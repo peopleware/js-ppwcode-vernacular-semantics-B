@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>PPW.ENUMERATIONS</title>
+
+    <script>
+        var dojoConfig = {
+            async: true,
+            parseOnload: false,
+            isDebug: true,
+            has: {
+                "dojo-firebug": false,
+                "dojo-debug-messages": true,
+                "mvc-bindings-log-api": false,
+                "ppwcode-contracts-precondition": true
+            },
+            packages: [
+                { name: "dojo", location: "../../lib/dojo" },
+                {name: "dijit", location: "../../lib/dijit"},
+                {name: "dojox", location: "../../lib/dojox"},
+                {name: "ppwcode-util-contracts", location: "../../lib/ppwcode/util/contracts"},
+                {name: "ppwcode-util-oddsAndEnds", location: "../../lib/ppwcode/util/oddsAndEnds"},
+                {name: "ppwcode-util-collections", location: "../../lib/ppwcode/util/collections"},
+                {name: "ppwcode-vernacular-exceptions", location: "../../lib/ppwcode/vernacular/exceptions"},
+                {name: "ppwcode-vernacular-semantics", location: "../../lib/ppwcode/vernacular/semantics"},
+                {name: "ppwcode-vernacular-persistence", location: "../../lib/ppwcode/vernacular/persistence"},
+                {name: "put-selector", location: "../../lib/put-selector"},
+                {name: "dgrid", location: "../../lib/dgrid"},
+                {name: "xstyle", location: "../../lib/xstyle"},
+
+                { name: "demo", location: "../../demo" },
+                {name: "demo-img", location: "../../demo/img"}
+            ],
+            map: {
+                "demo-viewmodel": {
+                    "contracts": "ppwcode-util-contracts",
+                    "oddsAndEnds": "ppwcode-util-oddsAndEnds",
+                    "collections": "ppwcode-util-collections"
+                }
+            }
+        };
+    </script>
+
+
+    <script src="lib/dojo/dojo.js"></script>
+
+    <script>
+        require([
+            "dojo/parser",
+            "dijit/registry",
+            "demo/boards/RoadBoard",
+            "dojo/ready",
+            "dijit/layout/ContentPane",
+            "dojo/domReady!"
+        ],
+                function (parser, registry, RoadBoard, ready) {//RoadBoard
+
+                    ready(function () {
+                        var parsePromise = parser.parse();
+                        parsePromise.then(function () {
+                                    var chooseEnumList = function (enumvalue) {
+
+                                        if (enumvalue.enum.isValueOf(RoadBoard.WARNING)) {
+                                            var warningList = registry.byId("warnings").updateSymbols(enumvalue.enum);
+                                        }
+
+                                        else if (enumvalue.enum.isValueOf(RoadBoard.DIRECTION)) {
+                                            var directionsList = registry.byId("directions").updateSymbols(enumvalue.enum);
+                                        }
+                                    }
+                                    registry.byId("enumChoice").onEnumValueChanged = chooseEnumList;
+                                },
+                                function (error) {
+                                    console.error("Main content not parsed");
+                                });
+                    });
+                });
+    </script>
+
+</head>
+<body>
+<body class="claro">
+
+
+<div id="mainPane" style="height: 100%;" data-dojo-type="dijit/layout/ContentPane">
+    <p style="text-align: left;">Choose a board</p>
+
+    <div dojoType="demo/combo/comboBoards"
+         id="enumChoice"></div>
+
+
+    <p style="text-align: center;">WARNINGS LIST: enum == RoadBoard.WARNING</p>
+    <ul data-dojo-type="demo/symbol/SymbolList"
+        id="warnings"></ul>
+
+
+    <p style="text-align: center;"> DIRECTIONS LIST: enum == RoadBoard.DIRECTION</p>
+    <ul data-dojo-type="demo/symbol/SymbolList"
+        id="directions"></ul>
+</div>
+
+
+</body>
+</body>
+</html>

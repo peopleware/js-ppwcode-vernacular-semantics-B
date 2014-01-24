@@ -1,0 +1,86 @@
+/* Symbol */
+
+.productDocuments_symbol,
+.productDocuments_symbol img {
+    padding: 0;
+}
+
+.productDocuments_symbol {
+    margin: 0;
+    min-height: 50px;
+    min-width: 50px;
+    display: inline-block;
+    opacity: 0; /* initial opacity */
+}
+
+td.productDocuments_symbol {
+    /* min-height doesn't exist for tabel cells, but heigth has that semantics */
+    height: 50px;
+    display: table-cell;
+}
+
+/* IDEA no idea why we don't have to position relative */
+.productDocuments_symbol img {
+    width: 50px; /* no height: keep ratio */
+    top: 0;
+    /* center horizontally */
+    left: 50%;
+    margin-left: 0; /*-25px;*//* IDEA no idea why we don't have to do -25px here, and still get it centered */
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+.big .productDocuments_symbol img,
+.productDocuments_symbol.big img {
+    /* symbols a big context list are bigger */
+    width: 100px;
+}
+
+.productDocuments_symbol span {
+    display: block;
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* List */
+
+ul.symbolList,
+ul.symbolList li {
+    padding: 0;
+}
+
+ul.symbolList {
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: 0;
+    margin-right: 0;
+    text-align: center;
+}
+
+ul.symbolList li {
+    display: inline-block;
+    margin: 0.5em;
+}
+
+ul.symbolList.dpd li {
+    /* dpd hazard symbols have a label, and need a bit of special treatment */
+    min-width: 100px;
+}
+
+ul.symbolList.dpd.big li {
+    /* dpd hazard symbols have a label, and need a bit of special treatment */
+    min-width: 150px;
+}
+
+ul.symbolList li:first-of-type {
+    margin-left: 0;
+}
+
+ul.symbolList li:last-child {
+    margin-right: 0;
+}
+
+

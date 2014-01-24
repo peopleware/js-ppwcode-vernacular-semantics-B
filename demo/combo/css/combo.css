@@ -1,0 +1,81 @@
+
+.enumSelect {
+    border: 1px solid #b5bcc7;
+    background-color: #ffffff;
+    width: 210px;
+    height: 20px;
+    /* Make this position: relative so our arrow is positioned within */
+    position: relative;
+    padding: 0;
+    color: black;
+    text-align: right;
+}
+
+.enumSelect .label {
+    line-height: 17px;
+    vertical-align: middle;
+}
+
+.enumSelect .arrow {
+    /* Position the arrow on the right-hand side */
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    /* Use claro's arrow image */
+    background-image: url("../images/commonFormArrows.png");
+    background-position: -35px 70%;
+    background-repeat: no-repeat;
+
+    /* 16x16 with a white border and a gray background */
+    width: 16px;
+    height: 18px;
+    border: 1px solid #ffffff;
+    border-top: none;
+    background-color: #efefef;
+}
+
+.enumSelect .dgrid {
+    position: absolute;
+    top: 21px;
+    left: -1px;
+    width: 100%;
+    display: none;
+}
+
+.enumSelect .opened {
+    display: block;
+}
+
+.dgrid {
+    background: azure;
+}
+
+.enumSelect div.dgrid-scroller {
+    margin-top: 0px !important;
+}
+
+.langSelect {
+    position: relative;
+    line-height: 30px;
+    margin-top: 1px;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.langSelect img {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    height: 20px;
+}
+
+.langGlob {
+    font-size: 20px;
+    background: white;
+    padding-left: 10px;
+}
+
+.langGlob img {
+    margin-right: 10px;
+}
