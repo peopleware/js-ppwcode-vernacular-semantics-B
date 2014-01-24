@@ -1,0 +1,51 @@
+.ppwCodeOnePropertyCrdList {
+    margin: 0;
+    padding: 0;
+}
+
+.ppwCodeOnePropertyCrdList .listContainer {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #4C656B;
+}
+
+.ppwCodeOnePropertyCrdList .list {
+    background: transparent !important;
+}
+
+.ppwCodeOnePropertyCrdList .list li.disabled {
+    color: #4C656B;
+}
+
+.ppwCodeOnePropertyCrdList .list li .mblListItemLabel {
+    float: left;
+}
+
+.ppwCodeOnePropertyCrdList .list li .deleteIcon {
+    margin: 8px 0px;
+    padding: 0;
+    float: right;
+    display: block;
+    width: 32px;
+    height: 26px;
+    line-height: 26px;
+    text-align: right;
+}
+
+.ppwCodeOnePropertyCrdList .list li:first-child {
+    border-top: none;
+}
+
+.ppwCodeOnePropertyCrdList .list li:last-child {
+    border-bottom: none;
+}
+
+.ppwCodeOnePropertyCrdList .fields {
+    padding: 4px 8px;
+    border-top: 1px solid #4C656B;
+    border-right: 1px solid #4C656B;
+    border-bottom: none;
+    border-left: 1px solid #4C656B;
+}

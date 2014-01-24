@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+  Copyright 2013 - $Date $ by PeopleWare n.v.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+  <title>AuditableInfo Browser Tests</title>
+
+  <!-- required: the default dijit theme: -->
+  <link id="themeStyles" rel="stylesheet" href="../../../../../../dojo/dijit/themes/claro/claro.css"/>
+
+  <!-- SCRIPT -->
+  <script>
+    var dojoConfig = {
+      async: true,
+      isDebug: true,
+      parseOnLoad: false,
+      has: {
+        "has-debug-messages": true
+      },
+      paths: {
+        "ppwcode-util-contracts": "../../ppwcode/util/contracts",
+        "ppwcode-util-oddsAndEnds": "../../ppwcode/util/oddsAndEnds",
+        "ppwcode-vernacular-semantics": "../../ppwcode/vernacular/semantics",
+        "ppwcode-vernacular-persistence": "../../ppwcode/vernacular/persistence",
+        "xstyle": "../../xstyle"
+      }
+    };
+  </script>
+
+  <script src="../../../../../../dojo/dojo/dojo.js"></script>
+
+  <script type="text/javascript">
+    require(
+      ["dojo/parser",
+        "ppwcode-util-contracts/doh",
+        "ppwcode-vernacular-persistence/AuditableObject",
+        "ppwcode-vernacular-persistence/ui/auditableInfoPane/AuditableInfoPane",
+        "dijit/registry",
+        "ppwcode-vernacular-semantics/ui/_semanticObjectPane/test/semanticObjectPaneTestGenerator",
+        "dojo/domReady!"
+      ],
+      function(parser, doh, AuditableObject, AuditableInfoPane, registry, generator) {
+
+        var parsePromise = parser.parse();
+        parsePromise.then(function() {
+          var json = {persistenceId: 7363, createdAt: new Date(), createdBy: "Jos2", lastModifiedAt: new Date(), lastModifiedBy: "Mieke"};
+
+          function createAO() {
+            var ao = new AuditableObject();
+            ao.reload(json);
+            return ao;
+          }
+
+          var subject = registry.byId("subject");
+
+          doh.register(
+            "Auditable Info Pane",
+            generator(subject, AuditableObject, createAO)
+          );
+          doh.run();
+        });
+      });
+  </script>
+</head>
+<body>
+<!-- Define an instance of the widget to test. -->
+<div id="subject" data-dojo-type="ppwcode-vernacular-persistence/ui/auditableInfoPane/AuditableInfoPane"></div>
+</body>
+</html>

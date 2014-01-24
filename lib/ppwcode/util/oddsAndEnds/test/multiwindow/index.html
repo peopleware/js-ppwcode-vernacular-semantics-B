@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+  Copyright 2012 - $Date $ by PeopleWare n.v.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+  <title>First window</title>
+  <script>
+    function onClick() {
+      window.secondwindow = window.open("second.html", "second window");
+      console.log(window.secondwindow);
+    }
+
+    function getData() {
+      var secondData = window.secondwindow.secondData;
+      console.log("secondData: " + secondData);
+      alert(secondData);
+    }
+
+    function writeData() {
+      window.secondwindow.document.writeln("Data from the first window");
+    }
+
+    function calculate() {
+      alert(window.secondwindow.returnSomething(3, 7));
+    }
+
+    function showMyData() {
+      alert(window.secondwindow.getFirstData("FIRST_WINDOW_DATA"));
+    }
+
+    window.FIRST_WINDOW_DATA = 987654321;
+  </script>
+</head>
+<body>
+  <button onclick="onClick()">Second window</button>
+  <button onclick="getData()">Get Data</button>
+  <button onclick="writeData()">Write Data</button>
+  <button onclick="window.secondwindow.doSomething()">Call something</button>
+  <button onclick="calculate()">Calculate</button>
+  <button onclick="showMyData()">Show my data</button>
+</body>
+</html>

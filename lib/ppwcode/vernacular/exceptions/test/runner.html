@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2012 - $Date $ by PeopleWare n.v.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<head>
+  <title>be/ppwcode.vernacular/semantic/I Test Runner</title>
+  <meta charset="UTF-8" />
+  <!--
+		test =
+			// zero to many AMD modules and/or URLs to load; provided by csv URL query parameter="test"
+			// For example, the URL...
+			//
+			//		 path-to-util/doh/runner.html?test=doh/selfTest,my/path/test.js
+			//
+			// ...will load...
+			//
+			//	 * the AMD module doh/selfTest
+			//	 * the plain old Javascript resource my/path/test.js
+			//
+			["dojo/tests/module"],
+
+		paths =
+			// zero to many path items to pass to the AMD loader; provided by semicolon separated values
+			// for URL query parameter="paths"; each path item has the form <from-path>,<to-path>
+			// i.e. path-to-util/doh/runner.html?paths=my/from/path,my/to/path;my/from/path2,my/to/path2
+			{},
+
+		dohPlugins =
+			// Semicolon separated list of files to load before the tests.
+			// Idea is to override aspects of DOH for reporting purposes.
+			"",
+
+		breakOnError =
+			// boolean; instructs doh to call the debugger upon a test failures; this can be helpful when
+			// trying to isolate exactly where the test failed
+			false,
+
+		async =
+			// boolean; config require.asyc==true before loading boot; this will have the effect of making
+			// version 1.7+ dojo bootstrap/loader operating in async mode
+			false,
+
+		sandbox =
+			// boolean; use a loader configuration that sandboxes the dojo and dojox objects used by doh
+			false,
+  -->
+  <meta http-equiv="refresh"
+        content="0;url=../../util/doh/runner.html?breakOnError=false&async=true&testModule=exceptions/test/module" />
+</head>
+<body>
+Redirecting to D.O.H runner.
+</body>
+</html>

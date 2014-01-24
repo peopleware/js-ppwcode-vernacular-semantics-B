@@ -1,0 +1,343 @@
+/*
+  Copyright 2012 - $Date $ by PeopleWare n.v.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+
+/*
+  Vertical position is controlled by using full-width block-elements, e.g., .formRow.
+  These elements should have a definite height, expressed relative to the font (e.g., ex or em).
+  All these block-elements should be set to a heigth that includes all there children effectively.
+
+  Horizontal positioning is done with absolute positioning, on px basis, within the block-elements
+  that control vertical positioning. The absolute positioning anchor is the semantic object pane,
+  or LayoutContainer children used in the semantic object pane. This will have a definite width.
+
+  Tabs are imagined at 10px and 90px, and a right tab at -10px from the right.
+*/
+
+
+/* fields */
+
+.SemanticObjectPane div.formRow {
+  /*position: relative;*/
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 3.4ex;
+}
+
+.SemanticObjectPane .dijitTextBoxReadOnly,
+.SemanticObjectPane .dijitValidationTextBoxReadOnly,
+.SemanticObjectPane .dijitSelectReadOnly {
+  border: 1px solid transparent !important;
+  background-color: transparent !important;
+}
+
+.SemanticObjectPane .dijitTextBoxReadOnly input,
+.SemanticObjectPane .dijitValidationTextBoxReadOnly input {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.SemanticObjectPane .formRow .dijitCheckBox {
+  padding-top: 1.1ex;
+  margin-left: 3px;
+}
+
+.SemanticObjectPane .identifyingField {
+  font-weight: bold;
+  font-size: 150%;
+  width: 99.5%;
+  margin-bottom: 0.5ex;
+}
+
+.SemanticObjectPane .secondary,
+.miniWidget .secondary {
+  float: right;
+  color: gray;
+  font-size: 75%;
+  /*padding-right: 2px allow space for italic last letter */
+}
+
+.SemanticObjectPane .fillToLeft,
+.SemanticObjectPane .afterLabel,
+.SemanticObjectPane .fillToRight,
+/* extra mentions necessary to force text boxes to listen */
+.SemanticObjectPane .dijitTextBox.fillToLeft,
+.SemanticObjectPane .dijitTextBox.afterLabel,
+.SemanticObjectPane .dijitTextBox.fillToRight {
+  position: absolute;
+  width: inherit !important;
+  line-height: 3.2ex;
+}
+
+.SemanticObjectPane .fillToLeft,
+.SemanticObjectPane .afterLabel,
+.SemanticObjectPane .fillToRight,
+  /* extra mentions necessary to force text boxes to listen */
+.SemanticObjectPane .dijitTextBox.fillToLeft,
+.SemanticObjectPane .dijitTextBox.afterLabel,
+.SemanticObjectPane .dijitTextBox.fillToRight {
+  width: inherit !important;
+}
+
+.SemanticObjectPane .fillToLeft,
+/* extra mentions necessary to force text boxes to listen */
+.SemanticObjectPane .dijitTextBox.fillToLeft,
+.SemanticObjectPane label.fixedLabel {
+  left: 10px;
+}
+
+.SemanticObjectPane .afterLabel,
+/* extra mentions necessary to force text boxes to listen */
+.SemanticObjectPane .dijitTextBox.afterLabel {
+  left: 90px !important; /* see fixedLabel */
+}
+
+.SemanticObjectPane .fillToRight,
+/* extra mentions necessary to force text boxes to listen */
+.SemanticObjectPane .dijitTextBox.fillToRight {
+  right: 10px;
+}
+
+
+.SemanticObjectPane .dojoxCheckedMultiSelectHidden {
+  display: none;
+}
+
+
+
+/* labels */
+
+.SemanticObjectPane label {
+  color: darkslategrey;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.SemanticObjectPane label.fixedLabel {
+  position: absolute;
+  width: 75px; /* see .dijitTextBox.afterLabel */
+  display: inline-block;
+  font-weight: bold;
+  font-size: 90%;
+  padding-top: 0.3ex;
+}
+
+.SemanticObjectPane fieldset {
+  border-style: solid;
+  border-color: gray;
+  border-width: 1px;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
+
+
+
+/* mini-widgets */
+
+.miniWidget {
+}
+
+
+
+
+
+/* layout */
+
+.SemanticObjectPane .fields.dijitLayoutContainerPane {
+  padding: 0; /* override dijit ContentPane setting */
+}
+
+.SemanticObjectPane .dijitBorderContainer-child {
+  border-style: none;
+  border-width: 0;
+}
+
+.SemanticObjectPane .dijitGutterV {
+  width: 10px;
+}
+
+.SemanticObjectPane .dijitTabPaneWrapper,
+.SemanticObjectPane .dijitTabContainerTop-child {
+  padding: 0;
+  background-color: transparent;
+}
+
+.SemanticObjectPane .dijitAccordionContainer .dijitAccordionChildWrapper,
+.SemanticObjectPane .dijitAccordionContainer .dijitAccordionContainer-child,
+.SemanticObjectPane .dijitAccordionContainer .dijitAccordionInnerContainerSelected {
+  padding: 0;
+  background-color: transparent;
+}
+
+.SemanticObjectPane .dijitAccordionContainer .dijitAccordionChildWrapper {
+  margin: 0;
+  border-style: none;
+  border-width: 0;
+}
+
+
+/* lists */
+
+/*.SemanticObjectPane .dgrid-grid.list,*/
+/*.SemanticObjectPane .dgrid-grid.grdComposition,*/
+/*.SemanticObjectPane .dgrid-grid.grdSingularProperties {*/
+  /*position: absolute;*/
+  /*left: 10px;*/
+  /*right: 10px;*/
+  /*border: none;*/
+  /*background-color: transparent;*/
+  /*min-height: 250px;*/
+  /*height: inherit;*/
+/*}*/
+
+/*.SemanticObjectPane .dgrid-grid.grdComposition,*/
+/*.SemanticObjectPane .dgrid-grid.grdSingularProperties {*/
+  /*border-radius: 3px;*/
+  /*border-color: gray;*/
+  /*border-width: 1px;*/
+  /*border-style: solid;*/
+/*}*/
+
+.SemanticObjectPane .dgrid-no-data,
+.SemanticObjectPane .dgrid-loading {
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+  font-size: 75%;
+  color: gray;
+}
+
+/*.SemanticObjectPane .dgrid-grid.list .dgrid-scroller,*/
+/*.SemanticObjectPane .dgrid-grid.grdComposition .dgrid-scroller,*/
+/*.SemanticObjectPane .dgrid-grid.grdSingularProperties .dgrid-scroller {*/
+  /*margin-top: 0 !important;*/
+  /*overflow-y: auto;*/
+/*}*/
+
+/*.SemanticObjectPane .dgrid-grid.grdComposition .dgrid-row,*/
+/*.SemanticObjectPane .dgrid-grid.grdSingularProperties .dgrid-row {*/
+  /*background-color: transparent;*/
+/*}*/
+
+/*.SemanticObjectPane .dgrid-grid.grdComposition .dgrid-cell.field-component,*/
+/*.SemanticObjectPane .dgrid-grid.grdSingularProperties .dgrid-cell.field-propertyName {*/
+  /*color: gray;*/
+  /*font-weight: bold;*/
+  /*font-size: 90%;*/
+  /*text-align: right;*/
+  /*width: 7em;*/
+/*}*/
+
+
+
+
+
+
+.SemanticObjectPane .properties .propertiesTop {
+  height: 36px;  /* icon button + padding */
+  padding: 0;
+}
+
+.SemanticObjectPane .properties .propertiesTop label {
+  font-size: 90%;
+  line-height: 35px;
+  font-weight: bold;
+}
+
+.SemanticObjectPane .properties .propertiesTop .dijitButton,
+.SemanticObjectPane .properties .propertiesTop .dijitDropDownButton {
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+  margin-right: 0;
+}
+
+.SemanticObjectPane .properties .dgrid.dgrid-grid{
+  margin-left: 0;
+  margin-right: 0;
+  border-style: none !important;
+  border-width: 0! important;
+  border-color: transparent !important;
+  background-color: transparent !important;
+}
+
+
+
+.extraButtons.dijitContentPane {
+  padding: 0;
+}
+
+.extraButtons .dijitButton,
+.extraButtons .dijitDropDownButton,
+.extraButtons .dijitToggleButton{
+  float: right;
+}
+
+/* dgrid list rows */
+
+.SemanticObjectPane .listRow {
+  padding: 5px;
+  margin-bottom: 3px;
+  margin-top: 3px;
+  margin-left: 0;
+  margin-right: 4px;
+  border-style: solid;
+  border-color: gray;
+  border-width: 1px;
+  border-radius: 3px;
+}
+
+.claro .SemanticObjectPane .listRow.ui-state-default:hover {
+  background-color: #e9f2fe !important;
+}
+
+.claro .SemanticObjectPane .listRow.ui-state-active {
+  background-color: #cee6fa !important;
+}
+
+.claro .SemanticObjectPane .listRow.ui-state-active:hover {
+  background-color: #9bc6f2 !important;
+}
+
+.claro .listRow.ui-state-highlight {
+  background-color: #ff6 !important;
+}
+
+.SemanticObjectPane .listRow label {
+  display: block;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.SemanticObjectPane .listRow label.listRowIdentifyingField {
+  font-weight: bolder;
+}
+
+.SemanticObjectPane .listRow label.listRowBottomRightMinor {
+  margin-top: 4px;
+  padding-right: 2px;  /*allow space for italic last letter*/
+  color: gray;
+  font-style: italic;
+  font-size: 75%;
+  text-align: right;
+}
+

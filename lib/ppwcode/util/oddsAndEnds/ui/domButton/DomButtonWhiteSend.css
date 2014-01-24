@@ -1,0 +1,60 @@
+/*
+Copyright 2012 - $Date $ by PeopleWare n.v.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/* === White Send Button ==*/
+.mblDomButtonWhiteSend {
+	position: relative;
+	width: 29px;
+	height: 29px;
+}
+.mblDomButtonWhiteSend > div { /* box */
+	position: absolute;
+	top: 8px;
+	left: 4px;
+  right: 4px;
+  bottom: 6px;
+	margin: 0;
+	font-size: 1px;
+  background-color: transparent;
+	border-width: 2px;
+	border-style: solid;
+	border-color: white;
+  border-radius: 4px;
+}
+.mblDomButtonWhiteSend > div > div {
+  position: absolute;
+  -webkit-transform: rotate(50deg);
+  left: 6px;
+  top: -10px;
+}
+.mblDomButtonWhiteSend > div > div > div {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  clip: rect(-5px, 35px, 13px, 0px);
+}
+.mblDomButtonWhiteSend > div > div > div > div {
+  top: 0;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  font-size: 1px;
+  background-color: white;
+  border-left: 2px solid #4a5a71;
+  border-top: 2px solid #4a5a71;
+  -webkit-transform: scaleX(0.2) rotate(45deg);
+}
