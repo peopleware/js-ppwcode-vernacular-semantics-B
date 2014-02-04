@@ -49,23 +49,23 @@
         require([
             "dojo/parser",
             "dijit/registry",
-            "demo/boards/RoadBoard",
+            "demo/boards/TrafficSign",
             "dojo/ready",
             "dijit/layout/ContentPane",
             "dojo/domReady!"
         ],
-                function (parser, registry, RoadBoard, ready) {//RoadBoard
+                function (parser, registry, TrafficSign, ready) {//RoadBoard
 
                     ready(function () {
                         var parsePromise = parser.parse();
                         parsePromise.then(function () {
                                     var chooseEnumList = function (enumvalue) {
 
-                                        if (enumvalue.enum.isValueOf(RoadBoard.WARNING)) {
+                                        if (enumvalue.enum.isValueOf(TrafficSign.WARNING)) {
                                             var warningList = registry.byId("warnings").updateSymbols(enumvalue.enum);
                                         }
 
-                                        else if (enumvalue.enum.isValueOf(RoadBoard.DIRECTION)) {
+                                        else if (enumvalue.enum.isValueOf(TrafficSign.DIRECTION)) {
                                             var directionsList = registry.byId("directions").updateSymbols(enumvalue.enum);
                                         }
                                     }
@@ -90,12 +90,12 @@
          id="enumChoice"></div>
 
 
-    <p style="text-align: center;">WARNINGS LIST: enum == RoadBoard.WARNING</p>
+    <p style="text-align: center;">WARNINGS LIST: enum == TrafficSign.WARNING</p>
     <ul data-dojo-type="demo/symbol/SymbolList"
         id="warnings"></ul>
 
 
-    <p style="text-align: center;"> DIRECTIONS LIST: enum == RoadBoard.DIRECTION</p>
+    <p style="text-align: center;"> DIRECTIONS LIST: enum == TrafficSign.DIRECTION</p>
     <ul data-dojo-type="demo/symbol/SymbolList"
         id="directions"></ul>
 </div>

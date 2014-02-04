@@ -1,7 +1,7 @@
 define(["require",
   "dojo/_base/declare",
   "dojo/string",
-  "demo/boards/RoadBoard",
+  "demo/boards/TrafficSign",
   "dojo/on",
   "dojo/_base/Deferred",
   "dojo/_base/array",
@@ -17,7 +17,7 @@ define(["require",
   "dojo/text!./combo.html",
   "xstyle/css!./css/combo.css"
 ],
-  function (require, declare, string, RoadBoard, on, Deferred, array, Memory, dom, domStyle, domConstruct, domClass, put, WidgetBase, TemplatedMixin, WidgetsInTemplateMixin, template) {
+  function (require, declare, string, TrafficSign, on, Deferred, array, Memory, dom, domStyle, domConstruct, domClass, put, WidgetBase, TemplatedMixin, WidgetsInTemplateMixin, template) {
     return declare("enumDemo.EnumCombo", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
       templateString: template,
 
@@ -93,7 +93,7 @@ define(["require",
         var self = this;
 
         // get all enums
-        var allboards = RoadBoard.WARNING.values().concat(RoadBoard.DIRECTION.values())
+        var allboards = TrafficSign.WARNING.values().concat(TrafficSign.DIRECTION.values())
           , dfd = new Deferred(),
           makeOptions = function () {
             if (!Array.isArray(allboards)) {
