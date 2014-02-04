@@ -6,7 +6,7 @@ define([
   function (require, string, EnumerationValue) {
 
 
-    var Board = EnumerationValue.declare(
+    var TrafficSign = EnumerationValue.declare(
       {
 
         // _dir: String
@@ -46,8 +46,8 @@ define([
         }
       }
     );
-    Board.WARNING = EnumerationValue.declare(
-      Board,
+    TrafficSign.WARNING = EnumerationValue.declare(
+      TrafficSign,
       {_typeDir: "warning-signs-jpg"},
       [
         {representation: "warning", filename: "501"},
@@ -63,8 +63,8 @@ define([
       ]
     );
 
-    Board.DIRECTION = EnumerationValue.declare(
-      Board,
+    TrafficSign.DIRECTION = EnumerationValue.declare(
+      TrafficSign,
       {_typeDir: "direction-and-tourist-signs-jpg"},
       [
         {representation: "direction_823V", filename: "823V"},
@@ -75,6 +75,6 @@ define([
       ]
     );
 
-    return Board;
+    return TrafficSign;
   }
 );
