@@ -36,8 +36,8 @@ define([
         },
 
         urlBuildSymbol: function (/*String*/ dir, /*String*/ fileName) {
-          var umgsrc = "demo/img/${0}/${1}.jpg";
-          return require.toUrl(string.substitute(umgsrc, [dir, fileName])).toString();
+          var imgsrc = "demo/img/${0}/${1}.jpg";
+          return require.toUrl(string.substitute(imgsrc, [dir, fileName])).toString();
 
         },
 
