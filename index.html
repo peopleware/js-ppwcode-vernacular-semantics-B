@@ -62,7 +62,7 @@
                                     var chooseEnumList = function (enumvalue) {
 
                                         if (enumvalue.enum.isValueOf(TrafficSign.WARNING)) {
-                                            var warningList = registry.byId("warnings").updateSymbols(enumvalue.enum);
+                                            var warningList = registry.byId("warning").updateSymbols(enumvalue.enum);
                                         }
 
                                         else if (enumvalue.enum.isValueOf(TrafficSign.DIRECTION)) {
@@ -90,9 +90,9 @@
          id="enumChoice"></div>
 
 
-    <p style="text-align: center;">WARNINGS LIST: enum == TrafficSign.WARNING</p>
+    <p style="text-align: center;">WARNING LIST: enum == TrafficSign.WARNING</p>
     <ul data-dojo-type="demo/symbol/SymbolList"
-        id="warnings"></ul>
+        id="warning"></ul>
 
 
     <p style="text-align: center;"> DIRECTIONS LIST: enum == TrafficSign.DIRECTION</p>
