@@ -61,7 +61,15 @@
                         parsePromise.then(function () {
                                     var chooseEnumList = function (enumvalue) {
 
-                                        if (enumvalue.enum.isValueOf(TrafficSign.WARNING)) {
+                                        if (enumvalue.enum.isValueOf(TrafficSign.MANDATORY)) {
+                                            var warningList = registry.byId("mandatory").updateSymbols(enumvalue.enum);
+                                        }
+
+                                        else if (enumvalue.enum.isValueOf(TrafficSign.PROHIBITORY)) {
+                                            var warningList = registry.byId("prohibitory").updateSymbols(enumvalue.enum);
+                                        }
+
+                                        else if (enumvalue.enum.isValueOf(TrafficSign.WARNING)) {
                                             var warningList = registry.byId("warning").updateSymbols(enumvalue.enum);
                                         }
 
@@ -88,6 +96,16 @@
 
     <div dojoType="demo/combo/comboBoards"
          id="enumChoice"></div>
+
+
+    <p style="text-align: center;">MANDATORY LIST: enum == TrafficSign.MANDATORY</p>
+    <ul data-dojo-type="demo/symbol/SymbolList"
+        id="mandatory"></ul>
+
+
+    <p style="text-align: center;">PROHIBITORY LIST: enum == TrafficSign.PROHIBITORY</p>
+    <ul data-dojo-type="demo/symbol/SymbolList"
+        id="prohibitory"></ul>
 
 
     <p style="text-align: center;">WARNING LIST: enum == TrafficSign.WARNING</p>

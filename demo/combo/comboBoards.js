@@ -93,7 +93,7 @@ define(["require",
         var self = this;
 
         // get all enums
-        var allboards = TrafficSign.WARNING.values().concat(TrafficSign.DIRECTION.values())
+        var allboards = TrafficSign.MANDATORY.values().concat(TrafficSign.PROHIBITORY.values()).concat(TrafficSign.WARNING.values()).concat(TrafficSign.DIRECTION.values())
           , dfd = new Deferred(),
           makeOptions = function () {
             if (!Array.isArray(allboards)) {
