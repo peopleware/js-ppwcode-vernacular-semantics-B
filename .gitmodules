@@ -1,3 +1,6 @@
 [submodule "lib/submodules_lib"]
 	path = lib/submodules_lib
 	url = https://github.com/rrakhmetov/submodules_lib.git
+[submodule "lib/submodules_2_lib"]
+	path = lib/submodules_2_lib
+	url = https://github.com/rrakhmetov/submodules_lib.git
