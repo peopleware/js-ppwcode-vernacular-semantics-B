@@ -4,3 +4,6 @@
 [submodule "lib/xstyle"]
 	path = lib/xstyle
 	url = https://github.com/kriszyp/xstyle.git
+[submodule "lib/put-selector"]
+	path = lib/put-selector
+	url = https://github.com/kriszyp/put-selector.git
