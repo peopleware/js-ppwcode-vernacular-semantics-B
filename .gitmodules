@@ -7,9 +7,3 @@
 [submodule "lib/put-selector"]
 	path = lib/put-selector
 	url = https://github.com/kriszyp/put-selector.git
-[submodule "lib/dojo"]
-	path = lib/dojo
-	url = https://github.com/dojo/dojo.git
-[submodule "lib/dijit"]
-	path = lib/dijit
-	url = https://github.com/dojo/dijit.git
