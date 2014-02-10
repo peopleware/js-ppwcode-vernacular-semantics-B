@@ -1,3 +1,6 @@
 [submodule "lib/dgrid"]
 	path = lib/dgrid
 	url = https://github.com/SitePen/dgrid.git
+[submodule "lib/xstyle"]
+	path = lib/xstyle
+	url = https://github.com/kriszyp/xstyle.git
