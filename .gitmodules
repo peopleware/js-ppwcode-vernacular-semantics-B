@@ -10,3 +10,6 @@
 [submodule "lib/dojo/dijit"]
 	path = lib/dojo/dijit
 url=https://github.com/dojo/dijit.git
+[submodule "lib/dojo/dojo"]
+	path = lib/dojo/dojo
+	url = https://github.com/dojo/dojo.git
