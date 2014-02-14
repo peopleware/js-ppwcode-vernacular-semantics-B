@@ -4,10 +4,13 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>ppwcode vernacular semantics EnumerationValue Demo</title>
 
+  <link rel="stylesheet" href="lib/dojo/dojo/resources/dojo.css" />
+  <link rel="stylesheet" href="lib/dojo/dijit/themes/claro/claro.css" />
+
   <script>
     var dojoConfig = {
       async: true,
-      parseOnload: false,
+      parseOnLoad: false,
       isDebug: true,
       has: {
         "dojo-firebug": false,
@@ -31,44 +34,39 @@
   <script src="lib/dojo/dojo/dojo.js"></script>
 
   <script>
-      require([
-          "dojo/parser",
-          "dijit/registry",
-          "demo/boards/TrafficSign",
-          "dojo/ready",
-          "dijit/layout/ContentPane",
-          "dojo/domReady!"
-      ],
-              function (parser, registry, TrafficSign, ready) {
-
-                  ready(function () {
-                      var parsePromise = parser.parse();
-                      parsePromise.then(function () {
-                                  var chooseEnumList = function (enumvalue) {
-
-                                      if (enumvalue.enum.isValueOf(TrafficSign.MANDATORY)) {
-                                          var warningList = registry.byId("mandatory").updateSymbols(enumvalue.enum);
-                                      }
-
-                                      else if (enumvalue.enum.isValueOf(TrafficSign.PROHIBITORY)) {
-                                          var warningList = registry.byId("prohibitory").updateSymbols(enumvalue.enum);
-                                      }
-
-                                      else if (enumvalue.enum.isValueOf(TrafficSign.WARNING)) {
-                                          var warningList = registry.byId("warning").updateSymbols(enumvalue.enum);
-                                      }
-
-                                      else if (enumvalue.enum.isValueOf(TrafficSign.DIRECTION)) {
-                                          var directionList = registry.byId("direction").updateSymbols(enumvalue.enum);
-                                      }
-                                  }
-                                  registry.byId("enumChoice").onEnumValueChanged = chooseEnumList;
-                              },
-                              function (error) {
-                                  console.error("Main content not parsed");
-                              });
-                  });
-              });
+    require(["dojo/parser", "dijit/registry",
+             "demo/boards/TrafficSign", "dijit/layout/ContentPane",
+             "dojo/domReady!"],
+      function (parser, registry, TrafficSign) {
+        var parsePromise = parser.parse();
+        parsePromise.then(
+          function() {
+            registry.byId("enumChoice").onEnumValueChanged = function(enumvalue) {
+              if (enumvalue.enum.isValueOf(TrafficSign.MANDATORY)) {
+                registry.byId("mandatory").updateSymbols(enumvalue.enum);
+              }
+              else if (enumvalue.enum.isValueOf(TrafficSign.PROHIBITORY)) {
+                registry.byId("prohibitory").updateSymbols(enumvalue.enum);
+              }
+              else if (enumvalue.enum.isValueOf(TrafficSign.WARNING)) {
+                registry.byId("warning").updateSymbols(enumvalue.enum);
+              }
+              else if (enumvalue.enum.isValueOf(TrafficSign.DIRECTION)) {
+                registry.byId("direction").updateSymbols(enumvalue.enum);
+              }
+              else {
+                var msg = "ERROR: not a known Enumeration type";
+                console.error(msg);
+                throw msg;
+              }
+            };
+          },
+          function (err) {
+            console.error("Main content not parsed: " + (err.message || err));
+          }
+        );
+      }
+    );
   </script>
 
 </head>
@@ -76,8 +74,8 @@
 <body class="claro">
 
   <div id="mainPane" style="height: 100%;" data-dojo-type="dijit/layout/ContentPane">
-    <p style="text-align: left;">Choose a board</p>
-    <div id="enumChoice" dojoType="demo/combo/comboBoards"></div>
+    <p style="text-align: left;">Choose a sign</p>
+    <div id="enumChoice" data-dojo-type="demo/combo/comboBoards"></div>
 
     <p style="text-align: center;">MANDATORY LIST: enum == TrafficSign.MANDATORY</p>
     <ul id="mandatory" data-dojo-type="demo/symbol/SymbolList"></ul>
