@@ -13,3 +13,6 @@ url=https://github.com/dojo/dijit.git
 [submodule "lib/dojo/dojo"]
 	path = lib/dojo/dojo
 	url = https://github.com/dojo/dojo.git
+[submodule "lib/dojo/util"]
+	path = lib/dojo/util
+	url = https://github.com/dojo/util.git

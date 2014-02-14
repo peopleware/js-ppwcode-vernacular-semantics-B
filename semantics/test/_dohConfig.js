@@ -8,22 +8,12 @@
 
 (function () {
 
-  var useCors = true;
-
   if (!window.require.has) {
     window.require.has = {};
   }
   window.require.has["running-doh"] = true;
   window.require.has["dojo-debug-messages"] = true;
   window.require.isDebug = true;
-  // for main tests
-  window.require.has["logLevel-test.log.main_INFO"] = "INFO";
-  window.require.has["logLevel-test.log.main_DEBUG"] = "DEBUG";
-  window.require.has["logLevel-test.log.main_TRACE"] = "TRACE";
-  // for logger tests
-  window.require.has["logLevel-log.test.logger"] = "TRACE";
-  window.require.has["logLevel-testLoggerName"] = "WARN";
-
 
   console.log("loaded _dohConfig.js");
   console.log("starting load of dojo.js");
