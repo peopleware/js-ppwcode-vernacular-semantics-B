@@ -6,16 +6,23 @@
 
 // Finally, dojo will be loaded, and then we are of.
 
-(function () {
 
-  if (!window.require.has) {
+(function(){
+
+  if (! window.require.has) {
     window.require.has = {};
   }
   window.require.has["running-doh"] = true;
   window.require.has["dojo-debug-messages"] = true;
   window.require.isDebug = true;
 
+    window.require.packages = window.require.packages.concat([
+    {name: "ppwcode-vernacular-semantics",   location: "../../semantics"}
+  ]);
+
+  window.require["ppwcode-contracts-doh-initialization-done"] = true;
   console.log("loaded _dohConfig.js");
+
   console.log("starting load of dojo.js");
   var e = document.createElement("script");
   e.type = "text/javascript";

@@ -11,13 +11,13 @@ define(["../_util/contracts/doh", "../PpwCodeObject", "dojo/_base/declare", "mod
       var result = subject.getTypeDescription();
       doh.validateInvariants(subject);
       // postconditions
-      doh.t(result);
+      doh.t(!!result);
       doh.t(typeof result === "string");
     }
 
     doh.register(PpwCodeObject.mid, [
       {
-        name: "constructor",
+        name: "Constructor test", // don't name a test "constructor"; it kills everything :-(
         runTest: function () {
           var subject = new PpwCodeObjectStub1();
           doh.validateInvariants(subject);
