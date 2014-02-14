@@ -1,116 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>PPW.ENUMERATIONS</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>ppwcode vernacular semantics EnumerationValue Demo</title>
 
-    <script>
-        var dojoConfig = {
-            async: true,
-            parseOnload: false,
-            isDebug: true,
-            has: {
-                "dojo-firebug": false,
-                "dojo-debug-messages": true,
-                "mvc-bindings-log-api": false,
-                "ppwcode-contracts-precondition": true
-            },
-            packages: [
-                { name: "dojo", location: "../../../lib/dojo/dojo" },
-                {name: "dijit", location: "../../../lib/dojo/dijit"},
-               // {name: "dojox", location: "../../lib/dojox"},
-                {name: "ppwcode-util-contracts", location: "../../../lib/ppwcode/util/contracts"},
-                {name: "ppwcode-util-oddsAndEnds", location: "../../../lib/ppwcode/util/oddsAndEnds"},
-                {name: "ppwcode-util-collections", location: "../../../lib/ppwcode/util/collections"},
-                {name: "ppwcode-vernacular-exceptions", location: "../../../lib/ppwcode/vernacular/exceptions"},
-                {name: "ppwcode-vernacular-semantics", location: "../../../lib/ppwcode/vernacular/semantics"},
-                {name: "ppwcode-vernacular-persistence", location: "../../../lib/ppwcode/vernacular/persistence"},
-                {name: "put-selector", location: "../../../lib/put-selector"},
-                {name: "dgrid", location: "../../../lib/dgrid"},
-                {name: "xstyle", location: "../../../lib/xstyle"},
-                { name: "demo", location: "../../../demo" },
-                {name: "demo-img", location: "../../../demo/img"}
-            ]
-        };
-    </script>
+  <script>
+    var dojoConfig = {
+      async: true,
+      parseOnload: false,
+      isDebug: true,
+      has: {
+        "dojo-firebug": false,
+        "dojo-debug-messages": true,
+        "mvc-bindings-log-api": false,
+        "ppwcode-contracts-precondition": true
+      },
+      packages: [
+        {name: "dojo", location: "../../../lib/dojo/dojo" },
+        {name: "dijit", location: "../../../lib/dojo/dijit"},
+        {name: "ppwcode-vernacular-semantics", location: "../../../semantics"},
+        {name: "put-selector", location: "../../../lib/put-selector"},
+        {name: "dgrid", location: "../../../lib/dgrid"},
+        {name: "xstyle", location: "../../../lib/xstyle"},
+        {name: "demo", location: "../../../demo" },
+        {name: "demo-img", location: "../../../demo/img"}
+      ]
+    };
+  </script>
 
+  <script src="lib/dojo/dojo/dojo.js"></script>
 
-    <script src="lib/dojo/dojo/dojo.js"></script>
+  <script>
+      require([
+          "dojo/parser",
+          "dijit/registry",
+          "demo/boards/TrafficSign",
+          "dojo/ready",
+          "dijit/layout/ContentPane",
+          "dojo/domReady!"
+      ],
+              function (parser, registry, TrafficSign, ready) {
 
-    <script>
-        require([
-            "dojo/parser",
-            "dijit/registry",
-            "demo/boards/TrafficSign",
-            "dojo/ready",
-            "dijit/layout/ContentPane",
-            "dojo/domReady!"
-        ],
-                function (parser, registry, TrafficSign, ready) {
+                  ready(function () {
+                      var parsePromise = parser.parse();
+                      parsePromise.then(function () {
+                                  var chooseEnumList = function (enumvalue) {
 
-                    ready(function () {
-                        var parsePromise = parser.parse();
-                        parsePromise.then(function () {
-                                    var chooseEnumList = function (enumvalue) {
+                                      if (enumvalue.enum.isValueOf(TrafficSign.MANDATORY)) {
+                                          var warningList = registry.byId("mandatory").updateSymbols(enumvalue.enum);
+                                      }
 
-                                        if (enumvalue.enum.isValueOf(TrafficSign.MANDATORY)) {
-                                            var warningList = registry.byId("mandatory").updateSymbols(enumvalue.enum);
-                                        }
+                                      else if (enumvalue.enum.isValueOf(TrafficSign.PROHIBITORY)) {
+                                          var warningList = registry.byId("prohibitory").updateSymbols(enumvalue.enum);
+                                      }
 
-                                        else if (enumvalue.enum.isValueOf(TrafficSign.PROHIBITORY)) {
-                                            var warningList = registry.byId("prohibitory").updateSymbols(enumvalue.enum);
-                                        }
+                                      else if (enumvalue.enum.isValueOf(TrafficSign.WARNING)) {
+                                          var warningList = registry.byId("warning").updateSymbols(enumvalue.enum);
+                                      }
 
-                                        else if (enumvalue.enum.isValueOf(TrafficSign.WARNING)) {
-                                            var warningList = registry.byId("warning").updateSymbols(enumvalue.enum);
-                                        }
-
-                                        else if (enumvalue.enum.isValueOf(TrafficSign.DIRECTION)) {
-                                            var directionList = registry.byId("direction").updateSymbols(enumvalue.enum);
-                                        }
-                                    }
-                                    registry.byId("enumChoice").onEnumValueChanged = chooseEnumList;
-                                },
-                                function (error) {
-                                    console.error("Main content not parsed");
-                                });
-                    });
-                });
-    </script>
+                                      else if (enumvalue.enum.isValueOf(TrafficSign.DIRECTION)) {
+                                          var directionList = registry.byId("direction").updateSymbols(enumvalue.enum);
+                                      }
+                                  }
+                                  registry.byId("enumChoice").onEnumValueChanged = chooseEnumList;
+                              },
+                              function (error) {
+                                  console.error("Main content not parsed");
+                              });
+                  });
+              });
+  </script>
 
 </head>
-<body>
+
 <body class="claro">
 
-
-<div id="mainPane" style="height: 100%;" data-dojo-type="dijit/layout/ContentPane">
+  <div id="mainPane" style="height: 100%;" data-dojo-type="dijit/layout/ContentPane">
     <p style="text-align: left;">Choose a board</p>
-
-    <div dojoType="demo/combo/comboBoards"
-         id="enumChoice"></div>
-
+    <div id="enumChoice" dojoType="demo/combo/comboBoards"></div>
 
     <p style="text-align: center;">MANDATORY LIST: enum == TrafficSign.MANDATORY</p>
-    <ul data-dojo-type="demo/symbol/SymbolList"
-        id="mandatory"></ul>
-
+    <ul id="mandatory" data-dojo-type="demo/symbol/SymbolList"></ul>
 
     <p style="text-align: center;">PROHIBITORY LIST: enum == TrafficSign.PROHIBITORY</p>
-    <ul data-dojo-type="demo/symbol/SymbolList"
-        id="prohibitory"></ul>
-
+    <ul id="prohibitory" data-dojo-type="demo/symbol/SymbolList"></ul>
 
     <p style="text-align: center;">WARNING LIST: enum == TrafficSign.WARNING</p>
-    <ul data-dojo-type="demo/symbol/SymbolList"
-        id="warning"></ul>
-
+    <ul id="warning" data-dojo-type="demo/symbol/SymbolList"></ul>
 
     <p style="text-align: center;"> DIRECTION LIST: enum == TrafficSign.DIRECTION</p>
-    <ul data-dojo-type="demo/symbol/SymbolList"
-        id="direction"></ul>
-</div>
+    <ul id="direction" data-dojo-type="demo/symbol/SymbolList"></ul>
+  </div>
 
-
-</body>
 </body>
 </html>
