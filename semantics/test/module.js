@@ -1,3 +1,4 @@
 define([
-  "./PpwCodeObject"
+  "./PpwCodeObject",
+  "./Value"
 ], 1);
