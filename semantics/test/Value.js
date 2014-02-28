@@ -142,6 +142,13 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "module"],
           var subject = new ValueStub1({data: "TEST"});
           test_Equals(subject, window);
         }
+      },
+      {
+        name: "getValue that was set via constructor",
+        runTest: function () {
+          var subject = new ValueStub1({data: "TEST"});
+         doh.assertEqual("TEST", subject.getValue());
+        }
       }
 
       /*
