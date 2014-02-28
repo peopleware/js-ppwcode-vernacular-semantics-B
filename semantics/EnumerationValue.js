@@ -284,7 +284,6 @@ define(["dojo/_base/declare", "./Value",
     }
 
     EnumerationValue.mid = module.id;
-    EnumerationValue.generalValues = values;
     EnumerationValue.bundleName = null;
     EnumerationValue.getBundle = getBundle;
     EnumerationValue.format = format;
