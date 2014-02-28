@@ -52,6 +52,26 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
 
     });
 
+    var ValueStub3 = declare([ValueStub], {
+
+      _coerceTo: function(/*Function*/ Type) {
+        if (Type === ValueStub2) {
+          return new ValueStub2({data: this.data});
+        }
+        return this.inherited(arguments);
+      },
+
+      canCoerceTo: function() {
+        // summary:
+        //   Array of the types this can coerceTo. Types to which we coerce with more
+        //   of our information intact should come earlier than types to which we coerce
+        //   with more loss of information.
+
+        return this.inherited(arguments).concat([ValueStub2]);
+      }
+
+    });
+
     function _coerceTo(/*Value*/ v1, /*Function?*/ type) {
       var result = v1.coerceTo(type);
       doh.validateInvariants(v1);
@@ -81,6 +101,10 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
 
     function getTestSubjectOtherTypeSameData() {
       return new ValueStub2({data: "TEST"});
+    }
+
+    function getTestSubjectChainingType() {
+      return new ValueStub3({data: "CHAINED"});
     }
 
     function getNumericTestSubject() {
@@ -126,13 +150,6 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
             }
           },
           {
-            name: "coerceTo my type",
-            runTest: function () {
-              var subject = getTestSubject();
-              test_CoerceTo(subject, ValueStub1, subject);
-            }
-          },
-          {
             name: "coerceTo same type",
             runTest: function () {
               var subject = getTestSubject();
@@ -151,6 +168,20 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
             runTest: function () {
               var subject = getTestSubject();
               test_CoerceTo(subject, ValueStub2, undefined);
+            }
+          },
+          {
+            name: "coerceTo other type (chaining), supported, expect succes",
+            runTest: function () {
+              var subject = getTestSubjectChainingType();
+              test_CoerceToData(subject, ValueStub1, subject.data);
+            }
+          },
+          {
+            name: "coerceTo other type (chaining), not supported, expect failure",
+            runTest: function () {
+              var subject = getTestSubjectOtherTypeSameData();
+              test_CoerceTo(subject, ValueStub3, undefined);
             }
           }
         )
