@@ -6,52 +6,12 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
         EnumType.values
      */
 
-    function tests_isJson(/*String*/ namePrefix, /*Object*/ EnumType, testFunction) {
-      return [
-        {
-          name: namePrefix + " - isJson - null",
-          runTest: function() {
-            testFunction(null, EnumType);
-          }
-        },
-        {
-          name: namePrefix + " - isJson - undefined",
-          runTest: function() {
-            testFunction(null, EnumType);
-          }
-        },
-        {
-          name: namePrefix + " - isJson - not json",
-          runTest: function() {
-            testFunction("NOT A JSON STRING", EnumType);
-          }
-        },
-        {
-          name: namePrefix + " - isJson - other string",
-          runTest: function() {
-            testFunction("\"lalala\"", EnumType);
-          }
-        },
-        {
-          name: namePrefix + " - isJson - other string first",
-          runTest: function() {
-            testFunction("first", EnumType);
-          }
-        },
-        {
-          name: namePrefix + " - isJson - other",
-          runTest: function() {
-            testFunction("{something: 'else'}", EnumType);
-          }
-        },
-        {
-          name: namePrefix + " - isJson - ok",
-          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
-            var json = JSON.stringify(enumValue);
-            testFunction(json, EnumType);
-          })
-        }
-      ];
+    function tests_isJson(/*String*/ candidate, /*Object*/ EnumType) {
+      var values = EnumType.values();
+      var jsons = values.map(function(enumValue) {return JSON.parse(JSON.stringify(enumValue));});
+      var expected = (jsons.indexOf(candidate) >= 0);
+      var result = EnumType.isJson(candidate);
+      doh.is(expected, result);
     }
 
     function test_isValueOf(/*EnumerationValue*/ enumValue, /*Object*/ EnumType) {
@@ -87,27 +47,57 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
             doh.t(EnumType.parse);
             doh.is("function", typeof EnumType.parse);
           }
-        }
-      ];
-      tests = tests.concat(tests_isJson(
-        "Actual type",
-        EnumType,
-        function(/*String*/ candidate, /*Object*/ EnumType) {
-          var values = EnumType.values();
-          var jsons = values.map(function(enumValue) {return JSON.parse(JSON.stringify(enumValue));});
-          var expected = (jsons.indexOf(candidate) >= 0);
-          var result = EnumType.isJson(candidate);
-          doh.is(expected, result);
-        }
-      ));
-      tests = tests.concat([
+        },
+        {
+          name: "isJson - null",
+          runTest: function() {
+            tests_isJson(null, EnumType);
+          }
+        },
+        {
+          name: "isJson - undefined",
+          runTest: function() {
+            tests_isJson(null, EnumType);
+          }
+        },
+        {
+          name: "isJson - not json",
+          runTest: function() {
+            tests_isJson("NOT A JSON STRING", EnumType);
+          }
+        },
+        {
+          name: "isJson - other string",
+          runTest: function() {
+            tests_isJson("\"lalala\"", EnumType);
+          }
+        },
+        {
+          name: "isJson - other string first",
+          runTest: function() {
+            tests_isJson("first", EnumType);
+          }
+        },
+        {
+          name: "isJson - other",
+          runTest: function() {
+            tests_isJson("{something: 'else'}", EnumType);
+          }
+        },
+        {
+          name: "isJson - ok",
+          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
+            var json = JSON.stringify(enumValue);
+            tests_isJson(json, EnumType);
+          })
+        },
         {
           name: "all instances adhere to invariants",
           runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
             doh.validateInvariants(enumValue);
           })
         }
-      ]);
+      ];
       tests = tests.concat(valueTestGenerator(
         function() {return values[0];},
         function() {return values[1]},
