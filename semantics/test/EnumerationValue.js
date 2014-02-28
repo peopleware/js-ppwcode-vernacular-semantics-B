@@ -9,9 +9,16 @@ define(["../_util/contracts/doh", "../EnumerationValue", "./enumerationValueTest
       // no bundle
     );
 
+    var EnumerationValueStub2 = EnumerationValue.declare(
+      {},
+      ["alpha", "beta", "gamma"],
+      module.id + "_2"
+      // no bundle
+    );
+
     doh.register(
       EnumerationValue.mid,
-      testGenerator(EnumerationValueStub1)
+      testGenerator(EnumerationValueStub1, EnumerationValueStub2)
     );
 
   });

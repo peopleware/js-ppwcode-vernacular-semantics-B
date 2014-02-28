@@ -1,5 +1,5 @@
-define(["../_util/contracts/doh"],//, "./valueTestGenerator"],
-  function (doh) { //}, valueTestGenerator) {
+define(["../_util/contracts/doh", "./valueTestGenerator"],
+  function (doh, valueTestGenerator) {
 
     function test_isValueOf(/*EnumerationValue*/ enumValue, /*Object*/ EnumType) {
       var result = enumValue.isValueOf(EnumType);
@@ -16,10 +16,14 @@ define(["../_util/contracts/doh"],//, "./valueTestGenerator"],
       };
     }
 
-    var testGenerator = function(EnumType) {
+    var testGenerator = function(EnumType, OtherEnumType) {
 
       var values = EnumType.values();
-      var tests = []; //valueTestGenerator(values[0], values[1]);
+      var tests = valueTestGenerator(
+        function() {return values[0];},
+        function() {return values[1]},
+        function() {return OtherEnumType.values()[0]}
+      );
       tests = tests.concat([
         {
           name: "isValueOf",
