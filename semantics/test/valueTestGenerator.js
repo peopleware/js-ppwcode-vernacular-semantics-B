@@ -12,7 +12,7 @@ define(["../_util/contracts/doh", "../Value"],
         doh.is(result, !!expectEquals);
       }
 
-      var testGenerator = function(createSubject, createOtherSubject, createSecondSubject) {
+      var testGenerator = function(createSubject, createSubjectOtherData, createSubjectOtherType) {
 
         var tests = [
           {
@@ -48,7 +48,7 @@ define(["../_util/contracts/doh", "../Value"],
             name: "equals with object of same type, expect not equals",
             runTest: function () {
               var subject = createSubject();
-              var other = createOtherSubject();
+              var other = createSubjectOtherData();
               test_Equals(subject, other);
             }
           },
@@ -56,7 +56,7 @@ define(["../_util/contracts/doh", "../Value"],
             name: "equals with object of other type",
             runTest: function () {
               var subject = createSubject();
-              var other = createSecondSubject();
+              var other = createSubjectOtherType();
               test_Equals(subject, other);
             }
           },
