@@ -16,9 +16,10 @@
   window.require.has["dojo-debug-messages"] = true;
   window.require.isDebug = true;
 
-    window.require.packages = window.require.packages.concat([
-    {name: "ppwcode-vernacular-semantics",   location: "../../semantics"}
-  ]);
+  // when sandbox === false, as it should be, there is no packages array yet
+  window.require.packages = [
+    {name: "ppwcode-vernacular-semantics",   location: "../../../semantics"}
+  ];
 
   window.require["ppwcode-contracts-doh-initialization-done"] = true;
   console.log("loaded _dohConfig.js");
