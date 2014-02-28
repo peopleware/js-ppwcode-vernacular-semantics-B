@@ -75,6 +75,10 @@ define(["dojo/_base/declare", "./Value",
       },
 
       toJSON: function() {
+        // summary:
+        //   JSON.Stringify hook.
+        //   See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior
+
         return this._representation;
       },
 
@@ -116,6 +120,8 @@ define(["dojo/_base/declare", "./Value",
     function isEnumJson(EnumDef, json) {
       // summary:
       //   Is `json` the String representation of a value defined in EnumDef?
+      //   Note: json must be the result of JSON.parse, not the naked JSON string.
+      //   E.g., "MALE" would be a correct "json representation", not "\"MALE\"".
 
       return values(EnumDef).some(function(ev) {return ev._representation === json;});
     }
