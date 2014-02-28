@@ -6,12 +6,17 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
         EnumType.values
      */
 
-    function tests_isJson(/*String*/ candidate, /*Object*/ EnumType) {
+    function test_isJson(/*String*/ candidate, /*Object*/ EnumType) {
       var values = EnumType.values();
       var jsons = values.map(function(enumValue) {return JSON.parse(JSON.stringify(enumValue));});
       var expected = (jsons.indexOf(candidate) >= 0);
       var result = EnumType.isJson(candidate);
       doh.is(expected, result);
+    }
+
+    function test_revive(/*String*/ candidate, /*Object*/ EnumType) {
+      var result = EnumType.revive(candidate);
+      doh.is(candidate, result.toJSON());
     }
 
     function test_isValueOf(/*EnumerationValue*/ enumValue, /*Object*/ EnumType) {
@@ -51,44 +56,51 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
         {
           name: "isJson - null",
           runTest: function() {
-            tests_isJson(null, EnumType);
+            test_isJson(null, EnumType);
           }
         },
         {
           name: "isJson - undefined",
           runTest: function() {
-            tests_isJson(null, EnumType);
+            test_isJson(null, EnumType);
           }
         },
         {
           name: "isJson - not json",
           runTest: function() {
-            tests_isJson("NOT A JSON STRING", EnumType);
+            test_isJson("NOT A JSON STRING", EnumType);
           }
         },
         {
           name: "isJson - other string",
           runTest: function() {
-            tests_isJson("\"lalala\"", EnumType);
+            test_isJson("\"lalala\"", EnumType);
           }
         },
         {
           name: "isJson - other string first",
           runTest: function() {
-            tests_isJson("first", EnumType);
+            test_isJson("first", EnumType);
           }
         },
         {
           name: "isJson - other",
           runTest: function() {
-            tests_isJson("{something: 'else'}", EnumType);
+            test_isJson("{something: 'else'}", EnumType);
           }
         },
         {
           name: "isJson - ok",
           runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
             var json = JSON.stringify(enumValue);
-            tests_isJson(json, EnumType);
+            test_isJson(json, EnumType);
+          })
+        },
+        {
+          name: "revive",
+          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
+            var json = JSON.parse(JSON.stringify(enumValue));
+            test_revive(json, EnumType);
           })
         },
         {
@@ -114,7 +126,8 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
 
     };
 
-    testGenerator.tests_isJson = tests_isJson;
+    testGenerator.isJson = test_isJson;
+    testGenerator.revive = test_revive;
     testGenerator.isValueOf = test_isValueOf;
 
     return testGenerator;
