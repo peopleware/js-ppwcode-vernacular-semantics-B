@@ -12,7 +12,16 @@ define(["../_util/contracts/doh", "../Value"],
         doh.is(result, !!expectEquals);
       }
 
-      var testGenerator = function(createSubject, createSubjectOtherData, createSubjectOtherType) {
+      function test_Compare(/*Value*/ v1, /*Value?*/ v2, /*Object*/ expectCompare) {
+        var result = v1.compare(v2);
+        doh.validateInvariants(v1);
+        if (v2 && v2.isInstanceOf && v2.isInstanceOf(Value)) {
+          doh.validateInvariants(v2);
+        }
+        doh.is(result, expectCompare);
+      }
+
+      var testGenerator = function(createSubject, createSubjectSameTypeOtherData, createSubjectOtherTypeSameData) {
 
         var tests = [
           {
@@ -48,7 +57,7 @@ define(["../_util/contracts/doh", "../Value"],
             name: "equals with object of same type, expect not equals",
             runTest: function () {
               var subject = createSubject();
-              var other = createSubjectOtherData();
+              var other = createSubjectSameTypeOtherData();
               test_Equals(subject, other);
             }
           },
@@ -56,7 +65,7 @@ define(["../_util/contracts/doh", "../Value"],
             name: "equals with object of other type",
             runTest: function () {
               var subject = createSubject();
-              var other = createSubjectOtherType();
+              var other = createSubjectOtherTypeSameData();
               test_Equals(subject, other);
             }
           },
@@ -94,13 +103,6 @@ define(["../_util/contracts/doh", "../Value"],
               var subject = createSubject();
               test_Equals(subject, window);
             }
-          },
-          {
-            name: "getValue that was set via constructor",
-            runTest: function () {
-              var subject = createSubject();
-              doh.assertEqual("TEST", subject.getValue());
-            }
           }
         ];
 
@@ -109,6 +111,7 @@ define(["../_util/contracts/doh", "../Value"],
       };
 
       testGenerator.Equals = test_Equals;
+      testGenerator.Compare = test_Compare;
 
       return testGenerator;
     }
