@@ -21,6 +21,9 @@ define(["dojo/_base/declare", "../_util/contracts/doh", "../PpwCodeObject", "./p
     PpwCodeObjectStub1.mid = module.id + "_PpwCodeObjectStub1";
 
     var PpwCodeObjectStub2 = declare([PpwCodeObject], {}); // no mid
+
+
+
     doh.register(PpwCodeObject.mid, [
       {
         name: "Constructor test", // don't name a test "constructor"; it kills everything :-(
