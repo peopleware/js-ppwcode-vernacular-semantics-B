@@ -1,5 +1,7 @@
-define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeObjectTestGenerator", "module"],
-  function (doh, Value, declare, ppwCodeObjectTestGenerator, module) {
+define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeObjectTestGenerator",
+  "./valueTestGenerator", "module"],
+  function (doh, Value, declare, ppwCodeObjectTestGenerator,
+            valueTestGenerator, module) {
 
     // Abstract functions are not tested.
     var ValueStub = declare([Value], {
@@ -14,7 +16,7 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
         return this.inherited(arguments) && (other._data === this._data);
       },
 
-      compare: function(other) {
+      compare: function(/*Value*/ other) {
         return 0;
       },
 
@@ -43,15 +45,21 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
 
     });
 
-    function test_Equals(/*Value*/ v1, /*Value?*/ v2, /*Boolean?*/ expectEquals) {
-      var result = v1.equals(v2);
+    function test_Compare(/*Value*/ v1, /*Value?*/ v2, /*Integer*/ expectCompare) {
+      var result = v1.compare(v2);
       doh.validateInvariants(v1);
       if (v2 && v2.isInstanceOf && v2.isInstanceOf(Value)) {
         doh.validateInvariants(v2);
       }
-      // postconditions
-      // we expect not equal, unless it is said it should be
-      doh.is(result, !!expectEquals);
+      doh.is(result, expectCompare);
+    }
+
+    function getTestSubject() {
+      return new ValueStub1({data: "TEST"});
+    }
+
+    function getNumericTestSubject() {
+      return new ValueStub1({data: 0});
     }
 
     doh.register(Value.mid,
@@ -59,109 +67,77 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
         {
           name: "Constructor test", // don't name a test "constructor"; it kills everything :-(
           runTest: function () {
-            var subject = new ValueStub({data: "TEST"});
+            var subject = getTestSubject();
             doh.validateInvariants(subject);
           }
         }
       ].concat(ppwCodeObjectTestGenerator(
           function() {return new ValueStub1({data: "TEST WITH MID"});},
           function() {return new ValueStub2({data: "TEST NO MID"});}
-        )).concat([
+        )).concat(valueTestGenerator(
+          getTestSubject,
+          function() {return new ValueStub1({data: "OTHER"});},
+          function() {return new ValueStub2({data: "TEST"});}
+        ))/*,
         {
-          name: "equals with null",
+          name: "compare with null",
           runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            test_Equals(subject, null);
+            var subject = getNumericTestSubject();
+            test_Compare(subject, null, +1);
           }
         },
         {
-          name: "equals with undefined",
+          name: "compare with undefined",
           runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            test_Equals(subject, undefined);
+            var subject = getNumericTestSubject();
+            test_Compare(subject, undefined, +1);
           }
         },
         {
-          name: "equals with me",
+          name: "compare with me",
           runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            test_Equals(subject, subject, true);
+            var subject = getNumericTestSubject();
+            test_Compare(subject, subject, 0);
           }
         },
         {
-          name: "equals with object of same type, expect equals",
+          name: "compare with larger",
           runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            var other = new ValueStub1({data: "TEST"});
-            test_Equals(subject, other, true);
+            var subject = getNumericTestSubject();
+            var other = new ValueStub1({data: 10});
+            test_Compare(subject, other, -1);
           }
         },
         {
-          name: "equals with object of same type, expect not equals",
+          name: "compare with smaller",
           runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            var other = new ValueStub1({data: "OTHER"});
-            test_Equals(subject, other);
+            var subject = getNumericTestSubject();
+            var other = new ValueStub1({data: -5});
+            test_Compare(subject, other, +1);
           }
         },
         {
-          name: "equals with object of other type",
+          name: "compare with object of same type same value, expect equals",
           runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            var other = new ValueStub2("TEST");
-            test_Equals(subject, other);
+            var subject = getNumericTestSubject();
+            var other = new ValueStub1({data: 0});
+            test_Compare(subject, other, 0);
           }
         },
         {
-          name: "equals with not-a-value Number",
+          name: "compare with object of other type",
           runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            test_Equals(subject, 4);
+            var subject = getNumericTestSubject();
+            var other = new ValueStub2({data: "TEST"});
+            test_Compare(subject, other, +1);
           }
-        },
-        {
-          name: "equals with not-a-value String",
-          runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            test_Equals(subject, "TEST");
-          }
-        },
-        {
-          name: "equals with not-a-value Date",
-          runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            test_Equals(subject, new Date());
-          }
-        },
-        {
-          name: "equals with not-a-value Function",
-          runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            test_Equals(subject, window.open);
-          }
-        },
-        {
-          name: "equals with not-a-value object",
-          runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-            test_Equals(subject, window);
-          }
-        },
-        {
-          name: "getValue that was set via constructor",
-          runTest: function () {
-            var subject = new ValueStub1({data: "TEST"});
-           doh.assertEqual("TEST", subject.getValue());
-          }
-        }
+        }*/
 
         /*
           canCoerceTo must not be tested: basic
           test coerceTo, from a Stub1 (default) and from a Stub2 (with the extended canCoerceTo
           all in different cases
          */
-
-      ])
     );
   }
 );
