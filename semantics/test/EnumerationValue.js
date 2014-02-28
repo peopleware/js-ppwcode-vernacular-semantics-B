@@ -18,7 +18,17 @@ define(["../_util/contracts/doh", "../EnumerationValue", "./enumerationValueTest
 
     doh.register(
       EnumerationValue.mid,
-      testGenerator(EnumerationValueStub1, EnumerationValueStub2)
+      testGenerator.tests_isJson(
+        "EnumerationValue",
+        EnumerationValueStub1,
+        function(/*String*/ candidate, /*Object*/ EnumType) {
+          var values = EnumType.values();
+          var jsons = values.map(function(enumValue) {return JSON.parse(JSON.stringify(enumValue));});
+          var expected = (jsons.indexOf(candidate) >= 0);
+          var result = EnumerationValue.isJson(EnumType, candidate);
+          doh.is(expected, result);
+        }
+      ).concat(testGenerator(EnumerationValueStub1, EnumerationValueStub2))
     );
 
   });
