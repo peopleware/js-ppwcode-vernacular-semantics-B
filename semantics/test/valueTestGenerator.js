@@ -12,15 +12,6 @@ define(["../_util/contracts/doh", "../Value"],
         doh.is(result, !!expectEquals);
       }
 
-      function test_Compare(/*Value*/ v1, /*Value?*/ v2, /*Object*/ expectCompare) {
-        var result = v1.compare(v2);
-        doh.validateInvariants(v1);
-        if (v2 && v2.isInstanceOf && v2.isInstanceOf(Value)) {
-          doh.validateInvariants(v2);
-        }
-        doh.is(result, expectCompare);
-      }
-
       var testGenerator = function(createSubject, createSubjectSameTypeOtherData, createSubjectOtherTypeSameData) {
 
         var tests = [
@@ -111,7 +102,6 @@ define(["../_util/contracts/doh", "../Value"],
       };
 
       testGenerator.Equals = test_Equals;
-      testGenerator.Compare = test_Compare;
 
       return testGenerator;
     }

@@ -185,60 +185,6 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
             }
           }
         )
-        /*,
-        {
-          name: "compare with null",
-          runTest: function () {
-            var subject = getNumericTestSubject();
-            test_Compare(subject, null, +1);
-          }
-        },
-        {
-          name: "compare with undefined",
-          runTest: function () {
-            var subject = getNumericTestSubject();
-            test_Compare(subject, undefined, +1);
-          }
-        },
-        {
-          name: "compare with me",
-          runTest: function () {
-            var subject = getNumericTestSubject();
-            test_Compare(subject, subject, 0);
-          }
-        },
-        {
-          name: "compare with larger",
-          runTest: function () {
-            var subject = getNumericTestSubject();
-            var other = new ValueStub1({data: 10});
-            test_Compare(subject, other, -1);
-          }
-        },
-        {
-          name: "compare with smaller",
-          runTest: function () {
-            var subject = getNumericTestSubject();
-            var other = new ValueStub1({data: -5});
-            test_Compare(subject, other, +1);
-          }
-        },
-        {
-          name: "compare with object of same type same value, expect equals",
-          runTest: function () {
-            var subject = getNumericTestSubject();
-            var other = new ValueStub1({data: 0});
-            test_Compare(subject, other, 0);
-          }
-        },
-        {
-          name: "compare with object of other type",
-          runTest: function () {
-            var subject = getNumericTestSubject();
-            var other = new ValueStub2({data: "TEST"});
-            test_Compare(subject, other, +1);
-          }
-        }*/
 
         /*
           canCoerceTo must not be tested: basic
