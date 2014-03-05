@@ -119,6 +119,18 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
           })
         },
         {
+          name: "compare with null",
+          runTest: function () {
+            test_Compare(EnumType.values()[0], null, -1);
+          }
+        },
+        {
+          name: "compare with undefined",
+          runTest: function () {
+            test_Compare(EnumType.values()[0], undefined, -1);
+          }
+        },
+        {
           name: "compare with me",
           runTest: function () {
             test_Compare(EnumType.values()[0], EnumType.values()[0], 0);

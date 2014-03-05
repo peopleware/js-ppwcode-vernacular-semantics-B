@@ -85,7 +85,9 @@ define(["dojo/_base/declare", "./Value",
       compare: function(other) {
         // summary:
         //   Comparison based on getValue. Can be overriden.
-
+        if (!other) {
+          return -1;
+        }
         return this.equals(other) ? 0 : (this.getValue() < other.getValue() ? -1 : +1);
       },
 
