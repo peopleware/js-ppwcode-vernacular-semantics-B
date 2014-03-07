@@ -8,7 +8,7 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
 
     function test_isJson(/*String*/ candidate, /*Object*/ EnumType) {
       var values = EnumType.values();
-      var jsons = values.map(function(enumValue) {return JSON.parse(JSON.stringify(enumValue));});
+      var /*String[]*/ jsons = values.map(function(enumValue) {return JSON.parse(JSON.stringify(enumValue));});
       var expected = (jsons.indexOf(candidate) >= 0);
       var result = EnumType.isJson(candidate);
       doh.is(expected, result);
@@ -24,15 +24,6 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
       doh.validateInvariants(enumValue);
       // postconditions
       doh.t(EnumType.values().indexOf(enumValue) >= 0, result);
-    }
-
-    function test_Compare(/*EnumerationValue*/ enumValue1, /*EnumerationValue?*/ enumValue2, /*Object*/ expectCompare) {
-      var result = enumValue1.compare(enumValue2);
-      doh.validateInvariants(enumValue1);
-      if (enumValue2 && enumValue2.isInstanceOf && enumValue2.isInstanceOf(EnumerationValue)) {
-        doh.validateInvariants(enumValue2);
-      }
-      doh.is(result, expectCompare);
     }
 
     function testForAllValues(/*Object*/ EnumType, /*Function*/ testFunction) {
@@ -71,7 +62,7 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
         {
           name: "isJson - undefined",
           runTest: function() {
-            test_isJson(null, EnumType);
+            test_isJson(undefined, EnumType);
           }
         },
         {
@@ -112,41 +103,15 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
             test_revive(json, EnumType);
           })
         },
+
+
+
+
         {
           name: "all instances adhere to invariants",
           runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
             doh.validateInvariants(enumValue);
           })
-        },
-        {
-          name: "compare with null",
-          runTest: function () {
-            test_Compare(EnumType.values()[0], null, -1);
-          }
-        },
-        {
-          name: "compare with undefined",
-          runTest: function () {
-            test_Compare(EnumType.values()[0], undefined, -1);
-          }
-        },
-        {
-          name: "compare with me",
-          runTest: function () {
-            test_Compare(EnumType.values()[0], EnumType.values()[0], 0);
-          }
-        },
-        {
-          name: "compare with larger",
-          runTest: function () {
-            test_Compare(EnumType.values()[0], EnumType.values()[1], -1);
-          }
-        },
-        {
-          name: "compare with smaller",
-          runTest: function () {
-            test_Compare(EnumType.values()[1], EnumType.values()[0], +1);
-          }
         }
       ];
       tests = tests.concat(valueTestGenerator(
@@ -168,7 +133,6 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
     testGenerator.isJson = test_isJson;
     testGenerator.revive = test_revive;
     testGenerator.isValueOf = test_isValueOf;
-    testGenerator.compare = test_Compare;
 
     return testGenerator;
   }

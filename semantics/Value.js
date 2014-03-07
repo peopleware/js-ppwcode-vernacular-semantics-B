@@ -33,7 +33,17 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
         //   parse: String x Options --> Value, ParseException
 
         _c_invar: [
-
+          function() {
+            var valueOf = this.valueOf();
+            var type = js.typeOf(valueOf);
+            return valueOf === this || type === "date" || type === "number" || type === "string" || type === "boolean";
+          },
+          function() {return js.typeOf(this.getValue()) === "string"},
+          function() {return this.getValue() !== ""},
+          function() {return js.typeOf(this.canCoerceTo()) === "array"},
+          function() {return this.canCoerceTo().every(function(el) {
+            return js.typeOf(el) === "function" && el.prototype.isInstanceOf(Value);
+          })}
         ],
 
         constructor: function(/*Object*/ props) {
@@ -45,25 +55,42 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
 
         compare: function(/*Value*/ other) {
           // summary:
-          //   Return a negative number if this is considered smaller than other;
-          //   return a positive number if this is considered larger than other;
-          //   return 0 is this.equals(other)
+          //   Return a negative number if `this` is considered smaller than `other`.
+          //   Return a positive number if `this` is considered larger than `other`.
+          //   return 0 if `this.equals(other)`.
           // description:
-          //   This method should return consistent results: given a this and an other,
+          //   This method should return consistent results: given a `this` and an `other`,
           //   it should return the same result whenever the method is called, during
-          //   the entire live time of the object.
+          //   the entire lifetime of the object.
           //   This extra requirement can be asked of Values, since they are immutable.
           //   This method should realize a total order: it should be complete,
           //   transitive, and anti-symmetric.
+          //   For any `one` and `other` of the same type, it must always be true that
+          //   `one.compare(other) === -other.compare(one)`.
           //
-          //   The pattern to express `this # other` is `this.compare(other) # 0`, with
+          //   `other` must be of the same type as `this`. `other` cannot be `null` or `undefined`.
+          //   We could devise a semantics for comparison with `null` or `undefined`, considering them
+          //   either the smallest or largest element of any type. There is however no sound reason to
+          //   choose one option over the other. In practice, sometimes we need null-elements last, sometimes
+          //   we need null-elements first. Furthermore, we cannot uphold the above requirement,
+          //   since `null` nor `undefined` can be used as the left-side when calling `compare`.
+          //   "Wovon man nicht sprechen kann, darüber mu§ man schweigen."
+          //   (http://en.wikisource.org/wiki/Tractatus_Logico-Philosophicus/7): the only sensible option
+          //   is to let this to the user, when needed.
+          //
+          //   The idiom to express `this # other` is `this.compare(other) # 0`, with
           //   # either <, =, or >.
           //
-          //   In the order, undefined comes first and null comes second. However, it is impossible
-          //   to compare null and undefined, since neither can be used as the left-side in calling this method.
+          //   When you need to add a semantics for `null` being first, e.g., you might wrap this method
+
+          //   function nullCompare(one, other) {
+          //     return one === null ?
+          //        (other === null ? 0 : -1) :
+          //        (other === null ? +1 : one.compare(other));
+          //   }
           // tags:
           //   public extension
-          this._c_pre(function() {return !other || (other.isInstanceOf && other.isInstanceOf(this.constructor));});
+          this._c_pre(function() {return other && other.isInstanceOf && other.isInstanceOf(this.constructor);});
 
           return this._c_ABSTRACT(); // return Number
         },
@@ -88,8 +115,22 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
                     (other.constructor === this.constructor)); // same type;
         },
 
+        valueOf: function() {
+          // summary:
+          //   Convert a value instance to a primitive value, if possible. Otherwise, return `this`.
+          //   Also see `coerceTo`.
+          // description:
+          //   The default implementation returns `this`. Subclasses should override if it makes sense.
+
+          return this.inherited(arguments);
+        },
+
         getValue: function() {
+          // summary:
+          //   Deprecated. Use `valueOf`, `toString` or `toJSON` (via `JSON.stringify`).
+          //   Return a string-representation of this value.
           this._c_ABSTRACT();
+
           return null; // return object
         },
 
