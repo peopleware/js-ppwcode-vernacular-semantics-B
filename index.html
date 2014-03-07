@@ -76,7 +76,7 @@
 
   <div id="mainPane" data-dojo-type="dijit/layout/ContentPane">
     <div class="boardsInput">
-      <h2 style="text-align: left;">Choose a sign</h2>
+      <h2>Choose a sign</h2>
       <p>
         The signs in the drop-down are traffic signs stored as an enumeration.
         On selection, the traffic sign will appear in the correct area below, depending on the type of traffic sign.
@@ -84,6 +84,7 @@
       <div id="enumChoice" data-dojo-type="demo/combo/comboBoards"></div>
     </div>
     <div class="boardsOutput">
+      <h2 style="text-align: left;">Selected signs</h2>
       <dl id="mandatory" data-dojo-type="demo/symbol/SymbolList">
         <dt>MANDATORY LIST: enum == TrafficSign.MANDATORY</dt>
         <dd class="emptySelection">No traffic signs selected yet</dd>
