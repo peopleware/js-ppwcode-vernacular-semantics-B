@@ -38,8 +38,6 @@ define(["dojo/_base/declare",
 
         query("dl#" + self.id + " dd").forEach(domConstruct.destroy);
 
-        //domConstruct.empty(self.domNode);
-        //domClass.toggle(self.domNode, "dpd", true);
         symbols.forEach(function (symbol) {
           var dd = domConstruct.create("dd", null, self.domNode);
           var w = new SymbolWidget();
