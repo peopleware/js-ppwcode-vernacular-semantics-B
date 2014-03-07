@@ -14,6 +14,15 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
       doh.is(expected, result);
     }
 
+    function test_format(/*EnumerationValue*/ candidate, /*Object*/ EnumType) {
+      EnumType.format(candidate);
+    }
+
+    function test_parse(/*EnumerationValue*/ candidate, /*Object*/ EnumType) {
+      var parsed = EnumType.parse(EnumType.constructor, candidate.getValue());
+      doh.is("string", typeof parsed);
+    }
+
     function test_revive(/*String*/ candidate, /*Object*/ EnumType) {
       var result = EnumType.revive(candidate);
       doh.is(candidate, result.toJSON());
@@ -96,6 +105,20 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
             test_isJson(json, EnumType);
           })
         },
+
+//        {
+//          name: "format - ok",
+//          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
+//            test_format(enumValue, EnumType);
+//          })
+//        },
+//        {
+//          name: "parse - ok",
+//          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
+//            test_parse(enumValue, EnumType);
+//          })
+//        },
+
         {
           name: "revive",
           runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
