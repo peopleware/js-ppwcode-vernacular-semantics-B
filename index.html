@@ -77,9 +77,10 @@
   <div id="mainPane" data-dojo-type="dijit/layout/ContentPane">
     <div class="boardsInput">
       <h2>Choose a sign</h2>
-      <p>
+      <p class="demoInfo">
         The signs in the drop-down are traffic signs stored as an enumeration.
         On selection, the traffic sign will appear in the correct area below, depending on the type of traffic sign.
+        Duplicates are not allowed, so selecting an already selected traffic sign will not result in added the sign to an area below.
       </p>
       <div id="enumChoice" data-dojo-type="demo/combo/comboBoards"></div>
     </div>

@@ -12,22 +12,34 @@ html,body {
     padding: 0;
 }
 
+h2, h3 {
+    color: #0a92df;
+    margin: 0;
+    padding: 10px 0px;
+}
+
+p {
+    margin: 0;
+    padding: 10px 0px;
+}
+
 dl {
     border: 1px solid #7AC142;
-    margin: 16px 20px 10px 0px !important;
+    margin: 10px 0px 10px 0px !important;
     overflow: auto;
 }
 
 dl dt {
     font-weight: bold;
+    color: #7AC142;
     border-bottom: 1px solid #7AC142;
     padding: 4px 10px;
-    background-color: #E1FACD;
+    background-color: #F1FFE6;
     text-align: left;
 }
 
 .boardsInput {
-    border-bottom: 2px solid #0a92df;
+    border-bottom: 3px solid #0a92df;
     margin: 0;
     padding: 0px 20px 20px 20px;
 }
@@ -38,5 +50,11 @@ dl dt {
 }
 
 dl dd.emptySelection {
-    color: silver;
+    color: #666;
+    font-style: italic;
+}
+
+.demoInfo {
+    color: #666;
+    font-style: italic;
 }
