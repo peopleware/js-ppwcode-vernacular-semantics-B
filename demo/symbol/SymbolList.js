@@ -28,8 +28,10 @@ define(["dojo/_base/declare",
 
       updateSymbols: function (symbol) {
         var s = this.symbols || [];
-        s.push(symbol);
-        this.set("symbols", s);
+        if (s.indexOf(symbol) < 0) {
+          s.push(symbol);
+          this.set("symbols", s);
+        }
       },
 
 
