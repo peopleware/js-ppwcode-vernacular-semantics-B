@@ -17,7 +17,7 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
       },
 
       compare: function(/*Value*/ other) {
-        return 0;
+        return this._data < other._data ? -1 : (this._data === other._data ? 0 : +1);
       },
 
       getValue: function() {
@@ -95,8 +95,8 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
       return new ValueStub1({data: "TEST"});
     }
 
-    function getTestSubjectSameTypeOtherData() {
-      return new ValueStub1({data: "OTHER"});
+    function getTestSubjectSameTypeOtherDataLarger() {
+      return new ValueStub1({data: "T_OTHER"});
     }
 
     function getTestSubjectOtherTypeSameData() {
@@ -125,16 +125,9 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
           function() {return new ValueStub2({data: "TEST NO MID"});}
         )).concat(valueTestGenerator(
           getTestSubject,
-          getTestSubjectSameTypeOtherData,
+          getTestSubjectSameTypeOtherDataLarger,
           getTestSubjectOtherTypeSameData
         )).concat(
-          {
-            name: "getValue that was set via constructor",
-            runTest: function () {
-              var subject = getTestSubject();
-              doh.assertEqual("TEST", subject.getValue());
-            }
-          },
           {
             name: "coerceTo null",
             runTest: function () {
