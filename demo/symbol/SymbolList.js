@@ -35,9 +35,7 @@ define(["dojo/_base/declare",
 
       _updateSymbolWidgets: function (symbols) {
         var self = this;
-
         query("dl#" + self.id + " dd").forEach(domConstruct.destroy);
-
         symbols.forEach(function (symbol) {
           var dd = domConstruct.create("dd", null, self.domNode);
           var w = new SymbolWidget();
