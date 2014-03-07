@@ -161,7 +161,7 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
             }
           },
           {
-            name: "coerceTo other type (chaining), supported, expect succes",
+            name: "coerceTo other type (chaining), supported, expect success",
             runTest: function () {
               var subject = getTestSubjectChainingType();
               test_CoerceToData(subject, ValueStub1, subject.data);
