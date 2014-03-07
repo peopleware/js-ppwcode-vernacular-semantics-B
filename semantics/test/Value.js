@@ -1,6 +1,6 @@
-define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeObjectTestGenerator",
+define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
   "./valueTestGenerator", "module"],
-  function (doh, Value, declare, ppwCodeObjectTestGenerator,
+  function (doh, Value, declare,
             valueTestGenerator, module) {
 
     // Abstract functions are not tested.
@@ -120,10 +120,7 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare", "./ppwCodeOb
             doh.validateInvariants(subject);
           }
         }
-      ].concat(ppwCodeObjectTestGenerator(
-          function() {return new ValueStub1({data: "TEST WITH MID"});},
-          function() {return new ValueStub2({data: "TEST NO MID"});}
-        )).concat(valueTestGenerator(
+      ].concat(valueTestGenerator(
           getTestSubject,
           getTestSubjectSameTypeOtherDataLarger,
           getTestSubjectOtherTypeSameData
