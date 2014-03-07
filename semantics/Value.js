@@ -33,7 +33,17 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
         //   parse: String x Options --> Value, ParseException
 
         _c_invar: [
-
+          function() {
+            var valueOf = this.valueOf();
+            var type = js.typeOf(valueOf);
+            return valueOf === this || type === "date" || type === "number" || type === "string" || type === "boolean";
+          },
+          function() {return js.typeOf(this.getValue()) === "string"},
+          function() {return this.getValue() !== ""},
+          function() {return js.typeOf(this.canCoerceTo()) === "array"},
+          function() {return this.canCoerceTo().every(function(el) {
+            return js.typeOf(el) === "function" && el.prototype.isInstanceOf(Value);
+          })}
         ],
 
         constructor: function(/*Object*/ props) {

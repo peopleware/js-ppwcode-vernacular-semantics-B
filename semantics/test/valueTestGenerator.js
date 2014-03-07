@@ -19,22 +19,6 @@ define(["../_util/contracts/doh", "../Value", "../_util/js"],
         doh.is(result, !!expectEquals);
       }
 
-      function test_valueOf(/*Value*/ value) {
-        var result = value.valueOf();
-        doh.validateInvariants(value);
-        doh.t(result !== null);
-        doh.t(result !== undefined);
-        var type = js.typeOf(result);
-        doh.t(result === value || type === "date" || type === "number" || type === "string" || type === "boolean");
-      }
-
-      function test_getValue(/*Value*/ value) {
-        var result = value.getValue();
-        doh.validateInvariants(value);
-        doh.is("string", js.typeOf(result));
-        doh.isNot("", result);
-      }
-
       var testGenerator = function(createSubject, createSubjectSameTypeOtherDataLarger, createSubjectOtherTypeSameData) {
 
         var tests = [
@@ -140,20 +124,6 @@ define(["../_util/contracts/doh", "../Value", "../_util/js"],
               var subject = createSubject();
               test_equals(subject, window);
             }
-          },
-          {
-            name: "test valueOf", // don't call this valueOf - doh crashes on that because it is a method of Object
-            runTest: function () {
-              var subject = createSubject();
-              test_getValue(subject);
-            }
-          },
-          {
-            name: "getValue",
-            runTest: function () {
-              var subject = createSubject();
-              test_getValue(subject);
-            }
           }
         ];
 
@@ -163,8 +133,6 @@ define(["../_util/contracts/doh", "../Value", "../_util/js"],
 
       testGenerator.compare = test_compare;
       testGenerator.equals = test_equals;
-      testGenerator.valueOf = test_valueOf;
-      testGenerator.getValue = test_getValue;
 
       return testGenerator;
     }
