@@ -72,20 +72,6 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
 
     });
 
-    function _coerceTo(/*Value*/ v1, /*Function?*/ type) {
-      var result = v1.coerceTo(type);
-      doh.validateInvariants(v1);
-      if (result && result.isInstanceOf && result.isInstanceOf(Value)) {
-        doh.validateInvariants(result);
-      }
-      return result;
-    }
-
-    function test_CoerceTo(/*Value*/ v1, /*Type?*/ type, expectResult) {
-      var result = _coerceTo(v1, type);
-      doh.assertEqual(result, expectResult);
-    }
-
     function test_CoerceToData(/*Value*/ v1, /*Type?*/ type, expectResult) {
       var result = _coerceTo(v1, type);
       doh.assertEqual(result.data, expectResult);
@@ -124,63 +110,7 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
           getTestSubject,
           getTestSubjectSameTypeOtherDataLarger,
           getTestSubjectOtherTypeSameData
-        )).concat(
-          {
-            name: "coerceTo null",
-            runTest: function () {
-              var subject = getTestSubject();
-              test_CoerceTo(subject, null, undefined);
-            }
-          },
-          {
-            name: "coerceTo undefined",
-            runTest: function () {
-              var subject = getTestSubject();
-              test_CoerceTo(subject, undefined, undefined);
-            }
-          },
-          {
-            name: "coerceTo same type",
-            runTest: function () {
-              var subject = getTestSubject();
-              test_CoerceTo(subject, ValueStub1, subject);
-            }
-          },
-          {
-            name: "coerceTo other type, supported, expect success",
-            runTest: function () {
-              var subject = getTestSubjectOtherTypeSameData();
-              test_CoerceToData(subject, ValueStub1, subject.data);
-            }
-          },
-          {
-            name: "coerceTo other type, not supported, expect fail",
-            runTest: function () {
-              var subject = getTestSubject();
-              test_CoerceTo(subject, ValueStub2, undefined);
-            }
-          },
-          {
-            name: "coerceTo other type (chaining), supported, expect success",
-            runTest: function () {
-              var subject = getTestSubjectChainingType();
-              test_CoerceToData(subject, ValueStub1, subject.data);
-            }
-          },
-          {
-            name: "coerceTo other type (chaining), not supported, expect failure",
-            runTest: function () {
-              var subject = getTestSubjectOtherTypeSameData();
-              test_CoerceTo(subject, ValueStub3, undefined);
-            }
-          }
-        )
-
-        /*
-          canCoerceTo must not be tested: basic
-          test coerceTo, from a Stub1 (default) and from a Stub2 (with the extended canCoerceTo
-          all in different cases
-         */
+        ))
     );
   }
 );

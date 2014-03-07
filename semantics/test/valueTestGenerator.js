@@ -19,6 +19,15 @@ define(["../_util/contracts/doh", "../Value",  "./ppwCodeObjectTestGenerator", "
         doh.is(result, !!expectEquals);
       }
 
+      function test_coerceTo(/*Value*/ value, /*Type?*/ type, expectedResult) {
+        var result = value.coerceTo(type);
+        doh.validateInvariants(value);
+        if (result && result.isInstanceOf && result.isInstanceOf(Value)) {
+          doh.validateInvariants(result);
+        }
+        doh.assertEqual(result, expectedResult);
+      }
+
       var testGenerator = function(createSubject, createSubjectSameTypeOtherDataLarger, createSubjectOtherTypeSameDataNoMid) {
 
         var tests = ppwCodeObjectTestGenerator(createSubject, createSubjectOtherTypeSameDataNoMid).
@@ -125,7 +134,57 @@ define(["../_util/contracts/doh", "../Value",  "./ppwCodeObjectTestGenerator", "
                 var subject = createSubject();
                 test_equals(subject, window);
               }
-            }
+            },
+            {
+              name: "coerceTo null",
+              runTest: function () {
+                var subject = createSubject();
+                test_coerceTo(subject, null, undefined);
+              }
+            },
+            {
+              name: "coerceTo undefined",
+              runTest: function () {
+                var subject = createSubject();
+                test_coerceTo(subject, undefined, undefined);
+              }
+            },
+            {
+              name: "coerceTo same type",
+              runTest: function () {
+                var subject = createSubject();
+                test_coerceTo(subject, subject.constructor, subject);
+              }
+            }//,
+//            {
+//              name: "coerceTo other type, supported, expect success",
+//              runTest: function () {
+//                var subject = createSubjectOtherTypeSameDataNoMid();
+//                var supportedOtherType = createSubject().constructor;
+//                test_CoerceToData(subject, supportedOtherType, subject.data);
+//              }
+//            },
+//            {
+//              name: "coerceTo other type, not supported, expect fail",
+//              runTest: function () {
+//                var subject = getTestSubject();
+//                test_coerceTo(subject, ValueStub2, undefined);
+//              }
+//            },
+//            {
+//              name: "coerceTo other type (chaining), supported, expect succes",
+//              runTest: function () {
+//                var subject = getTestSubjectChainingType();
+//                test_CoerceToData(subject, ValueStub1, subject.data);
+//              }
+//            },
+//            {
+//              name: "coerceTo other type (chaining), not supported, expect failure",
+//              runTest: function () {
+//                var subject = getTestSubjectOtherTypeSameData();
+//                test_coerceTo(subject, ValueStub3, undefined);
+//              }
+//            }
           ]);
 
         return tests;
