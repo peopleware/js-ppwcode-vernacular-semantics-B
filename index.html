@@ -6,6 +6,7 @@
 
   <link rel="stylesheet" href="lib/dojo/dojo/resources/dojo.css" />
   <link rel="stylesheet" href="lib/dojo/dijit/themes/claro/claro.css" />
+  <link rel="stylesheet" href="demo/css/boardsDemo.css" />
 
   <script>
     var dojoConfig = {
@@ -73,21 +74,36 @@
 
 <body class="claro">
 
-  <div id="mainPane" style="height: 100%;" data-dojo-type="dijit/layout/ContentPane">
-    <p style="text-align: left;">Choose a sign</p>
-    <div id="enumChoice" data-dojo-type="demo/combo/comboBoards"></div>
+  <div id="mainPane" data-dojo-type="dijit/layout/ContentPane">
+    <div class="boardsInput">
+      <h2 style="text-align: left;">Choose a sign</h2>
+      <p>
+        The signs in the drop-down are traffic signs stored as an enumeration.
+        On selection, the traffic sign will appear in the correct area below, depending on the type of traffic sign.
+      </p>
+      <div id="enumChoice" data-dojo-type="demo/combo/comboBoards"></div>
+    </div>
+    <div class="boardsOutput">
+      <dl id="mandatory" data-dojo-type="demo/symbol/SymbolList">
+        <dt>MANDATORY LIST: enum == TrafficSign.MANDATORY</dt>
+        <dd class="emptySelection">No traffic signs selected yet</dd>
+      </dl>
 
-    <p style="text-align: center;">MANDATORY LIST: enum == TrafficSign.MANDATORY</p>
-    <ul id="mandatory" data-dojo-type="demo/symbol/SymbolList"></ul>
+      <dl id="prohibitory" data-dojo-type="demo/symbol/SymbolList">
+        <dt>PROHIBITORY LIST: enum == TrafficSign.PROHIBITORY</dt>
+        <dd class="emptySelection">No traffic signs selected yet</dd>
+      </dl>
 
-    <p style="text-align: center;">PROHIBITORY LIST: enum == TrafficSign.PROHIBITORY</p>
-    <ul id="prohibitory" data-dojo-type="demo/symbol/SymbolList"></ul>
+      <dl id="warning" data-dojo-type="demo/symbol/SymbolList">
+        <dt>WARNING LIST: enum == TrafficSign.WARNING</dt>
+        <dd class="emptySelection">No traffic signs selected yet</dd>
+      </dl>
 
-    <p style="text-align: center;">WARNING LIST: enum == TrafficSign.WARNING</p>
-    <ul id="warning" data-dojo-type="demo/symbol/SymbolList"></ul>
-
-    <p style="text-align: center;"> DIRECTION LIST: enum == TrafficSign.DIRECTION</p>
-    <ul id="direction" data-dojo-type="demo/symbol/SymbolList"></ul>
+      <dl id="direction" data-dojo-type="demo/symbol/SymbolList">
+        <dt> DIRECTION LIST: enum == TrafficSign.DIRECTION</dt>
+        <dd class="emptySelection">No traffic signs selected yet</dd>
+      </dl>
+    </div>
   </div>
 
 </body>

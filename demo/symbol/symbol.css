@@ -1,11 +1,11 @@
 /* Symbol */
 
-.productDocuments_symbol,
-.productDocuments_symbol img {
-    padding: 0;
+.traffic_symbol,
+.traffic_symbol img {
+    padding: 10px;
 }
 
-.productDocuments_symbol {
+.traffic_symbol {
     margin: 0;
     min-height: 50px;
     min-width: 50px;
@@ -13,31 +13,21 @@
     opacity: 0; /* initial opacity */
 }
 
-td.productDocuments_symbol {
-    /* min-height doesn't exist for tabel cells, but heigth has that semantics */
-    height: 50px;
-    display: table-cell;
-}
-
-/* IDEA no idea why we don't have to position relative */
-.productDocuments_symbol img {
+.traffic_symbol img {
     width: 50px; /* no height: keep ratio */
     top: 0;
     /* center horizontally */
     left: 50%;
-    margin-left: 0; /*-25px;*//* IDEA no idea why we don't have to do -25px here, and still get it centered */
-    margin-top: 0;
-    margin-right: 0;
-    margin-bottom: 0;
+    margin: 0;
 }
 
-.big .productDocuments_symbol img,
-.productDocuments_symbol.big img {
+.big .traffic_symbol img,
+.traffic_symbol.big img {
     /* symbols a big context list are bigger */
     width: 100px;
 }
 
-.productDocuments_symbol span {
+.traffic_symbol span {
     display: block;
     margin: 0;
     text-align: center;
@@ -46,40 +36,27 @@ td.productDocuments_symbol {
 
 /* List */
 
-ul.symbolList,
-ul.symbolList li {
+dl.symbolList,
+dl.symbolList dd {
     padding: 0;
 }
 
-ul.symbolList {
+dl.symbolList {
     display: block;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 0.5em 0;
     text-align: center;
 }
 
-ul.symbolList li {
+dl.symbolList dd {
     display: inline-block;
     margin: 0.5em;
 }
 
-ul.symbolList.dpd li {
-    /* dpd hazard symbols have a label, and need a bit of special treatment */
-    min-width: 100px;
-}
-
-ul.symbolList.dpd.big li {
-    /* dpd hazard symbols have a label, and need a bit of special treatment */
-    min-width: 150px;
-}
-
-ul.symbolList li:first-of-type {
+dl.symbolList dd:first-of-type {
     margin-left: 0;
 }
 
-ul.symbolList li:last-child {
+dl.symbolList dd:last-child {
     margin-right: 0;
 }
 

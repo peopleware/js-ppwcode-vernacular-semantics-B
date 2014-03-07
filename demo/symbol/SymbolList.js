@@ -3,8 +3,9 @@ define(["dojo/_base/declare",
   "./Symbol",
   "dojo/dom-class",
   "dojo/dom-construct",
+  "dojo/query",
   "xstyle/css!./symbol.css"],
-  function (declare, _WidgetBase, SymbolWidget, domClass, domConstruct) {
+  function (declare, _WidgetBase, SymbolWidget, domClass, domConstruct, query) {
 
     return declare([_WidgetBase], {//,_PropagationMixin, _DerivedMixin
       // summary:
@@ -34,12 +35,15 @@ define(["dojo/_base/declare",
 
       _updateSymbolWidgets: function (symbols) {
         var self = this;
-        domConstruct.empty(self.domNode);
+
+        query("dl#" + self.id + " dd").forEach(domConstruct.destroy);
+
+        //domConstruct.empty(self.domNode);
         //domClass.toggle(self.domNode, "dpd", true);
         symbols.forEach(function (symbol) {
-          var li = domConstruct.create("li", null, self.domNode);
+          var dd = domConstruct.create("dd", null, self.domNode);
           var w = new SymbolWidget();
-          w.placeAt(li);
+          w.placeAt(dd);
           w.set("symbol", symbol);
         });
       }

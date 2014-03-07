@@ -33,7 +33,7 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
 
       postCreate: function () {
         this.inherited(arguments);
-        domClass.add(this.domNode, "productDocuments_symbol");
+        domClass.add(this.domNode, "traffic_symbol");
         if (this.symbol && this.symbol.url) {
           this._createNodes();
           domStyle.set(this.domNode, "opacity", 1);
