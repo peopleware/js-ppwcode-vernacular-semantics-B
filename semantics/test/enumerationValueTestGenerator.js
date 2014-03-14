@@ -181,6 +181,42 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
           }
         },
         {
+          name: "parse - passing in an object instead of a string",
+          runTest: function() {
+            test_parse({foo: "bar"}, EnumType, {value: null}, {});
+          }
+        },
+        {
+          name: "parse - non existent string value",
+          runTest: function() {
+            test_parse("wrongValue", EnumType, {value: undefined}, {});
+          }
+        },
+        {
+          name: "parse - test with locale",
+          runTest: function() {
+            test_parse("Nummer 1", EnumType, {value: EnumType.first}, {locale: "nl"});
+          }
+        },
+        {
+          name: "parse - test with locale with missing property for current enumeration value",
+          runTest: function() {
+            test_parse("Number 3", EnumType, {value: EnumType.third}, {locale: "nl"});
+          }
+        },
+        {
+          name: "parse - test with not found in fallback locale",
+          runTest: function() {
+            test_parse("Number 2", EnumType, {value: null}, {locale: "fr"});
+          }
+        },
+        {
+          name: "parse - test with fallback locale",
+          runTest: function() {
+            test_parse("Number 3", EnumType, {value: EnumType.third}, {locale: "fr"});
+          }
+        },
+        {
           name: "parse - all values are tested",
           runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
             var formattedEnum = EnumType.format(enumValue);
