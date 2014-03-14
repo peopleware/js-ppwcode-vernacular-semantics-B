@@ -219,7 +219,7 @@ define(["dojo/_base/declare", "./Value",
       //   options.locale can be filled out; if not, the default locale is used.
       //   If no label is found, the representation itself is returned.
 
-      if (!str && str !== "") {
+      if (!str || str === "") {
         return null;
       }
       var lang = options.locale || kernel.locale;
