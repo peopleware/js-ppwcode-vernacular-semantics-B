@@ -222,7 +222,7 @@ define(["dojo/_base/declare", "./Value",
       if (!str || str === "") {
         return null;
       }
-      var lang = options.locale || kernel.locale;
+      var lang = (options && options.locale) || kernel.locale;
       var bundle = getBundle(EnumValueConstructor, lang);
       for (var representation in bundle) {
         //noinspection JSUnfilteredForInLoop
