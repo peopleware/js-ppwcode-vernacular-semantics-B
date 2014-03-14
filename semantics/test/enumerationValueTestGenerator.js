@@ -14,8 +14,14 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
       doh.is(expected, result);
     }
 
-    function test_format(/*EnumerationValue*/ candidate, /*Object*/ EnumType) {
-      EnumType.format(candidate);
+    function test_format(/*EnumerationValue*/ candidate, /*Object*/ EnumType, /*Object?*/ options, /*String?*/ expected) {
+      var result = EnumType.format(candidate, options);
+      doh.t(!!result);
+      doh.t(typeof result === "string");
+      doh.t(result.trim().length > 0);
+      if (expected) {
+        doh.assertEqual(expected, result);
+      }
     }
 
     function test_parse(/*EnumerationValue*/ candidate, /*Object*/ EnumType) {
@@ -105,13 +111,53 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
             test_isJson(json, EnumType);
           })
         },
+        {
+          name: "format - no options ok",
+          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
+            test_format(enumValue, EnumType);
+          })
+        },
+        {
+          name: "format - options.locale = nl",
+          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
+            test_format(enumValue, EnumType, {locale: "nl"});
+          })
+        },
+        {
+          name: "format - options.locale = ru => fallback language",
+          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
+            test_format(enumValue, EnumType, {locale: "ru"});
+          })
+        },
+        {
+          name: "format - not found in fallback language",
+          runTest: function() {
+            test_format(EnumType.second, EnumType, {locale: "ru"}, EnumType.second.getValue());
+          }
+        },
+        {
+          name: "format - not found in nl language, falling back to default nls file",
+          runTest: function() {
+            test_format(EnumType.third, EnumType, {locale: "nl"}, "Number 3");
+          }
+        },
+        {
+          name: "format - found in fallback language file",
+          runTest: function() {
+            test_format(EnumType.first, EnumType, {locale: "ru"}, "Number 1");
+          }
+        },
+        {
+          name: "format - found in nl language file",
+          runTest: function() {
+            test_format(EnumType.first, EnumType, {locale: "nl"}, "Nummer 1");
+          }
+        },
 
-//        {
-//          name: "format - ok",
-//          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
-//            test_format(enumValue, EnumType);
-//          })
-//        },
+
+
+
+
 //        {
 //          name: "parse - ok",
 //          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
