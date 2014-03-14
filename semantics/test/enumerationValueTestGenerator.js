@@ -26,8 +26,15 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
 
     function test_parse(/*String?*/ candidate, /*Object*/ EnumType, /*Object?*/ expected, /*Object?*/ options) {
       var result = EnumType.parse(candidate, options);
+      if (result) {
+        doh.t(result.isInstanceOf(EnumType));
+      }
       if (expected) {
         doh.assertEqual(expected.value, result);
+      } else {
+        var values = EnumType.values();
+        var /*String[]*/ stringRepresentations = values.map(function(enumValue) {return JSON.parse(JSON.stringify(enumValue));});
+        doh.t(stringRepresentations.indexOf(result.getValue()) >= 0);
       }
     }
 
