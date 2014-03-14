@@ -188,13 +188,14 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
 
 
 
-//        {
-//          name: "parse - ok",
-//          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
-//            test_parse(enumValue, EnumType);
-//          })
-//        },
 
+        {
+          name: "parse - all values are tested",
+          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
+            var formattedEnum = EnumType.format(enumValue);
+            test_parse(formattedEnum, EnumType);
+          })
+        },
         {
           name: "revive",
           runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
