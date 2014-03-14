@@ -24,9 +24,11 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
       }
     }
 
-    function test_parse(/*EnumerationValue*/ candidate, /*Object*/ EnumType) {
-      var parsed = EnumType.parse(EnumType.constructor, candidate.getValue());
-      doh.is("string", typeof parsed);
+    function test_parse(/*String?*/ candidate, /*Object*/ EnumType, /*Object?*/ expected, /*Object?*/ options) {
+      var result = EnumType.parse(candidate, options);
+      if (expected) {
+        doh.assertEqual(expected.value, result);
+      }
     }
 
     function test_revive(/*String*/ candidate, /*Object*/ EnumType) {
@@ -151,6 +153,27 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
           name: "format - found in nl language file",
           runTest: function() {
             test_format(EnumType.first, EnumType, {locale: "nl"}, "Nummer 1");
+          }
+        },
+
+
+
+        {
+          name: "parse - null value",
+          runTest: function() {
+            test_parse(null, EnumType, {value: null}, {});
+          }
+        },
+        {
+          name: "parse - undefined value",
+          runTest: function() {
+            test_parse(undefined, EnumType, {value: null}, {});
+          }
+        },
+        {
+          name: "parse - empty string value",
+          runTest: function() {
+            test_parse("", EnumType, {value: null}, {});
           }
         },
 
