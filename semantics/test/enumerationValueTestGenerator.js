@@ -138,9 +138,9 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
         }
       ];
       tests = tests.concat(valueTestGenerator(
-        function() {return values[0];},
-        function() {return values[1]},
-        function() {return OtherEnumType.values()[0]}
+        function() {return EnumType.first;},
+        function() {return EnumType.second;},
+        function() {return OtherEnumType.alpha;}
       ));
       tests = tests.concat([
         {
