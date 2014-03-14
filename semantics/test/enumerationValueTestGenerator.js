@@ -162,9 +162,6 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
             test_format(EnumType.first, EnumType, "Nummer 1", {locale: "nl"});
           }
         },
-
-
-
         {
           name: "parse - null value",
           runTest: function() {
@@ -183,12 +180,6 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
             test_parse("", EnumType, {value: null}, {});
           }
         },
-
-
-
-
-
-
         {
           name: "parse - all values are tested",
           runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
@@ -203,10 +194,6 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
             test_revive(json, EnumType);
           })
         },
-
-
-
-
         {
           name: "all instances adhere to invariants",
           runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
