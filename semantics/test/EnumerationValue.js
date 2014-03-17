@@ -12,8 +12,8 @@ define(["../_util/contracts/doh", "../EnumerationValue", "./enumerationValueTest
     var EnumerationValueStub2 = EnumerationValue.declare(
       {},
       ["alpha", "beta", "gamma"],
-      module.id + "_2"
-      // no bundle
+      module.id + "_2",
+      "EnumerationValue_2"
     );
 
     doh.register(

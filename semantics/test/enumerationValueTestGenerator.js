@@ -242,6 +242,19 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
             doh.assertEqual(EnumType.mid, enumValue.constructor.mid);
             doh.assertEqual("ppwcode-vernacular-semantics/test/EnumerationValue_1", enumValue.constructor.mid);
           })
+        },
+        {
+          name: "No bundleName is set",
+          runTest: testForAllValues(OtherEnumType, function(/*EnumerationValue*/ enumValue) {
+            doh.t(!EnumType.bundleName);
+          })
+        },
+        {
+          name: "bundleName is set",
+          runTest: testForAllValues(OtherEnumType, function(/*EnumerationValue*/ enumValue) {
+            doh.assertEqual(OtherEnumType.bundleName, enumValue.constructor.bundleName);
+            doh.assertEqual("EnumerationValue_2", enumValue.constructor.bundleName);
+          })
         }
       ];
       tests = tests.concat(valueTestGenerator(
