@@ -235,6 +235,13 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
           runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
             doh.validateInvariants(enumValue);
           })
+        },
+        {
+          name: "mid is set",
+          runTest: testForAllValues(EnumType, function(/*EnumerationValue*/ enumValue) {
+            doh.assertEqual(EnumType.mid, enumValue.constructor.mid);
+            doh.assertEqual("ppwcode-vernacular-semantics/test/EnumerationValue_1", enumValue.constructor.mid);
+          })
         }
       ];
       tests = tests.concat(valueTestGenerator(
