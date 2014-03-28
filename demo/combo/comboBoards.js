@@ -107,7 +107,7 @@ define(["require",
             });
             dfd.resolve(boards);
           };
-        makeOptions()
+        makeOptions();
 
         return dfd;
       },
