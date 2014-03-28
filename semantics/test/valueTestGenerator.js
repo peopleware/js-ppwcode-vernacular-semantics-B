@@ -59,6 +59,13 @@ define(
       }
     }
 
+    function test_instanceFormat(/*Value*/ value, /*FormatOptions?*/ options) {
+      var result = value.format(options);
+      doh.validateInvariants(value);
+      var expected = value.constructor.format(value, options);
+      doh.is(expected, result);
+    }
+
 
     var testGenerator = function(createSubject,
                                  createSubjectSameTypeOtherDataLarger,
@@ -305,6 +312,27 @@ define(
               var instance = createSubject();
               var Subject = instance.constructor;
               doh.is("function", typeof Subject.parse);
+            }
+          },
+          {
+            name: "instance format, no options",
+            runTest: function() {
+              var instance = createSubject();
+              test_instanceFormat(instance);
+            }
+          },
+          {
+            name: "instance format, options.lang === nl",
+            runTest: function() {
+              var instance = createSubject();
+              test_instanceFormat(instance, {locale: "nl"});
+            }
+          },
+          {
+            name: "instance format, options.lang === ru",
+            runTest: function() {
+              var instance = createSubject();
+              test_instanceFormat(instance, {locale: "ru"});
             }
           }
         ]);

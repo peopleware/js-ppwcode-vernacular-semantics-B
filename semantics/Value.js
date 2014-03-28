@@ -215,6 +215,15 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
             return this;
           }
           return undefined;
+        },
+
+        format: function(/*FormatOptions?*/ options) {
+          // summary:
+          //   Shortcut for `this.constructor.format(this)`.
+          //   Note that this gives dynamic binding: you will always use the format function
+          //   defined for the dynamic type of this.
+
+          return this.constructor.format(this, options);
         }
 
       });
