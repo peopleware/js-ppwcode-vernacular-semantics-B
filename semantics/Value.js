@@ -57,7 +57,6 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
             return valueOf === this || type === "date" || type === "number" || type === "string" || type === "boolean";
           },
           function() {return js.typeOf(this.getValue()) === "string"},
-          function() {return this.getValue() !== ""},
           function() {return js.typeOf(this.canCoerceTo()) === "array"},
           function() {return this.canCoerceTo().every(function(el) {
             return js.typeOf(el) === "function" && el.prototype.isInstanceOf(Value);
@@ -145,7 +144,7 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
 
         getValue: function() {
           // summary:
-          //   Deprecated. Use `valueOf`, `toString` or `toJSON` (via `JSON.stringify`).
+          //   Deprecated. Use `format`, `valueOf`, `toString` or `toJSON` (via `JSON.stringify`).
           //   Return a string-representation of this value.
           this._c_ABSTRACT();
 
