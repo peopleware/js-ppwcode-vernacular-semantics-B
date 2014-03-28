@@ -14,9 +14,9 @@
  limitations under the License.
 */
 
-define(["dojo/_base/declare", "./Value",
+define(["dojo/_base/declare", "./Value", "./ParseException",
         "./_util/js", "dojo/i18n", "dojo/_base/kernel", "dojo/_base/lang", "module"],
-  function(declare, Value,
+  function(declare, Value, ParseException,
            js, i18n, kernel, lang, module) {
 
     var EnumerationValue = declare([Value], {
@@ -28,6 +28,9 @@ define(["dojo/_base/declare", "./Value",
       //   This class thus defines the values, but not the type.
       //   This hash is referenced with a Capitalized name, like a Constructor (although it is an object,
       //   and not a function).
+      //   Note that "" might be a valid representation of an enumeration value.
+      //   It can therefore not be used to represent "no value". For this, we need to use
+      //   null or undefined.
       //   An enumeration value can have a label (a human representation) that is different in different
       //   languages. To enable this, place a set of nls files in the nls directory next to the module
       //   defining the enumeration type with the same name as the module itself (or define the
@@ -184,7 +187,7 @@ define(["dojo/_base/declare", "./Value",
       );
     }
 
-    function format(v, /*Object*/ options) {
+    function format(/*EnumerationValue?*/ v, /*Object?*/ options) {
       // summary:
       //   options.locale can be filled out; if not, the default locale is used.
       //   The key for label lookup is the value representation, possibly extended with
@@ -219,7 +222,7 @@ define(["dojo/_base/declare", "./Value",
       //   options.locale can be filled out; if not, the default locale is used.
       //   If no label is found, the representation itself is returned.
 
-      if (!str || str === "") {
+      if (!str && str !== "") {
         return null;
       }
       var lang = (options && options.locale) || kernel.locale;
@@ -231,7 +234,7 @@ define(["dojo/_base/declare", "./Value",
           return enumRevive(EnumValueConstructor, representation);
         }
       }
-      return undefined;
+      throw new ParseException({targetType: EnumValueConstructor, str: str, options: options});
     }
 
     function methodFactory(/*Function*/ EnumValueConstructor, /*Function*/ f) {
