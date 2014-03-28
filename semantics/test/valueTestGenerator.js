@@ -29,21 +29,21 @@ define(
       doh.assertEqual(result, expectedResult);
     }
 
-    function test_format(/*Function*/ ValueType, /*Value*/ candidate, /*Object?*/ options) {
-      var result = ValueType.format(candidate, options);
-      if (!candidate) {
+    function test_format(/*Function*/ ValueType, /*Value*/ value, /*Object?*/ options) {
+      var result = ValueType.format(value, options);
+      if (!value) {
         doh.is(null, result);
       }
       else {
         doh.is("string", typeof result);
-        doh.t(candidate.equals(candidate.constructor.parse(result, options)));
+        doh.t(value.equals(value.constructor.parse(result, options)));
       }
     }
 
-    function test_parse(/*Function*/ ValueType, /*String?*/ candidate, /*Object?*/ expected, /*Object?*/ options) {
+    function test_parse(/*Function*/ ValueType, /*String?*/ str, /*Object?*/ expected, /*Object?*/ options) {
       try {
-        var result = ValueType.parse(candidate, options);
-        if (!candidate && candidate !== "") {
+        var result = ValueType.parse(str, options);
+        if (!str && str !== "") {
           doh.is(null, result);
         }
         else {
@@ -53,7 +53,7 @@ define(
       }
       catch (exc) {
         doh.t(exc.isInstanceOf && exc.isInstanceOf(ParseException));
-        doh.t(!!candidate || candidate === "");
+        doh.t(!!str || str === "");
       }
     }
 
