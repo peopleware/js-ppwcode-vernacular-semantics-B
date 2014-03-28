@@ -25,11 +25,19 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
       }
 
     });
+    ValueStub.format = function(v) {
+      return v ? v._data : null;
+    }
+    ValueStub.parse = function(str) {
+      return (str || str === "") ? new ValueStub1({data: str}) : null;
+    }
     ValueStub.mid = module.id + "_ValueStub";
 
     var ValueStub1 = declare([ValueStub], {
 
     });
+    ValueStub1.format = ValueStub.format;
+    ValueStub1.parse = ValueStub.parse;
     ValueStub1.mid = module.id + "_ValueStub1";
 
     var ValueStub2 = declare([ValueStub], {
@@ -52,6 +60,9 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
 
     });
 
+    ValueStub2.format = ValueStub.format;
+    ValueStub2.parse = ValueStub.parse;
+
     var ValueStub3 = declare([ValueStub], {
 
       _coerceTo: function(/*Function*/ Type) {
@@ -71,6 +82,9 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
       }
 
     });
+
+    ValueStub3.format = ValueStub.format;
+    ValueStub3.parse = ValueStub.parse;
 
     function test_CoerceToData(/*Value*/ v1, /*Type?*/ type, expectResult) {
       var result = _coerceTo(v1, type);
