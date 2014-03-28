@@ -35,6 +35,7 @@ define(
         doh.is(null, result);
       }
       else {
+        doh.validateInvariants(value);
         doh.is("string", typeof result);
         doh.t(value.equals(value.constructor.parse(result, options)));
       }
@@ -49,6 +50,7 @@ define(
         else {
           doh.t(result);
           doh.t(result.isInstanceOf(ValueType));
+          doh.validateInvariants(result);
         }
       }
       catch (exc) {
