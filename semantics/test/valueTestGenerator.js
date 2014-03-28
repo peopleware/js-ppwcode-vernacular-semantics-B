@@ -131,6 +131,12 @@ define(
       }
 
       var tests = ppwCodeObjectTestGenerator(createSubject, createSubjectOtherTypeSameDataNoMid)
+        .concat(createFormatTests(undefined, "no options"))
+        .concat(createFormatTests({locale: "nl"}, "options.lang === nl"))
+        .concat(createFormatTests({locale: "ru"}, "options.lang === ru => fallback language"))
+        .concat(createParseTests(undefined, "no options"))
+        .concat(createParseTests({locale: "nl"}, "options.lang === nl"))
+        .concat(createParseTests({locale: "ru"}, "options.lang === ru => fallback language"))
         .concat([
           {
             name: "compare with me",
@@ -301,14 +307,7 @@ define(
               doh.is("function", typeof Subject.parse);
             }
           }
-        ])
-        .concat(createFormatTests(undefined, "no options"))
-        .concat(createFormatTests({locale: "nl"}, "options.lang === nl"))
-        .concat(createFormatTests({locale: "ru"}, "options.lang === ru => fallback language"))
-        .concat(createParseTests(undefined, "no options"))
-        .concat(createParseTests({locale: "nl"}, "options.lang === nl"))
-        .concat(createParseTests({locale: "ru"}, "options.lang === ru => fallback language"));
-
+        ]);
       return tests;
 
     };
