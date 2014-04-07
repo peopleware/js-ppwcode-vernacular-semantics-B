@@ -4,11 +4,18 @@ define(
 
     var instanceTests = {
 
-      compare: function(/*Value*/ subject, /*Value*/ other, /*Object*/ expectCompare) {
+      compare: function(/*Value*/ subject, /*Value*/ other) {
         var result = subject.compare(other);
         doh.validateInvariants(subject);
         doh.validateInvariants(other);
-        doh.is(result, expectCompare);
+        doh.is("number", typeof result);
+        if (result === 0) {
+          doh.t(subject.equals(other));
+        }
+        var otherResult = other.compare(subject);
+        doh.validateInvariants(subject);
+        doh.validateInvariants(other);
+        doh.is(-1 * (result / Math.abs(result)), otherResult / Math.abs(otherResult));
       },
 
       equals: function(/*Value*/ subject, other, /*Boolean?*/ expectEquals) {
@@ -207,30 +214,33 @@ define(
             ]}
           ]
         ))
+        .concat(createTests(
+                  instanceTests,
+                  "compare",
+                  [
+                    [createSubject, createSubjectSameTypeOtherDataLarger], // subject factories
+                    {name: "other", factories: [
+                      {
+                        name: "large",
+                        factory: createSubjectSameTypeOtherDataLarger
+                      },
+                      {
+                        name: "small",
+                        factory: createSubject
+                      }
+                    ]},
+                    {name: "options", factories: [
+                      null,
+                      undefined,
+                      function() {return {locale: "nl"};},
+                      {
+                        name: "options.lang === ru --> fallback language",
+                        factory: function() {return {locale: "ru"};}
+                      }
+                    ]}
+                  ]
+                ))
         .concat([
-          {
-            name: "compare with me",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.compare(subject, subject, 0);
-            }
-          },
-          {
-            name: "compare with larger",
-            runTest: function() {
-              var subject = createSubject();
-              var larger = createSubjectSameTypeOtherDataLarger();
-              instanceTests.compare(subject, larger, -1);
-            }
-          },
-          {
-            name: "compare with smaller",
-            runTest: function() {
-              var subject = createSubjectSameTypeOtherDataLarger();
-              var smaller = createSubject();
-              instanceTests.compare(subject, smaller, +1);
-            }
-          },
           {
             name: "equals with null",
             runTest: function() {
