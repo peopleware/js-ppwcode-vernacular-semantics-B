@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/doh", "../PpwCodeObject", "./ppwCodeObjectTestGenerator", "module"],
-  function (declare, doh, PpwCodeObject, testGenerator, module) {
+define(["dojo/_base/declare", "../_util/contracts/doh", "./PpwCodeObjectMethodTests", "../PpwCodeObject", "./ppwCodeObjectTestGenerator", "module"],
+  function (declare, doh, PpwCodeObjectMethodTests, PpwCodeObject, testGenerator, module) {
 
     var PpwCodeObjectStub1 = declare([PpwCodeObject], {});
     PpwCodeObjectStub1.mid = module.id + "_PpwCodeObjectStub1";
@@ -36,6 +36,7 @@ define(["dojo/_base/declare", "../_util/contracts/doh", "../PpwCodeObject", "./p
 
     testGenerator(
       PpwCodeObject.mid,
+      new PpwCodeObjectMethodTests(),
       [
         function() {return new PpwCodeObjectStub1();},
         function() {return new PpwCodeObjectStub2();}

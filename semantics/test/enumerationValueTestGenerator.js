@@ -1,5 +1,5 @@
-define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"],
-  function (doh, valueTestGenerator, EnumerationValue) {
+define(["../_util/contracts/doh", "./valueTestGenerator", "./ValueMethodTests", "../EnumerationValue"],
+  function (doh, valueTestGenerator, ValueMethodTests, EnumerationValue) {
 
     /*
       basic inspectors (not tested separately):
@@ -36,11 +36,15 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
 
     var testGenerator = function(groupId, EnumType, OtherEnumType) {
 
-      valueTestGenerator(groupId, [
-        function() {return EnumType.first;},
-        function() {return EnumType.second;},
-        function() {return OtherEnumType.alpha;}
-      ]);
+      valueTestGenerator(
+        groupId,
+        new ValueMethodTests(),
+        [
+          function() {return EnumType.first;},
+          function() {return EnumType.second;},
+          function() {return OtherEnumType.alpha;}
+        ]
+      );
 
       var values = EnumType.values();
 

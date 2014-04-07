@@ -1,6 +1,6 @@
-define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
+define(["../_util/contracts/doh", "../Value", "./ValueMethodTests", "dojo/_base/declare",
   "./valueTestGenerator", "module"],
-  function (doh, Value, declare,
+  function (doh, Value, ValueMethodTests, declare,
             valueTestGenerator, module) {
 
     // Abstract functions are not tested.
@@ -115,11 +115,15 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
         }
       }
     ]);
-    valueTestGenerator(Value.mid, [
-      getTestSubject,
-      getTestSubjectSameTypeOtherDataLarger,
-      getTestSubjectOtherTypeSameData
-    ]);
+    valueTestGenerator(
+      Value.mid,
+      new ValueMethodTests(),
+      [
+        getTestSubject,
+        getTestSubjectSameTypeOtherDataLarger,
+        getTestSubjectOtherTypeSameData
+      ]
+    );
 
   }
 );

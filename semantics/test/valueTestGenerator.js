@@ -1,100 +1,8 @@
-define(
-  ["../_util/contracts/doh", "../_util/contracts/createTests", "../Value", "./ppwCodeObjectTestGenerator", "../_exceptions/SemanticException"],
-  function(doh, createTests, Value, ppwCodeObjectTestGenerator, ParseException) {
+define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contracts/createTests",
+   "./ppwCodeObjectTestGenerator"],
+  function(doh, TransformerMethodTests, createTests, ppwCodeObjectTestGenerator) {
 
-    var instanceTests = {
-
-      compare: function(/*Value*/ subject, /*Value*/ other) {
-        var result = subject.compare(other);
-        doh.validateInvariants(subject);
-        doh.validateInvariants(other);
-        doh.is("number", typeof result);
-        if (result === 0) {
-          doh.t(subject.equals(other));
-        }
-        var otherResult = other.compare(subject);
-        doh.validateInvariants(subject);
-        doh.validateInvariants(other);
-        doh.is(-1 * (result / Math.abs(result)), otherResult / Math.abs(otherResult));
-      },
-
-      equals: function(/*Value*/ subject, other) {
-        var result = !!subject.equals(other);
-        doh.validateInvariants(subject);
-        if (other && other.isInstanceOf && other.isInstanceOf(Value)) {
-          doh.validateInvariants(other);
-        }
-        // postconditions
-        if (subject === other) {
-          doh.t(result);
-        }
-        if (!other) {
-          doh.f(result);
-        }
-        else if (other.constructor !== subject.constructor) {
-          doh.f(result);
-        }
-      },
-
-      valueOf: function(/*Value*/ subject) {
-      },
-
-      getValue: function(/*Value*/ subject) {
-
-      },
-
-      // canCoerceTo is basic
-
-      coerceTo: function(/*Value*/ subject, /*Function?*/ Type) {
-        var result = subject.coerceTo(Type);
-        doh.validateInvariants(subject);
-        if (result && result.isInstanceOf && result.isInstanceOf(Value)) {
-          doh.validateInvariants(result);
-        }
-      },
-
-      format: function(/*Value*/ subject, /*FormatOptions?*/ options) {
-        var result = subject.format(options);
-        doh.validateInvariants(subject);
-        var expected = subject.constructor.format(subject, options);
-        doh.is(expected, result);
-      }
-
-    };
-
-    var constructorTests = {
-
-      format: function(/*Function*/ ValueType, /*Value?*/ value, /*Object?*/ options) {
-        var result = ValueType.format(value, options);
-        if (!value) {
-          doh.is(null, result);
-        }
-        else {
-          doh.validateInvariants(value);
-          doh.is("string", typeof result);
-          doh.t(value.equals(value.constructor.parse(result, options)));
-        }
-      },
-
-      parse: function(/*Function*/ ValueType, /*String?*/ str, /*Object?*/ expected, /*Object?*/ options) {
-        try {
-          var result = ValueType.parse(str, options);
-          if (!str && str !== "") {
-            doh.is(null, result);
-          }
-          else {
-            doh.t(result);
-            doh.t(result.isInstanceOf(ValueType));
-            doh.validateInvariants(result);
-          }
-        }
-        catch (exc) {
-          doh.t(exc.isInstanceOf && exc.isInstanceOf(ParseException));
-          doh.t(!!str || str === "");
-        }
-      }
-
-    };
+    var constructorTests = new TransformerMethodTests();
 
     var formatOptionsFactories = {
       name: "options",
@@ -109,7 +17,7 @@ define(
       ]
     };
 
-    var testGenerator = function(groupId, /*Function[]*/ subjectFactories) {
+    return function(groupId, methodTests, /*Function[]*/ subjectFactories) {
 
       var createSubject = subjectFactories[0];
       var createSubjectSameTypeOtherDataLarger = subjectFactories[1];
@@ -117,7 +25,7 @@ define(
 
       var ValueType = createSubject().constructor;
 
-      ppwCodeObjectTestGenerator(groupId, subjectFactories);
+      ppwCodeObjectTestGenerator(groupId, methodTests, subjectFactories);
       doh.register(groupId, [
         {
           name: "has a format",
@@ -166,7 +74,7 @@ define(
       );
       createTests(
         groupId,
-        instanceTests,
+        methodTests,
         "compare",
         [
           [createSubject], // subject factories
@@ -182,7 +90,7 @@ define(
       );
       createTests(
         groupId,
-        instanceTests,
+        methodTests,
         "equals",
         [
           [createSubject], // subject factories
@@ -224,7 +132,7 @@ define(
       );
       createTests(
         groupId,
-        instanceTests,
+        methodTests,
         "coerceTo",
         [
           [createSubject], // subject factories
@@ -269,7 +177,7 @@ define(
       );
       createTests(
         groupId,
-        instanceTests,
+        methodTests,
         "format",
         [
           [createSubject], // subject factories
@@ -278,9 +186,5 @@ define(
       );
     };
 
-    testGenerator.instanceTests = instanceTests;
-    testGenerator.constructorTests = constructorTests;
-
-    return testGenerator;
   }
 );
