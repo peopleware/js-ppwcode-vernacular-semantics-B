@@ -84,6 +84,9 @@ define(
     };
 
     function parameterToName(parameter) {
+      if (parameter instanceof Function && parameter.prototype.getTypeDescription) {
+        return parameter.prototype.getTypeDescription();
+      }
       if (parameter && parameter.toString !== Object.prototype.toString) {
         return parameter.toString();
       }
@@ -96,19 +99,47 @@ define(
 
       var ValueType = createSubject().constructor;
 
-      function createTest(methodName, value, options) {
-        return {
-          name: methodName + " - " + parameterToName(value) + " - " + parameterToName(options),
-          runTest: function() {
-            constructorTests[methodName](ValueType, value, options);
-          }
-        };
-      }
+      function createTests(tests, methodName, argumentFactories) {
 
-      function createTests(methodName, values, options) {
-        return values.map(function(value) {
-          return createTest(methodName, value, options);
-        });
+        var acc = [];
+        var partialInstanceArgFactories = [];
+        var remainingArgFactories = argumentFactories;
+
+        function fillTests() {
+          if (remainingArgFactories.length <= 0) {
+            acc.push({
+              argFactories: partialInstanceArgFactories.slice(), // lock a copy in scope of this test
+              name: methodName + " - " + partialInstanceArgFactories.map(function(af) {return af.argRepr;}).join("; "),
+              runTest: function() {
+                var args = this.argFactories.map(function(af) {
+                  return typeof af.factoryOrConstant === "function" ? af.factoryOrConstant() : af.factoryOrConstant;
+                });
+                tests[methodName].apply(tests, args);
+              }
+            });
+          }
+          else {
+            var nextArg = remainingArgFactories.shift();
+            nextArg = {
+              name: nextArg.name ||
+                      (partialInstanceArgFactories.length <= 0 ? "subject" : "arg" + (partialInstanceArgFactories.length - 1)),
+              factories: nextArg.factories || nextArg
+            };
+            nextArg.factories.forEach(function(instanceFactory) { // go wide
+              var factoryOrConstant = instanceFactory && instanceFactory.factory ? instanceFactory.factory : instanceFactory;
+              var valueRepr = instanceFactory && instanceFactory.name ?
+                                instanceFactory.name :
+                                parameterToName(typeof factoryOrConstant === "function" ? factoryOrConstant() : factoryOrConstant);
+              partialInstanceArgFactories.push({argRepr: nextArg.name + ": " + valueRepr, factoryOrConstant: factoryOrConstant});
+              fillTests(); // go deep
+              partialInstanceArgFactories.pop();
+            });
+            remainingArgFactories.unshift(nextArg);
+          }
+        }
+
+        fillTests();
+        return acc;
       }
 
       var tests = ppwCodeObjectTestGenerator(createSubject, createSubjectOtherTypeSameDataNoMid)
@@ -130,12 +161,52 @@ define(
             }
           }
         ])
-        .concat(createTests("format", [null, undefined, createSubject()], undefined, "no options"))
-        .concat(createTests("format", [null, undefined, createSubject()], {locale: "nl"}, "options.lang === nl"))
-        .concat(createTests("format", [null, undefined, createSubject()], {locale: "ru"}, "options.lang === ru => fallback language"))
-        .concat(createTests("parse", [null, undefined, "", ValueType.format(createSubject()), "XX not a formatted value XX"], undefined, "no options"))
-        .concat(createTests("parse", [null, undefined, "", ValueType.format(createSubject()), "XX not a formatted value XX"], {locale: "nl"}, "options.lang === nl"))
-        .concat(createTests("parse", [null, undefined, "", ValueType.format(createSubject()), "XX not a formatted value XX"], {locale: "ru"}, "options.lang === ru => fallback language"))
+        .concat(createTests(
+          constructorTests,
+          "format",
+          [
+            [function() {return ValueType;}], // subject factories
+            {name: "value", factories: [null, undefined, createSubject]},
+            {name: "options", factories: [
+              null,
+              undefined,
+              function() {return {locale: "nl"};},
+              {
+                name: "options.locale === ru --> fallback language",
+                factory: function() {return {locale: "ru"};}
+              }
+            ]}
+          ]
+        ))
+        .concat(createTests(
+          constructorTests,
+          "parse",
+          [
+            [function() {return ValueType;}], // subject factories
+            {name: "value", factories: [
+              null,
+              undefined,
+              "",
+              {
+                name: "a value",
+                factory: function() {return ValueType.format(createSubject());}
+              },
+              {
+                name: "not a value",
+                factory: "XX not a formatted value XX"
+              }
+            ]},
+            {name: "options", factories: [
+              null,
+              undefined,
+              function() {return {locale: "nl"};},
+              {
+                name: "options.lang === ru --> fallback language",
+                factory: function() {return {locale: "ru"};}
+              }
+            ]}
+          ]
+        ))
         .concat([
           {
             name: "compare with me",
