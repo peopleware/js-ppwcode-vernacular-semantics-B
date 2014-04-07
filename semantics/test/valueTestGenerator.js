@@ -195,17 +195,13 @@ define(
         {
           name: "has a format",
           runTest: function() {
-            var instance = createSubject();
-            var Subject = instance.constructor;
-            doh.is("function", typeof Subject.format);
+            doh.is("function", typeof ValueType.format);
           }
         },
         {
           name: "has a parse",
           runTest: function() {
-            var instance = createSubject();
-            var Subject = instance.constructor;
-            doh.is("function", typeof Subject.parse);
+            doh.is("function", typeof ValueType.parse);
           }
         }
       ]);
