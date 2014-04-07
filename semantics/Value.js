@@ -112,7 +112,7 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
           return this._c_ABSTRACT(); // return Number
         },
 
-        equals: function(/*Value*/ other) {
+        equals: function(other) {
           // summary:
           // description:
           //   Must be overriden in subtypes with the pattern:
@@ -160,7 +160,7 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
           return [this.constructor];
         },
 
-        coerceTo: function(/*Function*/ Type) {
+        coerceTo: function(/*Function?*/ Type) {
           // summary:
           //   Try to return a value of Type, that is similar to this.
           //   It might contain less information.
