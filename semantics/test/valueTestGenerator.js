@@ -83,45 +83,52 @@ define(
 
     };
 
+    function parameterToName(parameter) {
+      if (parameter && parameter.toString !== Object.prototype.toString) {
+        return parameter.toString();
+      }
+      return JSON.stringify(parameter);
+    }
+
     var testGenerator = function(createSubject,
                                  createSubjectSameTypeOtherDataLarger,
                                  createSubjectOtherTypeSameDataNoMid) {
 
       var ValueType = createSubject().constructor;
 
-      function createFormatTest(value, options, extraName) {
+      function createFormatTest(value, options) {
         return {
-          name: "format - " + extraName,
+          name: "format - " + parameterToName(value) + " - " + parameterToName(options),
           runTest: function() {
             constructorTests.format(ValueType, value, options);
           }
         };
       }
 
-      function createParseTest(value, options, extraName) {
+      function createParseTest(value, options) {
         return {
-          name: "parse - " + extraName,
+          name: "parse - " + parameterToName(value) + " - " + parameterToName(options),
           runTest: function() {
             constructorTests.parse(ValueType, value, options);
           }
         };
       }
 
-      function createFormatTests(options, extraName) {
+      function createFormatTests(options) {
         return [
-          createFormatTest(null, options, "null - " + extraName),
-          createFormatTest(undefined, options, "undefined - " + extraName),
-          createFormatTest(createSubject(), options, "a value - " + extraName)
+          createFormatTest(null, options),
+          createFormatTest(undefined, options),
+          createFormatTest(createSubject(), options)
         ];
       }
 
-      function createParseTests(options, extraName) {
+      function createParseTests(options) {
         return [
-          createParseTest(null, options, "null - " + extraName),
-          createParseTest(undefined, options, "undefined - " + extraName),
-          createParseTest("", options, "\"\" - " + extraName),
-          createParseTest(ValueType.format(createSubject()), options, "a value - " + extraName),
-          createParseTest("XX not a formatted value XX", options, "not a value - " + extraName)
+          createParseTest(null, options),
+          createParseTest(undefined, options),
+          createParseTest("", options),
+          createParseTest(ValueType.format(createSubject()), options),
+          createParseTest("XX not a formatted value XX", options)
         ];
       }
 
