@@ -1,71 +1,87 @@
 define(
-  ["../_util/contracts/doh", "../Value", "./ppwCodeObjectTestGenerator", "../_util/js", "../_exceptions/SemanticException"],
-  function(doh, Value, ppwCodeObjectTestGenerator, js, ParseException) {
+  ["../_util/contracts/doh", "../Value", "./ppwCodeObjectTestGenerator", "../_exceptions/SemanticException"],
+  function(doh, Value, ppwCodeObjectTestGenerator, ParseException) {
 
-    function test_compare(/*Value*/ value1, /*Value*/ value2, /*Object*/ expectCompare) {
-      var result = value1.compare(value2);
-      doh.validateInvariants(value1);
-      doh.validateInvariants(value2);
-      doh.is(result, expectCompare);
-    }
+    var instanceTests = {
 
-    function test_equals(/*Value*/ v1, /*Value?*/ v2, /*Boolean?*/ expectEquals) {
-      var result = v1.equals(v2);
-      doh.validateInvariants(v1);
-      if (v2 && v2.isInstanceOf && v2.isInstanceOf(Value)) {
-        doh.validateInvariants(v2);
+      compare: function(/*Value*/ subject, /*Value*/ other, /*Object*/ expectCompare) {
+        var result = subject.compare(other);
+        doh.validateInvariants(subject);
+        doh.validateInvariants(other);
+        doh.is(result, expectCompare);
+      },
+
+      equals: function(/*Value*/ subject, other, /*Boolean?*/ expectEquals) {
+        var result = subject.equals(other);
+        doh.validateInvariants(subject);
+        if (other && other.isInstanceOf && other.isInstanceOf(Value)) {
+          doh.validateInvariants(other);
+        }
+        // postconditions
+        // we expect not equal, unless it is said it should be
+        doh.is(result, !!expectEquals);
+      },
+
+      valueOf: function(/*Value*/ subject) {
+      },
+
+      getValue: function(/*Value*/ subject) {
+
+      },
+
+      // canCoerceTo is basic
+
+      coerceTo: function(/*Value*/ subject, /*Function?*/ Type, expectedResult) {
+        var result = subject.coerceTo(Type);
+        doh.validateInvariants(subject);
+        if (result && result.isInstanceOf && result.isInstanceOf(Value)) {
+          doh.validateInvariants(result);
+        }
+        doh.assertEqual(result, expectedResult);
+      },
+
+      format: function(/*Value*/ subject, /*FormatOptions?*/ options) {
+        var result = subject.format(options);
+        doh.validateInvariants(subject);
+        var expected = subject.constructor.format(subject, options);
+        doh.is(expected, result);
       }
-      // postconditions
-      // we expect not equal, unless it is said it should be
-      doh.is(result, !!expectEquals);
-    }
 
-    function test_coerceTo(/*Value*/ value, /*Type?*/ type, expectedResult) {
-      var result = value.coerceTo(type);
-      doh.validateInvariants(value);
-      if (result && result.isInstanceOf && result.isInstanceOf(Value)) {
-        doh.validateInvariants(result);
-      }
-      doh.assertEqual(result, expectedResult);
-    }
+    };
 
-    function test_format(/*Function*/ ValueType, /*Value*/ value, /*Object?*/ options) {
-      var result = ValueType.format(value, options);
-      if (!value) {
-        doh.is(null, result);
-      }
-      else {
-        doh.validateInvariants(value);
-        doh.is("string", typeof result);
-        doh.t(value.equals(value.constructor.parse(result, options)));
-      }
-    }
+    var constructorTests = {
 
-    function test_parse(/*Function*/ ValueType, /*String?*/ str, /*Object?*/ expected, /*Object?*/ options) {
-      try {
-        var result = ValueType.parse(str, options);
-        if (!str && str !== "") {
+      format: function(/*Function*/ ValueType, /*Value?*/ value, /*Object?*/ options) {
+        var result = ValueType.format(value, options);
+        if (!value) {
           doh.is(null, result);
         }
         else {
-          doh.t(result);
-          doh.t(result.isInstanceOf(ValueType));
-          doh.validateInvariants(result);
+          doh.validateInvariants(value);
+          doh.is("string", typeof result);
+          doh.t(value.equals(value.constructor.parse(result, options)));
+        }
+      },
+
+      parse: function(/*Function*/ ValueType, /*String?*/ str, /*Object?*/ expected, /*Object?*/ options) {
+        try {
+          var result = ValueType.parse(str, options);
+          if (!str && str !== "") {
+            doh.is(null, result);
+          }
+          else {
+            doh.t(result);
+            doh.t(result.isInstanceOf(ValueType));
+            doh.validateInvariants(result);
+          }
+        }
+        catch (exc) {
+          doh.t(exc.isInstanceOf && exc.isInstanceOf(ParseException));
+          doh.t(!!str || str === "");
         }
       }
-      catch (exc) {
-        doh.t(exc.isInstanceOf && exc.isInstanceOf(ParseException));
-        doh.t(!!str || str === "");
-      }
-    }
 
-    function test_instanceFormat(/*Value*/ value, /*FormatOptions?*/ options) {
-      var result = value.format(options);
-      doh.validateInvariants(value);
-      var expected = value.constructor.format(value, options);
-      doh.is(expected, result);
-    }
-
+    };
 
     var testGenerator = function(createSubject,
                                  createSubjectSameTypeOtherDataLarger,
@@ -77,24 +93,24 @@ define(
             name: "format - null - " + extraName,
             runTest: function() {
               var instance = createSubject();
-              test_format(instance.constructor, null, options);
+              constructorTests.format(instance.constructor, null, options);
             }
           },
           {
             name: "format - undefined - " + extraName,
             runTest: function() {
               var instance = createSubject();
-              test_format(instance.constructor, undefined, options);
+              constructorTests.format(instance.constructor, undefined, options);
             }
           },
           {
             name: "format - a value - " + extraName,
             runTest: function() {
               var instance = createSubject();
-              test_format(instance.constructor, instance, options);
+              constructorTests.format(instance.constructor, instance, options);
             }
           }
-        ]
+        ];
       }
 
       function createParseTests(options, extraName) {
@@ -103,201 +119,42 @@ define(
             name: "parse - null - " + extraName,
             runTest: function() {
               var instance = createSubject();
-              test_parse(instance.constructor, null, options);
+              constructorTests.parse(instance.constructor, null, options);
             }
           },
           {
             name: "parse - undefined - " + extraName,
             runTest: function() {
               var instance = createSubject();
-              test_parse(instance.constructor, undefined, options);
+              constructorTests.parse(instance.constructor, undefined, options);
             }
           },
           {
             name: "parse - \"\" - " + extraName,
             runTest: function() {
               var instance = createSubject();
-              test_parse(instance.constructor, "", options);
+              constructorTests.parse(instance.constructor, "", options);
             }
           },
           {
             name: "parse - a value - " + extraName,
             runTest: function() {
               var instance = createSubject();
-              test_parse(instance.constructor, instance.constructor.format(instance), options);
+              constructorTests.parse(instance.constructor, instance.constructor.format(instance), options);
             }
           },
           {
             name: "parse - not a value - " + extraName,
             runTest: function() {
               var instance = createSubject();
-              test_parse(instance.constructor, "XX not a formatted value XX", options);
+              constructorTests.parse(instance.constructor, "XX not a formatted value XX", options);
             }
           }
-        ]
+        ];
       }
 
       var tests = ppwCodeObjectTestGenerator(createSubject, createSubjectOtherTypeSameDataNoMid)
-        .concat(createFormatTests(undefined, "no options"))
-        .concat(createFormatTests({locale: "nl"}, "options.lang === nl"))
-        .concat(createFormatTests({locale: "ru"}, "options.lang === ru => fallback language"))
-        .concat(createParseTests(undefined, "no options"))
-        .concat(createParseTests({locale: "nl"}, "options.lang === nl"))
-        .concat(createParseTests({locale: "ru"}, "options.lang === ru => fallback language"))
         .concat([
-          {
-            name: "compare with me",
-            runTest: function() {
-              var subject = createSubject();
-              test_compare(subject, subject, 0);
-            }
-          },
-          {
-            name: "compare with larger",
-            runTest: function() {
-              var subject = createSubject();
-              var larger = createSubjectSameTypeOtherDataLarger();
-              test_compare(subject, larger, -1);
-            }
-          },
-          {
-            name: "compare with smaller",
-            runTest: function() {
-              var subject = createSubjectSameTypeOtherDataLarger();
-              var smaller = createSubject();
-              test_compare(subject, smaller, +1);
-            }
-          },
-          {
-            name: "equals with null",
-            runTest: function() {
-              var subject = createSubject();
-              test_equals(subject, null);
-            }
-          },
-          {
-            name: "equals with undefined",
-            runTest: function() {
-              var subject = createSubject();
-              test_equals(subject, undefined);
-            }
-          },
-          {
-            name: "equals with me",
-            runTest: function() {
-              var subject = createSubject();
-              test_equals(subject, subject, true);
-            }
-          },
-          {
-            name: "equals with object of same type, expect equals",
-            runTest: function() {
-              var subject = createSubject();
-              var other = createSubject();
-              test_equals(subject, other, true);
-            }
-          },
-          {
-            name: "equals with object of same type, expect not equals",
-            runTest: function() {
-              var subject = createSubject();
-              var other = createSubjectSameTypeOtherDataLarger();
-              test_equals(subject, other);
-            }
-          },
-          {
-            name: "equals with object of other type",
-            runTest: function() {
-              var subject = createSubject();
-              var other = createSubjectOtherTypeSameDataNoMid();
-              test_equals(subject, other);
-            }
-          },
-          {
-            name: "equals with not-a-value Number",
-            runTest: function() {
-              var subject = createSubject();
-              test_equals(subject, 4);
-            }
-          },
-          {
-            name: "equals with not-a-value String",
-            runTest: function() {
-              var subject = createSubject();
-              test_equals(subject, "TEST");
-            }
-          },
-          {
-            name: "equals with not-a-value Date",
-            runTest: function() {
-              var subject = createSubject();
-              test_equals(subject, new Date());
-            }
-          },
-          {
-            name: "equals with not-a-value Function",
-            runTest: function() {
-              var subject = createSubject();
-              test_equals(subject, window.open);
-            }
-          },
-          {
-            name: "equals with not-a-value object",
-            runTest: function() {
-              var subject = createSubject();
-              test_equals(subject, window);
-            }
-          },
-          {
-            name: "coerceTo null",
-            runTest: function() {
-              var subject = createSubject();
-              test_coerceTo(subject, null, undefined);
-            }
-          },
-          {
-            name: "coerceTo undefined",
-            runTest: function() {
-              var subject = createSubject();
-              test_coerceTo(subject, undefined, undefined);
-            }
-          },
-          {
-            name: "coerceTo same type",
-            runTest: function() {
-              var subject = createSubject();
-              test_coerceTo(subject, subject.constructor, subject);
-            }
-          },
-          //            {
-          //              name: "coerceTo other type, supported, expect success",
-          //              runTest: function () {
-          //                var subject = createSubjectOtherTypeSameDataNoMid();
-          //                var supportedOtherType = createSubject().constructor;
-          //                test_CoerceToData(subject, supportedOtherType, subject.data);
-          //              }
-          //            },
-          //            {
-          //              name: "coerceTo other type, not supported, expect fail",
-          //              runTest: function () {
-          //                var subject = getTestSubject();
-          //                test_coerceTo(subject, ValueStub2, undefined);
-          //              }
-          //            },
-          //            {
-          //              name: "coerceTo other type (chaining), supported, expect succes",
-          //              runTest: function () {
-          //                var subject = getTestSubjectChainingType();
-          //                test_CoerceToData(subject, ValueStub1, subject.data);
-          //              }
-          //            },
-          //            {
-          //              name: "coerceTo other type (chaining), not supported, expect failure",
-          //              runTest: function () {
-          //                var subject = getTestSubjectOtherTypeSameData();
-          //                test_coerceTo(subject, ValueStub3, undefined);
-          //              }
-          //            },
           {
             name: "has a format",
             runTest: function() {
@@ -313,26 +170,187 @@ define(
               var Subject = instance.constructor;
               doh.is("function", typeof Subject.parse);
             }
+          }
+        ])
+        .concat(createFormatTests(undefined, "no options"))
+        .concat(createFormatTests({locale: "nl"}, "options.lang === nl"))
+        .concat(createFormatTests({locale: "ru"}, "options.lang === ru => fallback language"))
+        .concat(createParseTests(undefined, "no options"))
+        .concat(createParseTests({locale: "nl"}, "options.lang === nl"))
+        .concat(createParseTests({locale: "ru"}, "options.lang === ru => fallback language"))
+        .concat([
+          {
+            name: "compare with me",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.compare(subject, subject, 0);
+            }
           },
+          {
+            name: "compare with larger",
+            runTest: function() {
+              var subject = createSubject();
+              var larger = createSubjectSameTypeOtherDataLarger();
+              instanceTests.compare(subject, larger, -1);
+            }
+          },
+          {
+            name: "compare with smaller",
+            runTest: function() {
+              var subject = createSubjectSameTypeOtherDataLarger();
+              var smaller = createSubject();
+              instanceTests.compare(subject, smaller, +1);
+            }
+          },
+          {
+            name: "equals with null",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.equals(subject, null);
+            }
+          },
+          {
+            name: "equals with undefined",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.equals(subject, undefined);
+            }
+          },
+          {
+            name: "equals with me",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.equals(subject, subject, true);
+            }
+          },
+          {
+            name: "equals with object of same type, expect equals",
+            runTest: function() {
+              var subject = createSubject();
+              var other = createSubject();
+              instanceTests.equals(subject, other, true);
+            }
+          },
+          {
+            name: "equals with object of same type, expect not equals",
+            runTest: function() {
+              var subject = createSubject();
+              var other = createSubjectSameTypeOtherDataLarger();
+              instanceTests.equals(subject, other);
+            }
+          },
+          {
+            name: "equals with object of other type",
+            runTest: function() {
+              var subject = createSubject();
+              var other = createSubjectOtherTypeSameDataNoMid();
+              instanceTests.equals(subject, other);
+            }
+          },
+          {
+            name: "equals with not-a-value Number",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.equals(subject, 4, false);
+            }
+          },
+          {
+            name: "equals with not-a-value String",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.equals(subject, "TEST");
+            }
+          },
+          {
+            name: "equals with not-a-value Date",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.equals(subject, new Date());
+            }
+          },
+          {
+            name: "equals with not-a-value Function",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.equals(subject, window.open);
+            }
+          },
+          {
+            name: "equals with not-a-value object",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.equals(subject, window);
+            }
+          },
+          {
+            name: "coerceTo null",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.coerceTo(subject, null, undefined);
+            }
+          },
+          {
+            name: "coerceTo undefined",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.coerceTo(subject, undefined, undefined);
+            }
+          },
+          {
+            name: "coerceTo same type",
+            runTest: function() {
+              var subject = createSubject();
+              instanceTests.coerceTo(subject, subject.constructor, subject);
+            }
+          },
+          //            {
+          //              name: "coerceTo other type, supported, expect success",
+          //              runTest: function () {
+          //                var subject = createSubjectOtherTypeSameDataNoMid();
+          //                var supportedOtherType = createSubject().constructor;
+          //                instanceTests.coerceToData(subject, supportedOtherType, subject.data);
+          //              }
+          //            },
+          //            {
+          //              name: "coerceTo other type, not supported, expect fail",
+          //              runTest: function () {
+          //                var subject = getTestSubject();
+          //                instanceTests.coerceTo(subject, ValueStub2, undefined);
+          //              }
+          //            },
+          //            {
+          //              name: "coerceTo other type (chaining), supported, expect succes",
+          //              runTest: function () {
+          //                var subject = getTestSubjectChainingType();
+          //                instanceTests.coerceToData(subject, ValueStub1, subject.data);
+          //              }
+          //            },
+          //            {
+          //              name: "coerceTo other type (chaining), not supported, expect failure",
+          //              runTest: function () {
+          //                var subject = getTestSubjectOtherTypeSameData();
+          //                instanceTests.coerceTo(subject, ValueStub3, undefined);
+          //              }
+          //            },
           {
             name: "instance format, no options",
             runTest: function() {
               var instance = createSubject();
-              test_instanceFormat(instance);
+              instanceTests.format(instance);
             }
           },
           {
             name: "instance format, options.lang === nl",
             runTest: function() {
               var instance = createSubject();
-              test_instanceFormat(instance, {locale: "nl"});
+              instanceTests.format(instance, {locale: "nl"});
             }
           },
           {
             name: "instance format, options.lang === ru",
             runTest: function() {
               var instance = createSubject();
-              test_instanceFormat(instance, {locale: "ru"});
+              instanceTests.format(instance, {locale: "ru"});
             }
           }
         ]);
@@ -340,8 +358,8 @@ define(
 
     };
 
-    testGenerator.compare = test_compare;
-    testGenerator.equals = test_equals;
+    testGenerator.instanceTests = instanceTests;
+    testGenerator.constructorTests = constructorTests;
 
     return testGenerator;
   }
