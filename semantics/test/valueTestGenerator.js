@@ -96,39 +96,30 @@ define(
 
       var ValueType = createSubject().constructor;
 
-      function createFormatTest(value, options) {
+      function createTest(methodName, value, options) {
         return {
-          name: "format - " + parameterToName(value) + " - " + parameterToName(options),
+          name: methodName + " - " + parameterToName(value) + " - " + parameterToName(options),
           runTest: function() {
-            constructorTests.format(ValueType, value, options);
-          }
-        };
-      }
-
-      function createParseTest(value, options) {
-        return {
-          name: "parse - " + parameterToName(value) + " - " + parameterToName(options),
-          runTest: function() {
-            constructorTests.parse(ValueType, value, options);
+            constructorTests[methodName](ValueType, value, options);
           }
         };
       }
 
       function createFormatTests(options) {
         return [
-          createFormatTest(null, options),
-          createFormatTest(undefined, options),
-          createFormatTest(createSubject(), options)
+          createTest("format", null, options),
+          createTest("format", undefined, options),
+          createTest("format", createSubject(), options)
         ];
       }
 
       function createParseTests(options) {
         return [
-          createParseTest(null, options),
-          createParseTest(undefined, options),
-          createParseTest("", options),
-          createParseTest(ValueType.format(createSubject()), options),
-          createParseTest("XX not a formatted value XX", options)
+          createTest("parse", null, options),
+          createTest("parse", undefined, options),
+          createTest("parse", "", options),
+          createTest("parse", ValueType.format(createSubject()), options),
+          createTest("parse", "XX not a formatted value XX", options)
         ];
       }
 
