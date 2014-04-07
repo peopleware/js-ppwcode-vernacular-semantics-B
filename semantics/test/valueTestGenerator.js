@@ -87,69 +87,41 @@ define(
                                  createSubjectSameTypeOtherDataLarger,
                                  createSubjectOtherTypeSameDataNoMid) {
 
+      var ValueType = createSubject().constructor;
+
+      function createFormatTest(value, options, extraName) {
+        return {
+          name: "format - " + extraName,
+          runTest: function() {
+            constructorTests.format(ValueType, value, options);
+          }
+        };
+      }
+
+      function createParseTest(value, options, extraName) {
+        return {
+          name: "parse - " + extraName,
+          runTest: function() {
+            constructorTests.parse(ValueType, value, options);
+          }
+        };
+      }
+
       function createFormatTests(options, extraName) {
         return [
-          {
-            name: "format - null - " + extraName,
-            runTest: function() {
-              var instance = createSubject();
-              constructorTests.format(instance.constructor, null, options);
-            }
-          },
-          {
-            name: "format - undefined - " + extraName,
-            runTest: function() {
-              var instance = createSubject();
-              constructorTests.format(instance.constructor, undefined, options);
-            }
-          },
-          {
-            name: "format - a value - " + extraName,
-            runTest: function() {
-              var instance = createSubject();
-              constructorTests.format(instance.constructor, instance, options);
-            }
-          }
+          createFormatTest(null, options, "null - " + extraName),
+          createFormatTest(undefined, options, "undefined - " + extraName),
+          createFormatTest(createSubject(), options, "a value - " + extraName)
         ];
       }
 
       function createParseTests(options, extraName) {
         return [
-          {
-            name: "parse - null - " + extraName,
-            runTest: function() {
-              var instance = createSubject();
-              constructorTests.parse(instance.constructor, null, options);
-            }
-          },
-          {
-            name: "parse - undefined - " + extraName,
-            runTest: function() {
-              var instance = createSubject();
-              constructorTests.parse(instance.constructor, undefined, options);
-            }
-          },
-          {
-            name: "parse - \"\" - " + extraName,
-            runTest: function() {
-              var instance = createSubject();
-              constructorTests.parse(instance.constructor, "", options);
-            }
-          },
-          {
-            name: "parse - a value - " + extraName,
-            runTest: function() {
-              var instance = createSubject();
-              constructorTests.parse(instance.constructor, instance.constructor.format(instance), options);
-            }
-          },
-          {
-            name: "parse - not a value - " + extraName,
-            runTest: function() {
-              var instance = createSubject();
-              constructorTests.parse(instance.constructor, "XX not a formatted value XX", options);
-            }
-          }
+          createParseTest(null, options, "null - " + extraName),
+          createParseTest(undefined, options, "undefined - " + extraName),
+          createParseTest("", options, "\"\" - " + extraName),
+          createParseTest(ValueType.format(createSubject()), options, "a value - " + extraName),
+          createParseTest("XX not a formatted value XX", options, "not a value - " + extraName)
         ];
       }
 
