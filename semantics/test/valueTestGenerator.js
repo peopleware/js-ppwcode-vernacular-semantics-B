@@ -105,22 +105,10 @@ define(
         };
       }
 
-      function createFormatTests(options) {
-        return [
-          createTest("format", null, options),
-          createTest("format", undefined, options),
-          createTest("format", createSubject(), options)
-        ];
-      }
-
-      function createParseTests(options) {
-        return [
-          createTest("parse", null, options),
-          createTest("parse", undefined, options),
-          createTest("parse", "", options),
-          createTest("parse", ValueType.format(createSubject()), options),
-          createTest("parse", "XX not a formatted value XX", options)
-        ];
+      function createTests(methodName, values, options) {
+        return values.map(function(value) {
+          return createTest(methodName, value, options);
+        });
       }
 
       var tests = ppwCodeObjectTestGenerator(createSubject, createSubjectOtherTypeSameDataNoMid)
@@ -142,12 +130,12 @@ define(
             }
           }
         ])
-        .concat(createFormatTests(undefined, "no options"))
-        .concat(createFormatTests({locale: "nl"}, "options.lang === nl"))
-        .concat(createFormatTests({locale: "ru"}, "options.lang === ru => fallback language"))
-        .concat(createParseTests(undefined, "no options"))
-        .concat(createParseTests({locale: "nl"}, "options.lang === nl"))
-        .concat(createParseTests({locale: "ru"}, "options.lang === ru => fallback language"))
+        .concat(createTests("format", [null, undefined, createSubject()], undefined, "no options"))
+        .concat(createTests("format", [null, undefined, createSubject()], {locale: "nl"}, "options.lang === nl"))
+        .concat(createTests("format", [null, undefined, createSubject()], {locale: "ru"}, "options.lang === ru => fallback language"))
+        .concat(createTests("parse", [null, undefined, "", ValueType.format(createSubject()), "XX not a formatted value XX"], undefined, "no options"))
+        .concat(createTests("parse", [null, undefined, "", ValueType.format(createSubject()), "XX not a formatted value XX"], {locale: "nl"}, "options.lang === nl"))
+        .concat(createTests("parse", [null, undefined, "", ValueType.format(createSubject()), "XX not a formatted value XX"], {locale: "ru"}, "options.lang === ru => fallback language"))
         .concat([
           {
             name: "compare with me",
