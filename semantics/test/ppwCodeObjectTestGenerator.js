@@ -1,35 +1,25 @@
-define(["../_util/contracts/doh"],
-  function (doh) {
+define(["../_util/contracts/doh", "../_util/contracts/createTests"],
+  function (doh, createTests) {
 
-    function test_getTypeDescription(/*Function*/ createSubject) {
-      var subject = createSubject();
-      var result = subject.getTypeDescription();
-      doh.validateInvariants(subject);
-      // postconditions
-      doh.t(!!result);
-      doh.t(typeof result === "string");
-    }
+    var tests = {
 
-    var testGenerator = function(groupId, /*Function[]*/ subjectFactories) {
-
-      doh.register(groupId, [
-        {
-          name: "getTypeDescription with mid",
-          runTest: function () {
-            test_getTypeDescription(subjectFactories[0]);
-          }
-        },
-        {
-          name: "getTypeDescription with no mid",
-          runTest: function () {
-            test_getTypeDescription(subjectFactories[1]);
-          }
-        }
-      ]);
+      getTypeDescription: function(/*PpwCodeObject*/ subject) {
+        var result = subject.getTypeDescription();
+        doh.validateInvariants(subject);
+        // postconditions
+        doh.t(!!result);
+        doh.t(typeof result === "string");
+      }
 
     };
 
-    testGenerator.getTypeDescription = test_getTypeDescription;
+    var testGenerator = function(groupId, /*Function[]*/ subjectFactories) {
+
+      createTests(groupId, tests, "getTypeDescription", [subjectFactories]);
+
+    };
+
+    testGenerator.tests = tests;
 
     return testGenerator;
   }
