@@ -18,15 +18,23 @@ define(
         doh.is(-1 * (result / Math.abs(result)), otherResult / Math.abs(otherResult));
       },
 
-      equals: function(/*Value*/ subject, other, /*Boolean?*/ expectEquals) {
-        var result = subject.equals(other);
+      equals: function(/*Value*/ subject, other) {
+        var result = !!subject.equals(other);
         doh.validateInvariants(subject);
         if (other && other.isInstanceOf && other.isInstanceOf(Value)) {
           doh.validateInvariants(other);
         }
         // postconditions
-        // we expect not equal, unless it is said it should be
-        doh.is(result, !!expectEquals);
+        if (subject === other) {
+          doh.t(result);
+        }
+        if (!other) {
+          doh.f(result);
+        }
+        else if (other.constructor !== subject.constructor) {
+          doh.f(result);
+        }
+        console.log(other);
       },
 
       valueOf: function(/*Value*/ subject) {
@@ -118,8 +126,30 @@ define(
               argFactories: partialInstanceArgFactories.slice(), // lock a copy in scope of this test
               name: methodName + " - " + partialInstanceArgFactories.map(function(af) {return af.argRepr;}).join("; "),
               runTest: function() {
+                var self = this;
                 var args = this.argFactories.map(function(af) {
-                  return typeof af.factoryOrConstant === "function" ? af.factoryOrConstant() : af.factoryOrConstant;
+                  if (typeof af.factoryOrConstant === "function") {
+                    return af.factoryOrConstant();
+                  }
+                  return af.factoryOrConstant;
+                });
+                args = args.map(function(arg) {
+                  if (arg === "$this") {
+                    return args[0];
+                  }
+                  if (arg === "$this()") {
+                    return self.argFactories[0].factoryOrConstant();
+                  }
+                  var match = /^\$args\[(\d+)\](\(\))?$/.exec(arg);
+                  if (match) {
+                    if (match.length === 3) {
+                      return self.argFactories[match[1]].factoryOrConstant();
+                    }
+                    else if (match.length === 2) {
+                      return args[match[1]];
+                    }
+                  }
+                  return arg;
                 });
                 tests[methodName].apply(tests, args);
               }
@@ -215,112 +245,62 @@ define(
           ]
         ))
         .concat(createTests(
-                  instanceTests,
-                  "compare",
-                  [
-                    [createSubject, createSubjectSameTypeOtherDataLarger], // subject factories
-                    {name: "other", factories: [
-                      {
-                        name: "large",
-                        factory: createSubjectSameTypeOtherDataLarger
-                      },
-                      {
-                        name: "small",
-                        factory: createSubject
-                      }
-                    ]},
-                    {name: "options", factories: [
-                      null,
-                      undefined,
-                      function() {return {locale: "nl"};},
-                      {
-                        name: "options.lang === ru --> fallback language",
-                        factory: function() {return {locale: "ru"};}
-                      }
-                    ]}
-                  ]
-                ))
+          instanceTests,
+          "compare",
+          [
+            [createSubject], // subject factories
+            {name: "other", factories: [
+              "$this",
+              "$this()",
+              {
+                name: "large",
+                factory: createSubjectSameTypeOtherDataLarger
+              }
+            ]}
+          ]
+        ))
+        .concat(createTests(
+          instanceTests,
+          "equals",
+          [
+            [createSubject], // subject factories
+            {name: "other", factories: [
+              null,
+              undefined,
+              "$this",
+              "$this()",
+              {
+                name: "unequal object of same type",
+                factory: createSubjectSameTypeOtherDataLarger
+              },
+              {
+                name: "object of other type",
+                factory: createSubjectOtherTypeSameDataNoMid
+              },
+              {
+                name: "not-a-value Number",
+                factory: 4
+              },
+              {
+                name: "not-a-value String",
+                factory: "TEST"
+              },
+              {
+                name: "not-a-value Date",
+                factory: function() {return new Date();}
+              },
+              {
+                name: "not-a-value Function",
+                factory: function() {return window.open;}
+              },
+              {
+                name: "not-a-value object",
+                factory: function() {return window;}
+              }
+            ]}
+          ]
+        ))
         .concat([
-          {
-            name: "equals with null",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.equals(subject, null);
-            }
-          },
-          {
-            name: "equals with undefined",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.equals(subject, undefined);
-            }
-          },
-          {
-            name: "equals with me",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.equals(subject, subject, true);
-            }
-          },
-          {
-            name: "equals with object of same type, expect equals",
-            runTest: function() {
-              var subject = createSubject();
-              var other = createSubject();
-              instanceTests.equals(subject, other, true);
-            }
-          },
-          {
-            name: "equals with object of same type, expect not equals",
-            runTest: function() {
-              var subject = createSubject();
-              var other = createSubjectSameTypeOtherDataLarger();
-              instanceTests.equals(subject, other);
-            }
-          },
-          {
-            name: "equals with object of other type",
-            runTest: function() {
-              var subject = createSubject();
-              var other = createSubjectOtherTypeSameDataNoMid();
-              instanceTests.equals(subject, other);
-            }
-          },
-          {
-            name: "equals with not-a-value Number",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.equals(subject, 4, false);
-            }
-          },
-          {
-            name: "equals with not-a-value String",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.equals(subject, "TEST");
-            }
-          },
-          {
-            name: "equals with not-a-value Date",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.equals(subject, new Date());
-            }
-          },
-          {
-            name: "equals with not-a-value Function",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.equals(subject, window.open);
-            }
-          },
-          {
-            name: "equals with not-a-value object",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.equals(subject, window);
-            }
-          },
           {
             name: "coerceTo null",
             runTest: function() {
