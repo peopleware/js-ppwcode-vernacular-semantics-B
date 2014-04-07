@@ -27,10 +27,10 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
     });
     ValueStub.format = function(v) {
       return v ? v._data : null;
-    }
+    };
     ValueStub.parse = function(str) {
       return (str || str === "") ? new ValueStub1({data: str}) : null;
-    }
+    };
     ValueStub.mid = module.id + "_ValueStub";
 
     var ValueStub1 = declare([ValueStub], {
@@ -86,11 +86,6 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
     ValueStub3.format = ValueStub.format;
     ValueStub3.parse = ValueStub.parse;
 
-    function test_CoerceToData(/*Value*/ v1, /*Type?*/ type, expectResult) {
-      var result = _coerceTo(v1, type);
-      doh.assertEqual(result.data, expectResult);
-    }
-
     function getTestSubject() {
       return new ValueStub1({data: "TEST"});
     }
@@ -111,20 +106,20 @@ define(["../_util/contracts/doh", "../Value", "dojo/_base/declare",
       return new ValueStub1({data: 0});
     }
 
-    doh.register(Value.mid,
-      [
-        {
-          name: "Constructor test", // don't name a test "constructor"; it kills everything :-(
-          runTest: function () {
-            var subject = getTestSubject();
-            doh.validateInvariants(subject);
-          }
+    doh.register(Value.mid, [
+      {
+        name: "Constructor test", // don't name a test "constructor"; it kills everything :-(
+        runTest: function () {
+          var subject = getTestSubject();
+          doh.validateInvariants(subject);
         }
-      ].concat(valueTestGenerator(
-          getTestSubject,
-          getTestSubjectSameTypeOtherDataLarger,
-          getTestSubjectOtherTypeSameData
-        ))
-    );
+      }
+    ]);
+    valueTestGenerator(Value.mid, [
+      getTestSubject,
+      getTestSubjectSameTypeOtherDataLarger,
+      getTestSubjectOtherTypeSameData
+    ]);
+
   }
 );

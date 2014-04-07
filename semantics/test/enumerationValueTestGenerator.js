@@ -14,26 +14,6 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
       doh.is(expected, result);
     }
 
-    function test_format(/*EnumerationValue*/ candidate, /*Object*/ EnumType, /*String?*/ expected, /*Object?*/ options) {
-      var result = EnumType.format(candidate, options);
-      doh.t(result === null || typeof result === "string");
-      doh.assertEqual(expected, result);
-    }
-
-    function test_parse(/*String?*/ candidate, /*Object*/ EnumType, /*Object?*/ expected, /*Object?*/ options) {
-      var result = EnumType.parse(candidate, options);
-      if (result) {
-        doh.t(result.isInstanceOf(EnumType));
-      }
-      if (expected) {
-        doh.assertEqual(expected.value, result);
-      } else {
-        var values = EnumType.values();
-        var /*String[]*/ stringRepresentations = values.map(function(enumValue) {return JSON.parse(JSON.stringify(enumValue));});
-        doh.t(stringRepresentations.indexOf(result.getValue()) >= 0);
-      }
-    }
-
     function test_revive(/*String*/ candidate, /*Object*/ EnumType) {
       var result = EnumType.revive(candidate);
       doh.is(candidate, result.toJSON());
@@ -54,10 +34,17 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
       };
     }
 
-    var testGenerator = function(EnumType, OtherEnumType) {
+    var testGenerator = function(groupId, EnumType, OtherEnumType) {
+
+      valueTestGenerator(groupId, [
+        function() {return EnumType.first;},
+        function() {return EnumType.second;},
+        function() {return OtherEnumType.alpha;}
+      ]);
 
       var values = EnumType.values();
-      var tests = [
+
+      doh.register(groupId, [
         {
           name: "EnumType has all necessary properties",
           runTest: function() {
@@ -251,21 +238,12 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "../EnumerationValue"]
             doh.assertEqual(OtherEnumType.bundleName, enumValue.constructor.bundleName);
             doh.assertEqual("EnumerationValue_2", enumValue.constructor.bundleName);
           })
-        }
-      ];
-      tests = tests.concat(valueTestGenerator(
-        function() {return EnumType.first;},
-        function() {return EnumType.second;},
-        function() {return OtherEnumType.alpha;}
-      ));
-      tests = tests.concat([
+        },
         {
           name: "isValueOf",
           runTest: testForAllValues(EnumType, test_isValueOf)
         }
       ]);
-
-      return tests;
 
     };
 

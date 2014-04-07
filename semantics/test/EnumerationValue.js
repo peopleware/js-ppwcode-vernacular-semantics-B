@@ -16,9 +16,6 @@ define(["../_util/contracts/doh", "../EnumerationValue", "./enumerationValueTest
       "EnumerationValue_2"
     );
 
-    doh.register(
-      EnumerationValue.mid,
-      testGenerator(EnumerationValueStub1, EnumerationValueStub2)
-    );
+    testGenerator(EnumerationValue.mid, EnumerationValueStub1, EnumerationValueStub2);
 
   });

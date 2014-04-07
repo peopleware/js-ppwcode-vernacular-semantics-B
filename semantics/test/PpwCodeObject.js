@@ -32,9 +32,14 @@ define(["dojo/_base/declare", "../_util/contracts/doh", "../PpwCodeObject", "./p
           doh.validateInvariants(subject);
         }
       }
-    ].concat(testGenerator(
+    ]);
+
+    testGenerator(
+      PpwCodeObject.mid,
+      [
         function() {return new PpwCodeObjectStub1();},
         function() {return new PpwCodeObjectStub2();}
-    )));
+      ]
+    );
   }
 );

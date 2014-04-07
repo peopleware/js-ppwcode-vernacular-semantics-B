@@ -10,24 +10,22 @@ define(["../_util/contracts/doh"],
       doh.t(typeof result === "string");
     }
 
-    var testGenerator = function(createSubjectWithMid, createSubjectWithoutMid) {
+    var testGenerator = function(groupId, /*Function[]*/ subjectFactories) {
 
-      var tests = [
+      doh.register(groupId, [
         {
           name: "getTypeDescription with mid",
           runTest: function () {
-            test_getTypeDescription(createSubjectWithMid);
+            test_getTypeDescription(subjectFactories[0]);
           }
         },
         {
           name: "getTypeDescription with no mid",
           runTest: function () {
-            test_getTypeDescription(createSubjectWithoutMid);
+            test_getTypeDescription(subjectFactories[1]);
           }
         }
-      ];
-
-      return tests;
+      ]);
 
     };
 
