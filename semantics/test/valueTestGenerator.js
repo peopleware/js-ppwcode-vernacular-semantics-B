@@ -169,6 +169,19 @@ define(
       fillTests();
     }
 
+    var formatOptionsFactories = {
+      name: "options",
+      factories: [
+        null,
+        undefined,
+        function() {return {locale: "nl"};},
+        {
+          name: "options.locale === ru --> fallback language",
+          factory: function() {return {locale: "ru"};}
+        }
+      ]
+    };
+
     var testGenerator = function(groupId, /*Function[]*/ subjectFactories) {
 
       var createSubject = subjectFactories[0];
@@ -203,15 +216,7 @@ define(
         [
           [function() {return ValueType;}], // subject factories
           {name: "value", factories: [null, undefined, createSubject]},
-          {name: "options", factories: [
-            null,
-            undefined,
-            function() {return {locale: "nl"};},
-            {
-              name: "options.locale === ru --> fallback language",
-              factory: function() {return {locale: "ru"};}
-            }
-          ]}
+          formatOptionsFactories
         ]
       );
       createTests(
@@ -233,15 +238,7 @@ define(
               factory: "XX not a formatted value XX"
             }
           ]},
-          {name: "options", factories: [
-            null,
-            undefined,
-            function() {return {locale: "nl"};},
-            {
-              name: "options.lang === ru --> fallback language",
-              factory: function() {return {locale: "ru"};}
-            }
-          ]}
+          formatOptionsFactories
         ]
       );
       createTests(
@@ -353,15 +350,7 @@ define(
         "format",
         [
           [createSubject], // subject factories
-          {name: "options", factories: [
-            null,
-            undefined,
-            function() {return {locale: "nl"};},
-            {
-              name: "options.lang === ru --> fallback language",
-              factory: function() {return {locale: "ru"};}
-            }
-          ]}
+          formatOptionsFactories
         ]
       );
     };
