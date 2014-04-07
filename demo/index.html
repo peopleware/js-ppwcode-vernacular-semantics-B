@@ -4,9 +4,9 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>ppwcode vernacular semantics EnumerationValue Demo</title>
 
-  <link rel="stylesheet" href="lib/dojo/dojo/resources/dojo.css" />
-  <link rel="stylesheet" href="lib/dojo/dijit/themes/claro/claro.css" />
-  <link rel="stylesheet" href="demo/css/boardsDemo.css" />
+  <link rel="stylesheet" href="../lib/dojo/dojo/resources/dojo.css" />
+  <link rel="stylesheet" href="../lib/dojo/dijit/themes/claro/claro.css" />
+  <link rel="stylesheet" href="css/boardsDemo.css" />
 
   <script>
     var dojoConfig = {
@@ -20,23 +20,24 @@
         "ppwcode-contracts-precondition": true
       },
       packages: [
-        {name: "dojo", location: "../../../lib/dojo/dojo" },
-        {name: "dijit", location: "../../../lib/dojo/dijit"},
+        {name: "dijit", location: "../dijit"},
         {name: "ppwcode-vernacular-semantics", location: "../../../semantics"},
-        {name: "put-selector", location: "../../../lib/put-selector"},
-        {name: "dgrid", location: "../../../lib/dgrid"},
-        {name: "xstyle", location: "../../../lib/xstyle"},
+        {name: "put-selector", location: "../../put-selector"},
+        {name: "dgrid", location: "../../dgrid"},
+        {name: "xstyle", location: "../../xstyle"},
         {name: "demo", location: "../../../demo" },
         {name: "demo-img", location: "../../../demo/img"}
       ]
     };
   </script>
 
-  <script src="lib/dojo/dojo/dojo.js"></script>
+  <script src="../lib/dojo/dojo/dojo.js"></script>
 
   <script>
     require(["dojo/parser", "dijit/registry",
-             "demo/boards/TrafficSign", "dijit/layout/ContentPane",
+             "demo/boards/TrafficSign",
+             "dijit/layout/ContentPane", "demo/symbol/SymbolList",
+             "demo/combo/comboBoards",
              "dojo/domReady!"],
       function (parser, registry, TrafficSign) {
         var parsePromise = parser.parse();
