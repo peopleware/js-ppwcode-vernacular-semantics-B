@@ -46,13 +46,12 @@ define(
 
       // canCoerceTo is basic
 
-      coerceTo: function(/*Value*/ subject, /*Function?*/ Type, expectedResult) {
+      coerceTo: function(/*Value*/ subject, /*Function?*/ Type) {
         var result = subject.coerceTo(Type);
         doh.validateInvariants(subject);
         if (result && result.isInstanceOf && result.isInstanceOf(Value)) {
           doh.validateInvariants(result);
         }
-        doh.assertEqual(result, expectedResult);
       },
 
       format: function(/*Value*/ subject, /*FormatOptions?*/ options) {
@@ -300,79 +299,66 @@ define(
             ]}
           ]
         ))
-        .concat([
-          {
-            name: "coerceTo null",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.coerceTo(subject, null, undefined);
-            }
-          },
-          {
-            name: "coerceTo undefined",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.coerceTo(subject, undefined, undefined);
-            }
-          },
-          {
-            name: "coerceTo same type",
-            runTest: function() {
-              var subject = createSubject();
-              instanceTests.coerceTo(subject, subject.constructor, subject);
-            }
-          },
-          //            {
-          //              name: "coerceTo other type, supported, expect success",
-          //              runTest: function () {
-          //                var subject = createSubjectOtherTypeSameDataNoMid();
-          //                var supportedOtherType = createSubject().constructor;
-          //                instanceTests.coerceToData(subject, supportedOtherType, subject.data);
-          //              }
-          //            },
-          //            {
-          //              name: "coerceTo other type, not supported, expect fail",
-          //              runTest: function () {
-          //                var subject = getTestSubject();
-          //                instanceTests.coerceTo(subject, ValueStub2, undefined);
-          //              }
-          //            },
-          //            {
-          //              name: "coerceTo other type (chaining), supported, expect succes",
-          //              runTest: function () {
-          //                var subject = getTestSubjectChainingType();
-          //                instanceTests.coerceToData(subject, ValueStub1, subject.data);
-          //              }
-          //            },
-          //            {
-          //              name: "coerceTo other type (chaining), not supported, expect failure",
-          //              runTest: function () {
-          //                var subject = getTestSubjectOtherTypeSameData();
-          //                instanceTests.coerceTo(subject, ValueStub3, undefined);
-          //              }
-          //            },
-          {
-            name: "instance format, no options",
-            runTest: function() {
-              var instance = createSubject();
-              instanceTests.format(instance);
-            }
-          },
-          {
-            name: "instance format, options.lang === nl",
-            runTest: function() {
-              var instance = createSubject();
-              instanceTests.format(instance, {locale: "nl"});
-            }
-          },
-          {
-            name: "instance format, options.lang === ru",
-            runTest: function() {
-              var instance = createSubject();
-              instanceTests.format(instance, {locale: "ru"});
-            }
-          }
-        ]);
+        .concat(createTests(
+          instanceTests,
+          "coerceTo",
+          [
+            [createSubject], // subject factories
+            {name: "Type", factories: [
+              null,
+              undefined,
+              {
+                name: "same type",
+                factory: function() {return ValueType;}
+              }
+              //            {
+              //              name: "coerceTo other type, supported, expect success",
+              //              runTest: function () {
+              //                var subject = createSubjectOtherTypeSameDataNoMid();
+              //                var supportedOtherType = createSubject().constructor;
+              //                instanceTests.coerceToData(subject, supportedOtherType, subject.data);
+              //              }
+              //            },
+              //            {
+              //              name: "coerceTo other type, not supported, expect fail",
+              //              runTest: function () {
+              //                var subject = getTestSubject();
+              //                instanceTests.coerceTo(subject, ValueStub2, undefined);
+              //              }
+              //            },
+              //            {
+              //              name: "coerceTo other type (chaining), supported, expect succes",
+              //              runTest: function () {
+              //                var subject = getTestSubjectChainingType();
+              //                instanceTests.coerceToData(subject, ValueStub1, subject.data);
+              //              }
+              //            },
+              //            {
+              //              name: "coerceTo other type (chaining), not supported, expect failure",
+              //              runTest: function () {
+              //                var subject = getTestSubjectOtherTypeSameData();
+              //                instanceTests.coerceTo(subject, ValueStub3, undefined);
+              //              }
+              //            },
+            ]}
+          ]
+        ))
+        .concat(createTests(
+          instanceTests,
+          "format",
+          [
+            [createSubject], // subject factories
+            {name: "options", factories: [
+              null,
+              undefined,
+              function() {return {locale: "nl"};},
+              {
+                name: "options.lang === ru --> fallback language",
+                factory: function() {return {locale: "ru"};}
+              }
+            ]}
+          ]
+        ));
       return tests;
 
     };
