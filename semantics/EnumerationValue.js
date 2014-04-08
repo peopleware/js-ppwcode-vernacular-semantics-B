@@ -49,6 +49,9 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       _representation: null,
 
       constructor: function(/*Object*/ kwargs) {
+        // summary:
+        //   Private. Don't call the constructor of an EnumerationValue type.
+
         this._c_pre(function() {return this._c_prop_mandatory(kwargs, "representation");});
         this._c_pre(function() {return this._c_prop_string(kwargs, "representation");});
 
