@@ -135,6 +135,14 @@ define(["doh/main", "dojo/_base/lang"],
     doh.exc = doh.unexpectedException;
 
     doh.createMethodTest = function(Type, methodName, testMethod, argFactories) {
+
+      function argInstance(argFactoryOrConstant) {
+        if (typeof argFactoryOrConstant.factoryOrConstant === "function") {
+          return argFactoryOrConstant.factoryOrConstant();
+        }
+        return argFactoryOrConstant.factoryOrConstant;
+      }
+
       doh.register(
         groupId(Type),
         {
@@ -143,26 +151,19 @@ define(["doh/main", "dojo/_base/lang"],
                 argFactories.map(function(af) {return af.argRepr;}).join("; "),
           runTest: function() {
             var self = this;
-            var args = this.argFactories.map(
-              function(af) {
-                if (typeof af.factoryOrConstant === "function") {
-                  return af.factoryOrConstant();
-                }
-                return af.factoryOrConstant;
-              }
-            );
+            var args = this.argFactories.map(argInstance);
             args = args.map(
               function(arg) {
                 if (arg === "$this") {
                   return args[0];
                 }
                 if (arg === "$this()") {
-                  return self.argFactories[0].factoryOrConstant();
+                  return argInstance(self.argFactories[0]);
                 }
                 var match = /^\$args\[(\d+)\](\(\))?$/.exec(arg);
                 if (match) {
                   if (match.length === 3) {
-                    return self.argFactories[match[1]].factoryOrConstant();
+                    return argInstance(self.argFactories[match[1]]);
                   }
                   if (match.length === 2) {
                     return args[match[1]];

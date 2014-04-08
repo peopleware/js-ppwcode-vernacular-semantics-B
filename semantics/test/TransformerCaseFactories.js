@@ -67,8 +67,9 @@ define(["dojo/_base/declare", "../_util/contracts/CaseFactories", "./Transformer
                name: "not a value",
                factory: "XX not a formatted value XX"
              }
-           ].concat(this.valueFactories.map(function(sFactory) {
-             return function() {return subjectTypeFormat(sFactory());};
+           ].concat(this.valueFactories.map(function(factoryOrConstant) {
+             var value = typeof factoryOrConstant === "function" ? factoryOrConstant() : factoryOrConstant;
+             return function() {return subjectTypeFormat(value);};
            }))
          },
          this.formatOptionsFactories
