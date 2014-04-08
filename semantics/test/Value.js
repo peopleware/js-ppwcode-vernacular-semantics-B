@@ -116,7 +116,6 @@ define(["../_util/contracts/doh", "../Value", "./ValueMethodTests", "dojo/_base/
       }
     ]);
     valueTestGenerator(
-      Value.mid,
       new ValueMethodTests(),
       [
         getTestSubject,

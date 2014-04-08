@@ -19,6 +19,10 @@ define(["dojo/_base/declare"],
 
     var MethodTests = declare([], {
 
+      // Type: Function
+      //   Constructor of the type documented by this contract.
+      Type: null
+
     });
 
     return MethodTests;

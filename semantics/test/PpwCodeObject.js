@@ -35,7 +35,6 @@ define(["dojo/_base/declare", "../_util/contracts/doh", "./PpwCodeObjectMethodTe
     ]);
 
     testGenerator(
-      PpwCodeObject.mid,
       new PpwCodeObjectMethodTests(),
       [
         function() {return new PpwCodeObjectStub1();},

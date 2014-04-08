@@ -17,7 +17,7 @@ define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contract
       ]
     };
 
-    return function(groupId, methodTests, /*Function[]*/ subjectFactories) {
+    return function(methodTests, /*Function[]*/ subjectFactories) {
 
       var createSubject = subjectFactories[0];
       var createSubjectSameTypeOtherDataLarger = subjectFactories[1];
@@ -25,8 +25,8 @@ define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contract
 
       var ValueType = createSubject().constructor;
 
-      ppwCodeObjectTestGenerator(groupId, methodTests, subjectFactories);
-      doh.register(groupId, [
+      ppwCodeObjectTestGenerator(methodTests, subjectFactories);
+      doh.register(methodTests.Type.prototype.getTypeDescription(), [
         {
           name: "has a format",
           runTest: function() {
@@ -41,7 +41,6 @@ define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contract
         }
       ]);
       createTests(
-        groupId,
         constructorTests,
         "format",
         [
@@ -51,7 +50,6 @@ define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contract
         ]
       );
       createTests(
-        groupId,
         constructorTests,
         "parse",
         [
@@ -73,7 +71,6 @@ define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contract
         ]
       );
       createTests(
-        groupId,
         methodTests,
         "compare",
         [
@@ -89,7 +86,6 @@ define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contract
         ]
       );
       createTests(
-        groupId,
         methodTests,
         "equals",
         [
@@ -131,7 +127,6 @@ define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contract
         ]
       );
       createTests(
-        groupId,
         methodTests,
         "coerceTo",
         [
@@ -176,7 +171,6 @@ define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contract
         ]
       );
       createTests(
-        groupId,
         methodTests,
         "format",
         [

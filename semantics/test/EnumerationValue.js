@@ -16,6 +16,6 @@ define(["../_util/contracts/doh", "../EnumerationValue", "./enumerationValueTest
       "EnumerationValue_2"
     );
 
-    testGenerator(EnumerationValue.mid, EnumerationValueStub1, EnumerationValueStub2);
+    testGenerator(EnumerationValueStub1, EnumerationValueStub2);
 
   });

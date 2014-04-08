@@ -16,6 +16,13 @@
 
 define(["./doh"], function (doh) {
 
+  var groupCounter = 0;
+
+  function groupId(/*MethodTests*/ tests) {
+    groupCounter++;
+    return tests.Type.mid || tests.Type.prototype.declaredClass || ("test group " + groupCounter);
+  }
+
   function parameterToName(parameter) {
     if (parameter instanceof Function && parameter.prototype.getTypeDescription) {
       return parameter.prototype.getTypeDescription();
@@ -28,7 +35,7 @@ define(["./doh"], function (doh) {
 
   var counter = 1;
 
-  function createTests(groupId, tests, methodName, argumentFactories) {
+  function createTests(tests, methodName, argumentFactories) {
 
     var partialInstanceArgFactories = [];
     var remainingArgFactories = argumentFactories;
@@ -36,7 +43,7 @@ define(["./doh"], function (doh) {
     function fillTests() {
       if (remainingArgFactories.length <= 0) {
         doh.register(
-          groupId, {
+          groupId(tests), {
             argFactories: partialInstanceArgFactories.slice(), // lock a copy in scope of this test
             name: "(" + counter + ") " + methodName + " - " +
                   partialInstanceArgFactories.map(function(af) {return af.argRepr;}).join("; "),

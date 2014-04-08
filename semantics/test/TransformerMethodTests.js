@@ -14,10 +14,12 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contracts/doh", "../_exceptions/SemanticException"],
-  function(declare, MethodTests, doh, ParseException) {
+define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contracts/doh", "../Value", "../_exceptions/SemanticException"],
+  function(declare, MethodTests, doh, Value, ParseException) {
 
     return declare([MethodTests], {
+
+      Type: Value,
 
       format: function(/*Function*/ ValueType, /*Value?*/ value, /*Object?*/ options) {
         var result = ValueType.format(value, options);

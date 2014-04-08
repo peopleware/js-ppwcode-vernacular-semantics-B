@@ -1,9 +1,9 @@
 define(["../_util/contracts/createTests"],
   function (createTests) {
 
-    return function(groupId, methodTests, /*Function[]*/ subjectFactories) {
+    return function(methodTests, /*Function[]*/ subjectFactories) {
 
-      createTests(groupId, methodTests, "getTypeDescription", [subjectFactories]);
+      createTests(methodTests, "getTypeDescription", [subjectFactories]);
 
     };
 

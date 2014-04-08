@@ -14,10 +14,12 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contracts/doh"],
-  function(declare, MethodTests, doh) {
+define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contracts/doh", "../PpwCodeObject"],
+  function(declare, MethodTests, doh, PpwCodeObject) {
 
     return declare([MethodTests], {
+
+      Type: PpwCodeObject,
 
       getTypeDescription: function(/*PpwCodeObject*/ subject) {
         var result = subject.getTypeDescription();

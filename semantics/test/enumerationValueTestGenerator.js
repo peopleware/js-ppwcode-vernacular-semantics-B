@@ -34,10 +34,9 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "./ValueMethodTests", 
       };
     }
 
-    var testGenerator = function(groupId, EnumType, OtherEnumType) {
+    var testGenerator = function(EnumType, OtherEnumType) {
 
       valueTestGenerator(
-        groupId,
         new ValueMethodTests(),
         [
           function() {return EnumType.first;},
@@ -48,7 +47,7 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "./ValueMethodTests", 
 
       var values = EnumType.values();
 
-      doh.register(groupId, [
+      doh.register(EnumType.prototype.getTypeDescription(), [
         {
           name: "EnumType has all necessary properties",
           runTest: function() {
