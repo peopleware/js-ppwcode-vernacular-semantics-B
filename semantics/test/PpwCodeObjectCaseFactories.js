@@ -40,9 +40,11 @@ define(["dojo/_base/declare", "../_util/contracts/CaseFactories", "./PpwCodeObje
      },
 
      $getTypeDescription: function() {
-       return [
-         this.subjectFactories()
-       ];
+       return [this.subjectFactories()];
+     },
+
+     $toString: function() {
+       return [this.subjectFactories()];
      }
 
    });

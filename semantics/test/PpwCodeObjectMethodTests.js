@@ -34,7 +34,14 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
         doh.validateInvariants(subject);
         // postconditions
         doh.t(!!result);
-        doh.t(typeof result === "string");
+        doh.is("string", typeof result);
+      },
+
+      $toString: function(/*PpwCodeObject*/ subject) {
+        var result = subject.toString();
+        doh.validateInvariants(subject);
+        // postconditions
+        doh.is("string", typeof result);
       }
 
     });
