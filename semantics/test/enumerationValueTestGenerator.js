@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-define(["../_util/contracts/doh", "./valueTestGenerator", "./ValueMethodTests", "../EnumerationValue"],
-  function (doh, valueTestGenerator, ValueMethodTests, EnumerationValue) {
+define(["../_util/contracts/doh", "./valueTestGenerator", "../_contract/Value", "../EnumerationValue"],
+  function (doh, valueTestGenerator, ValueContract, EnumerationValue) {
 
     /*
       basic inspectors (not tested separately):
@@ -53,7 +53,7 @@ define(["../_util/contracts/doh", "./valueTestGenerator", "./ValueMethodTests", 
     var testGenerator = function(EnumType, OtherEnumType) {
 
       valueTestGenerator(
-        new ValueMethodTests(),
+        new ValueContract(),
         [
           function() {return EnumType.first;},
           function() {return EnumType.second;},

@@ -14,17 +14,17 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/CaseFactories", "./PpwCodeObjectMethodTests", "module"],
- function(declare, CaseFactories, PpwCodeObjectContract, module) {
+define(["dojo/_base/declare", "../_util/contracts/CaseFactories", "../_contract/PpwCodeObject", "module"],
+ function(declare, CaseFactories, Contract, module) {
 
-   var PpwCodeObjectStub1 = declare([PpwCodeObjectContract.prototype.SubjectType], {});
+   var PpwCodeObjectStub1 = declare([Contract.prototype.SubjectType], {});
    PpwCodeObjectStub1.mid = module.id + "_PpwCodeObjectStub1";
 
-   var PpwCodeObjectStub2 = declare([PpwCodeObjectContract.prototype.SubjectType], {}); // no mid
+   var PpwCodeObjectStub2 = declare([Contract.prototype.SubjectType], {}); // no mid
 
    return declare([CaseFactories], {
 
-     contract: new PpwCodeObjectContract(),
+     contract: new Contract(),
 
      subjectFactories: function() {
        return [

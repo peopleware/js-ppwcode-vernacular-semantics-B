@@ -1,10 +1,10 @@
-define(["dojo/_base/declare", "./PpwCodeObjectCaseFactories", "./ValueMethodTests", "./TransformerCaseFactories", "module"],
-  function(declare, PpwCodeObjectCaseFactories, ValueMethodTests, TransformerCaseFactories, module) {
+define(["dojo/_base/declare", "./PpwCodeObjectCaseFactories", "../_contract/Value", "./TransformerCaseFactories", "module"],
+  function(declare, PpwCodeObjectCaseFactories, Contract, TransformerCaseFactories, module) {
 
 
 
     // Abstract functions are not tested.
-    var ValueStub = declare([ValueMethodTests.prototype.SubjectType], {
+    var ValueStub = declare([Contract.prototype.SubjectType], {
 
       _data: null,
 
@@ -99,7 +99,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactories", "./ValueMethodTest
 
     return declare([PpwCodeObjectCaseFactories], {
 
-      contract: new ValueMethodTests(),
+      contract: new Contract(),
 
       // typeCaseFactories: TransformerCaseFactories
       typeCaseFactories: null,

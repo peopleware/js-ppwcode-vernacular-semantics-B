@@ -14,12 +14,12 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/CaseFactories", "./TransformerMethodTests"],
- function(declare, CaseFactories, TransformerMethodTests) {
+define(["dojo/_base/declare", "../_util/contracts/CaseFactories", "../_contract/Transformer"],
+ function(declare, CaseFactories, Contract) {
 
    return declare([CaseFactories], {
 
-     contract: new TransformerMethodTests(),
+     contract: new Contract(),
 
      // ValueType: Function
      //   Constructor (type) of the values to be formatted or parsed.

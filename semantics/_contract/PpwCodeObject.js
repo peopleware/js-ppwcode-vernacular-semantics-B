@@ -14,10 +14,10 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contracts/doh", "../PpwCodeObject"],
-  function(declare, MethodTests, doh, PpwCodeObject) {
+define(["dojo/_base/declare", "../_util/contracts/Contract", "../_util/contracts/doh", "../PpwCodeObject"],
+  function(declare, Contract, doh, PpwCodeObject) {
 
-    return declare([MethodTests], {
+    return declare([Contract], {
 
       SubjectType: PpwCodeObject,
 

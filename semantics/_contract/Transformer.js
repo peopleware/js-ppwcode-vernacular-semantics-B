@@ -14,10 +14,10 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contracts/doh", "../Value", "../ParseException"],
-  function(declare, MethodTests, doh, Value, ParseException) {
+define(["dojo/_base/declare", "../_util/contracts/Contract", "../_util/contracts/doh", "../Value", "../ParseException"],
+  function(declare, Contract, doh, Value, ParseException) {
 
-    return declare([MethodTests], {
+    return declare([Contract], {
 
       SubjectType: Value,
 

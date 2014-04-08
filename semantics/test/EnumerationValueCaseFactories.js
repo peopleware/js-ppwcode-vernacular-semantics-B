@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactories", "./EnumerationValueMethodTests", "./TransformerCaseFactories", "module"],
-  function(declare, EnumerationValue, ValueCaseFactories, EnumerationValueMethodTests, TransformerCaseFactories, module) {
+define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactories", "../_contract/EnumerationValue", "./TransformerCaseFactories", "module"],
+  function(declare, EnumerationValue, ValueCaseFactories, Contract, TransformerCaseFactories, module) {
 
 
     // Abstract functions are not tested.
@@ -23,7 +23,7 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactories", "./
 
     return declare([ValueCaseFactories], {
 
-      contract: new EnumerationValueMethodTests(),
+      contract: new Contract(),
 
       // typeCaseFactories: TransformerCaseFactories
       typeCaseFactories: null,

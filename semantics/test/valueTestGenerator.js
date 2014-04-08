@@ -14,11 +14,11 @@
  limitations under the License.
  */
 
-define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contracts/createTests",
+define(["../_util/contracts/doh", "../_contract/Transformer", "../_util/contracts/createTests",
    "./ppwCodeObjectTestGenerator"],
-  function(doh, TransformerMethodTests, createTests, ppwCodeObjectTestGenerator) {
+  function(doh, TransformerContract, createTests, ppwCodeObjectTestGenerator) {
 
-    var constructorTests = new TransformerMethodTests();
+    var constructorTests = new TransformerContract();
 
     var formatOptionsFactories = {
       name: "options",

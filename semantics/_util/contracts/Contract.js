@@ -17,7 +17,7 @@
 define(["dojo/_base/declare"],
   function(declare) {
 
-    var MethodTests = declare([], {
+    var Contract = declare([], {
 
       // SubjectType: Function
       //   Constructor of the type documented by this contract.
@@ -25,7 +25,7 @@ define(["dojo/_base/declare"],
 
     });
 
-    return MethodTests;
+    return Contract;
 
   }
 );
