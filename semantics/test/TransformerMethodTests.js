@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contracts/doh", "../Value", "../_exceptions/SemanticException"],
+define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contracts/doh", "../Value", "../ParseException"],
   function(declare, MethodTests, doh, Value, ParseException) {
 
     return declare([MethodTests], {
