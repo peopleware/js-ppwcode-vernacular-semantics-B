@@ -56,11 +56,11 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
             var type = js.typeOf(valueOf);
             return valueOf === this || type === "date" || type === "number" || type === "string" || type === "boolean";
           },
-          function() {return js.typeOf(this.getValue()) === "string"},
-          function() {return js.typeOf(this.canCoerceTo()) === "array"},
+          function() {return js.typeOf(this.getValue()) === "string";},
+          function() {return js.typeOf(this.canCoerceTo()) === "array";},
           function() {return this.canCoerceTo().every(function(el) {
             return js.typeOf(el) === "function" && el.prototype.isInstanceOf(Value);
-          })}
+          });}
         ],
 
         constructor: function(/*Object*/ props) {
@@ -197,9 +197,7 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
               this
             );
           }
-          else {
-            return undefined;
-          }
+          return undefined;
         },
 
         _coerceTo: function(/*Function*/ Type) {

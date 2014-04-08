@@ -14,8 +14,8 @@
  limitations under the License.
 */
 
-define(["dojo/_base/declare", "./_util/contracts/_Mixin", "dojo/_base/kernel", "./_util/js", "module"],
-    function(declare, _ContractMixin, kernel, js, module) {
+define(["dojo/_base/declare", "./_util/contracts/_Mixin", "./_util/js", "module"],
+    function(declare, _ContractMixin, js, module) {
 
       var PpwCodeObject = declare([_ContractMixin], {
 
@@ -36,9 +36,7 @@ define(["dojo/_base/declare", "./_util/contracts/_Mixin", "dojo/_base/kernel", "
           if (this.constructor.mid) {
             return this.constructor.mid;
           }
-          else {
-            return this.declaredClass;
-          }
+          return this.declaredClass;
         }
 
       });
