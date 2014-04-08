@@ -21,6 +21,14 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
 
       SubjectType: PpwCodeObject,
 
+      $constructor: function(/*Function*/ Constructor) {
+        var result = new Constructor();
+        doh.t(!!result);
+        doh.t(result.isInstanceOf(PpwCodeObject));
+        doh.t(result.isInstanceOf(Constructor));
+        doh.validateInvariants(result);
+      },
+
       $getTypeDescription: function(/*PpwCodeObject*/ subject) {
         var result = subject.getTypeDescription();
         doh.validateInvariants(subject);

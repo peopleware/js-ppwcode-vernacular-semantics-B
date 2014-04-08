@@ -21,6 +21,14 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
 
       SubjectType: Value,
 
+      $constructor: function(/*Function*/ Constructor, /*Object*/ kwargs) {
+        var result = new Constructor(kwargs);
+        doh.t(!!result);
+        doh.t(result.isInstanceOf(Value));
+        doh.t(result.isInstanceOf(Constructor));
+        doh.validateInvariants(result);
+      },
+
       $compare: function(/*Value*/ subject, /*Value*/ other) {
         var result = subject.compare(other);
         doh.validateInvariants(subject);
