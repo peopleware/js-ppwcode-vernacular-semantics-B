@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "./PpwCodeObjectCaseFactories", "./ValueMethodTests", "module"],
-  function(declare, PpwCodeObjectCaseFactories, ValueMethodTests, module) {
+define(["dojo/_base/declare", "./PpwCodeObjectCaseFactories", "./ValueMethodTests", "./TransformerCaseFactories", "module"],
+  function(declare, PpwCodeObjectCaseFactories, ValueMethodTests, TransformerCaseFactories, module) {
 
 
 
@@ -95,9 +95,18 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactories", "./ValueMethodTest
 
 
 
+
+
     return declare([PpwCodeObjectCaseFactories], {
 
       contract: new ValueMethodTests(),
+
+      // typeCaseFactories: TransformerCaseFactories
+      typeCaseFactories: null,
+
+      constructor: function() {
+        this.typeCaseFactories = new TransformerCaseFactories(ValueStub1, this.subjectFactories(), this.formatOptionsFactories());
+      },
 
       subjectFactories: function() {
         return [

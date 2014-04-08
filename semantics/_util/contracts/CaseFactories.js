@@ -23,6 +23,10 @@ define(["dojo/_base/declare"],
       //   Instance of the contract we are supplying cases for.
       contract: null,
 
+      // typeCaseFactories: CaseFactories
+      //   Optional instance for testing the type (the Constructor function object) itself.
+      typeCaseFactories: null,
+
       subjectFactories: function() {
         return [];
       }

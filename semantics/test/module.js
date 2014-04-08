@@ -26,6 +26,9 @@ define(["../_util/contracts/createTests", "./PpwCodeObjectCaseFactories", "./Val
   function(createMethodTests, PpwCodeObjectCaseFactories, ValueCaseFactories, js) {
 
     function createTypeTests(caseFactories) {
+      if (caseFactories.typeCaseFactories) {
+        createTypeTests(caseFactories.typeCaseFactories);
+      }
       js.getAllPropertyNames(caseFactories.contract)
         .filter(function(methodName) {
           return methodName[0] === "$" && typeof caseFactories.contract[methodName] === "function";
