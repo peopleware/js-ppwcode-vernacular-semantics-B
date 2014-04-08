@@ -54,9 +54,16 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
       },
 
       $valueOf: function(/*Value*/ subject) {
+        var result = subject.valueOf();
+        doh.validateInvariants(subject);
+        var resultType = typeof result;
+        doh.t(result === subject || resultType === "number" || resultType === "boolean" || resultType === "string");
       },
 
       $getValue: function(/*Value*/ subject) {
+        var result = subject.getValue();
+        doh.validateInvariants(subject);
+        doh.is("string", typeof result);
       },
 
       // canCoerceTo is basic
