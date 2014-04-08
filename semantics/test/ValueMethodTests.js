@@ -27,6 +27,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
         doh.t(result.isInstanceOf(Value));
         doh.t(result.isInstanceOf(Constructor));
         doh.validateInvariants(result);
+        return result;
       },
 
       $compare: function(/*Value*/ subject, /*Value*/ other) {
@@ -41,6 +42,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
         doh.validateInvariants(subject);
         doh.validateInvariants(other);
         doh.is(-1 * (result / Math.abs(result)), otherResult / Math.abs(otherResult));
+        return result;
       },
 
       $equals: function(/*Value*/ subject, other) {
@@ -59,6 +61,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
         else if (other.constructor !== subject.constructor) {
           doh.f(result);
         }
+        return result;
       },
 
       $valueOf: function(/*Value*/ subject) {
@@ -66,12 +69,14 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
         doh.validateInvariants(subject);
         var resultType = typeof result;
         doh.t(result === subject || resultType === "number" || resultType === "boolean" || resultType === "string");
+        return result;
       },
 
       $getValue: function(/*Value*/ subject) {
         var result = subject.getValue();
         doh.validateInvariants(subject);
         doh.is("string", typeof result);
+        return result;
       },
 
       // canCoerceTo is basic
@@ -82,6 +87,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
         if (result && result.isInstanceOf && result.isInstanceOf(Value)) {
           doh.validateInvariants(result);
         }
+        return result;
       },
 
       $format: function(/*Value*/ subject, /*FormatOptions?*/ options) {
@@ -89,6 +95,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
         doh.validateInvariants(subject);
         var expected = subject.constructor.format(subject, options);
         doh.is(expected, result);
+        return result;
       }
 
     });

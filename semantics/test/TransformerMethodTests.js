@@ -31,6 +31,7 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
           doh.is("string", typeof result);
           doh.t(value.equals(value.constructor.parse(result, options)));
         }
+        return result;
       },
 
       $parse: function(/*Function*/ ValueType, /*String?*/ str, /*Object?*/ expected, /*Object?*/ options) {
@@ -44,10 +45,12 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
             doh.t(result.isInstanceOf(ValueType));
             doh.validateInvariants(result);
           }
+          return result;
         }
         catch (exc) {
           doh.t(exc.isInstanceOf && exc.isInstanceOf(ParseException));
           doh.t(!!str || str === "");
+          return exc;
         }
       }
 

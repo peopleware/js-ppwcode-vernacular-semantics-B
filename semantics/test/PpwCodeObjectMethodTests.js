@@ -27,6 +27,7 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
         doh.t(result.isInstanceOf(PpwCodeObject));
         doh.t(result.isInstanceOf(Constructor));
         doh.validateInvariants(result);
+        return result;
       },
 
       $getTypeDescription: function(/*PpwCodeObject*/ subject) {
@@ -35,6 +36,7 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
         // postconditions
         doh.t(!!result);
         doh.is("string", typeof result);
+        return result;
       },
 
       $toString: function(/*PpwCodeObject*/ subject) {
@@ -42,6 +44,7 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
         doh.validateInvariants(subject);
         // postconditions
         doh.is("string", typeof result);
+        return result;
       }
 
     });
