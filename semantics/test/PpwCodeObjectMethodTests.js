@@ -21,7 +21,7 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
 
       SubjectType: PpwCodeObject,
 
-      getTypeDescription: function(/*PpwCodeObject*/ subject) {
+      $getTypeDescription: function(/*PpwCodeObject*/ subject) {
         var result = subject.getTypeDescription();
         doh.validateInvariants(subject);
         // postconditions

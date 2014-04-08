@@ -21,7 +21,7 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
 
       SubjectType: Value,
 
-      format: function(/*Function*/ ValueType, /*Value?*/ value, /*Object?*/ options) {
+      $format: function(/*Function*/ ValueType, /*Value?*/ value, /*Object?*/ options) {
         var result = ValueType.format(value, options);
         if (!value) {
           doh.is(null, result);
@@ -33,7 +33,7 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
         }
       },
 
-      parse: function(/*Function*/ ValueType, /*String?*/ str, /*Object?*/ expected, /*Object?*/ options) {
+      $parse: function(/*Function*/ ValueType, /*String?*/ str, /*Object?*/ expected, /*Object?*/ options) {
         try {
           var result = ValueType.parse(str, options);
           if (!str && str !== "") {

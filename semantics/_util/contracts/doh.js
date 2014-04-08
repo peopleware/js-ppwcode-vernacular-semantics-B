@@ -14,13 +14,32 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "doh/main", "dojo/_base/lang"],
-  function(declare, doh, lang) {
+define(["doh/main", "dojo/_base/lang"],
+  function(doh, lang) {
+
+    var groupCache = [];
+    var testCounter = 0;
+
+    function cached(Type) {
+      if (!Type) {
+        return "untyped";
+      }
+      var index = groupCache.indexOf(Type);
+      if (index < 0) {
+        index = groupCache.push(Type) - 1;
+      }
+      return "test group " + index;
+    }
+
+    function groupId(/*Function?*/ Type) {
+      if (Type && (Type.mid || Type.declaredClass || Type.name)) {
+        return Type.mid || Type.declaredClass || Type.name;
+      }
+      return cached(Type);
+    }
 
     console.log("Loading ppwcode contracts doh extension");
 
-      }
-    });
 //    var InvariantViolationError = declare(null, {
 //      instance: null,
 //      invariant: null,
@@ -114,6 +133,50 @@ define(["dojo/_base/declare", "doh/main", "dojo/_base/lang"],
       throw new doh._AssertFailure(msg, exc);
     };
     doh.exc = doh.unexpectedException;
+
+    doh.createMethodTest = function(Type, methodName, testMethod, argFactories) {
+      doh.register(
+        groupId(Type),
+        {
+          argFactories: argFactories.slice(), // lock a copy in scope of this test
+          name: "(" + testCounter + ") " + methodName + " - " +
+                argFactories.map(function(af) {return af.argRepr;}).join("; "),
+          runTest: function() {
+            var self = this;
+            var args = this.argFactories.map(
+              function(af) {
+                if (typeof af.factoryOrConstant === "function") {
+                  return af.factoryOrConstant();
+                }
+                return af.factoryOrConstant;
+              }
+            );
+            args = args.map(
+              function(arg) {
+                if (arg === "$this") {
+                  return args[0];
+                }
+                if (arg === "$this()") {
+                  return self.argFactories[0].factoryOrConstant();
+                }
+                var match = /^\$args\[(\d+)\](\(\))?$/.exec(arg);
+                if (match) {
+                  if (match.length === 3) {
+                    return self.argFactories[match[1]].factoryOrConstant();
+                  }
+                  if (match.length === 2) {
+                    return args[match[1]];
+                  }
+                }
+                return arg;
+              }
+            );
+            testMethod.apply(this, args);
+          }
+        }
+      );
+      testCounter++;
+    };
 
     return doh;
   }

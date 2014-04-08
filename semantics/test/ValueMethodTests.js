@@ -21,7 +21,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
 
       SubjectType: Value,
 
-      compare: function(/*Value*/ subject, /*Value*/ other) {
+      $compare: function(/*Value*/ subject, /*Value*/ other) {
         var result = subject.compare(other);
         doh.validateInvariants(subject);
         doh.validateInvariants(other);
@@ -35,7 +35,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
         doh.is(-1 * (result / Math.abs(result)), otherResult / Math.abs(otherResult));
       },
 
-      equals: function(/*Value*/ subject, other) {
+      $equals: function(/*Value*/ subject, other) {
         var result = !!subject.equals(other);
         doh.validateInvariants(subject);
         if (other && other.isInstanceOf && other.isInstanceOf(Value)) {
@@ -53,16 +53,15 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
         }
       },
 
-      valueOf: function(/*Value*/ subject) {
+      $valueOf: function(/*Value*/ subject) {
       },
 
-      getValue: function(/*Value*/ subject) {
-
+      $getValue: function(/*Value*/ subject) {
       },
 
       // canCoerceTo is basic
 
-      coerceTo: function(/*Value*/ subject, /*Function?*/ Type) {
+      $coerceTo: function(/*Value*/ subject, /*Function?*/ Type) {
         var result = subject.coerceTo(Type);
         doh.validateInvariants(subject);
         if (result && result.isInstanceOf && result.isInstanceOf(Value)) {
@@ -70,7 +69,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
         }
       },
 
-      format: function(/*Value*/ subject, /*FormatOptions?*/ options) {
+      $format: function(/*Value*/ subject, /*FormatOptions?*/ options) {
         var result = subject.format(options);
         doh.validateInvariants(subject);
         var expected = subject.constructor.format(subject, options);

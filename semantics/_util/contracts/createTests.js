@@ -14,14 +14,7 @@
  limitations under the License.
  */
 
-define(["./doh"], function (doh) {
-
-  var groupCounter = 0;
-
-  function groupId(/*MethodTests*/ tests) {
-    groupCounter++;
-    return tests.Type.mid || tests.Type.prototype.declaredClass || ("test group " + groupCounter);
-  }
+define(["./doh", "dojo/_base/lang"], function (doh, lang) {
 
   function parameterToName(parameter) {
     if (parameter instanceof Function && parameter.prototype.getTypeDescription) {
@@ -33,8 +26,6 @@ define(["./doh"], function (doh) {
     return JSON.stringify(parameter);
   }
 
-  var counter = 1;
-
   function createTests(tests, methodName, argumentFactories) {
 
     var partialInstanceArgFactories = [];
@@ -42,46 +33,7 @@ define(["./doh"], function (doh) {
 
     function fillTests() {
       if (remainingArgFactories.length <= 0) {
-        doh.register(
-          groupId(tests), {
-            argFactories: partialInstanceArgFactories.slice(), // lock a copy in scope of this test
-            name: "(" + counter + ") " + methodName + " - " +
-                  partialInstanceArgFactories.map(function(af) {return af.argRepr;}).join("; "),
-            runTest: function() {
-              var self = this;
-              var args = this.argFactories.map(
-                function(af) {
-                  if (typeof af.factoryOrConstant === "function") {
-                    return af.factoryOrConstant();
-                  }
-                  return af.factoryOrConstant;
-                }
-              );
-              args = args.map(
-                function(arg) {
-                  if (arg === "$this") {
-                    return args[0];
-                  }
-                  if (arg === "$this()") {
-                    return self.argFactories[0].factoryOrConstant();
-                  }
-                  var match = /^\$args\[(\d+)\](\(\))?$/.exec(arg);
-                  if (match) {
-                    if (match.length === 3) {
-                      return self.argFactories[match[1]].factoryOrConstant();
-                    }
-                    if (match.length === 2) {
-                      return args[match[1]];
-                    }
-                  }
-                  return arg;
-                }
-              );
-              tests[methodName].apply(tests, args);
-            }
-          }
-        );
-        counter++;
+        doh.createMethodTest(tests.SubjectType, methodName, lang.hitch(tests, tests["$" + methodName]), partialInstanceArgFactories);
       }
       else {
         var nextArg = remainingArgFactories.shift();
