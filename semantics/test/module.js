@@ -22,8 +22,7 @@
 //
 
 
-define(["../_util/contracts/createTests", "./PpwCodeObjectCaseFactories", "./ValueCaseFactories", "../_util/js",
-        "./PpwCodeObject"],
+define(["../_util/contracts/createTests", "./PpwCodeObjectCaseFactories", "./ValueCaseFactories", "../_util/js"],
   function(createMethodTests, PpwCodeObjectCaseFactories, ValueCaseFactories, js) {
 
     function createTypeTests(caseFactories) {
