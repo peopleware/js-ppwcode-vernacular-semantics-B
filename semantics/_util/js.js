@@ -84,6 +84,20 @@ define([],
       );
     }
 
+    function getAllPropertyNames(/*Object*/ obj) {
+      // summary:
+      //   Returns an array containing the names of all given objects properties.
+      //   Like own property names, but for the entire prototype chain. The array starts with the properties
+      //   of Object.prototype, and works down the chain.
+
+      return getPrototypeChain(obj).reduceRight(
+        function(acc, proto) {
+          return nub(acc.concat(Object.getOwnPropertyNames(proto)));
+        },
+        []
+      );
+    }
+
     function isInt(/*Number*/ n) {
       // summary:
       //   True if n is an integer.
@@ -319,6 +333,7 @@ define([],
       typeOf: typeOf,
       getPrototypeChain: getPrototypeChain,
       getAllKeys: getAllKeys,
+      getAllPropertyNames: getAllPropertyNames,
       isInt: isInt,
       nub: nub
 //      flatten: flatten,
