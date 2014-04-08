@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-define(["../_util/contracts/createTests", "./PpwCodeObjectCaseFactories", "./ValueCaseFactories", "./EnumerationValueCaseFactories", "../_util/js"],
-  function(createMethodTests, PpwCodeObjectCaseFactories, ValueCaseFactories, EnumerationValueCaseFactories, js) {
+define(["../_util/contracts/createTests", "./PpwCodeObjectCaseFactory", "./ValueCaseFactory", "./EnumerationValueCaseFactory", "../_util/js"],
+  function(createMethodTests, PpwCodeObjectCaseFactory, ValueCaseFactory, EnumerationValueCaseFactory, js) {
 
     function createTypeTests(caseFactories) {
       if (caseFactories.typeCaseFactories) {
@@ -30,8 +30,8 @@ define(["../_util/contracts/createTests", "./PpwCodeObjectCaseFactories", "./Val
         });
     }
 
-    createTypeTests(new PpwCodeObjectCaseFactories());
-    createTypeTests(new ValueCaseFactories());
-    createTypeTests(new EnumerationValueCaseFactories());
+    createTypeTests(new PpwCodeObjectCaseFactory());
+    createTypeTests(new ValueCaseFactory());
+    createTypeTests(new EnumerationValueCaseFactory());
   }
 );

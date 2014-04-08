@@ -14,10 +14,10 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/CaseFactories", "../_contract/Transformer"],
- function(declare, CaseFactories, Contract) {
+define(["dojo/_base/declare", "../_util/contracts/CaseFactory", "../_contract/Transformer"],
+ function(declare, CaseFactory, Contract) {
 
-   return declare([CaseFactories], {
+   return declare([CaseFactory], {
 
      contract: new Contract(),
 

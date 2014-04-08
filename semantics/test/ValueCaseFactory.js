@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "./PpwCodeObjectCaseFactories", "../_contract/Value", "./TransformerCaseFactories", "module"],
-  function(declare, PpwCodeObjectCaseFactories, Contract, TransformerCaseFactories, module) {
+define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value", "./TransformerCaseFactory", "module"],
+  function(declare, PpwCodeObjectCaseFactory, Contract, TransformerCaseFactory, module) {
 
 
 
@@ -97,7 +97,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactories", "../_contract/Valu
 
 
 
-    return declare([PpwCodeObjectCaseFactories], {
+    return declare([PpwCodeObjectCaseFactory], {
 
       contract: new Contract(),
 
@@ -105,7 +105,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactories", "../_contract/Valu
       typeCaseFactories: null,
 
       constructor: function() {
-        this.typeCaseFactories = new TransformerCaseFactories(ValueStub1, this.subjectFactories(), this.formatOptionsFactories());
+        this.typeCaseFactories = new TransformerCaseFactory(ValueStub1, this.subjectFactories(), this.formatOptionsFactories());
       },
 
       subjectFactories: function() {
