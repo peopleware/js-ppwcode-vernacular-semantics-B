@@ -42,7 +42,7 @@ define(["../_util/contracts/doh", "./TransformerMethodTests", "../_util/contract
       var ValueType = createSubject().constructor;
 
       ppwCodeObjectTestGenerator(methodTests, subjectFactories);
-      doh.register(methodTests.Type.prototype.getTypeDescription(), [
+      doh.register(methodTests.SubjectType.prototype.getTypeDescription(), [
         {
           name: "has a format",
           runTest: function() {

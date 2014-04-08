@@ -19,7 +19,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectMethodTests", "../_util/contracts/
 
     return declare([PpwCodeObjectMethodTests], {
 
-      Type: Value,
+      SubjectType: Value,
 
       compare: function(/*Value*/ subject, /*Value*/ other) {
         var result = subject.compare(other);

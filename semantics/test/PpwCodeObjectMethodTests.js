@@ -19,7 +19,7 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
 
     return declare([MethodTests], {
 
-      Type: PpwCodeObject,
+      SubjectType: PpwCodeObject,
 
       getTypeDescription: function(/*PpwCodeObject*/ subject) {
         var result = subject.getTypeDescription();

@@ -19,7 +19,7 @@ define(["dojo/_base/declare", "../_util/contracts/MethodTests", "../_util/contra
 
     return declare([MethodTests], {
 
-      Type: Value,
+      SubjectType: Value,
 
       format: function(/*Function*/ ValueType, /*Value?*/ value, /*Object?*/ options) {
         var result = ValueType.format(value, options);
