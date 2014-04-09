@@ -237,6 +237,12 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
           return enumRevive(EnumValueConstructor, representation);
         }
       }
+      // if we get here, there was no match in the bundle; try the representation itself
+      var possibleResult = enumRevive(EnumValueConstructor, str);
+      if (possibleResult) {
+        return possibleResult;
+      }
+      // nope, got no answer for you
       throw new ParseException({targetType: EnumValueConstructor, str: str, options: options});
     }
 
