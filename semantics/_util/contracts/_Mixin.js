@@ -17,32 +17,33 @@
 define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
   function(declare, lang, js, has) {
 
-    var _PreconditionViolationError = declare([Error], {
+    var PreconditionViolationError = declare([Error], {
       instance: null,
       method: null,
       condition: null,
-      arguments: null,
+      args: null,
       caller: null,
       constructor: function(instance, method, caller, callArguments, condition) {
         this.instance = instance;
         this.method = (method && method.nom) || method;
         this.caller = (caller && caller.nom) || caller;
-        this.arguments = callArguments;
+        this.args = callArguments;
         this.condition = condition;
         console.info(this.stack);
       },
       toString: function() {
         return "Precondition violation: " + this.condition +
-          " (on " + this.instance.toString() + " in method " + this.method + ", called from " + this.caller + ")";
+          " (on " + this.instance.toString() + " in method " + this.method + ", called from " + this.caller +
+          ", with arguments " + this.args + ")";
       }
     });
 
     var _ContractMixin = declare(null, {
       _c_invar: [],
 
-      _c_pre: function(condition) {
+      _c_pre: function pre(condition) {
         if (has("ppwcode-contracts-precondition") && !condition.apply(this)) {
-          throw new _PreconditionViolationError(this, this._c_pre.caller, this._c_pre.caller.caller, this._c_pre.caller.arguments, condition);
+          throw new PreconditionViolationError(this, pre.caller, pre.caller.caller, pre.caller.arguments, condition);
         }
       },
 
@@ -100,11 +101,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
         var exists = this._c_prop_mandatory(s, pName);
         if (exists) {
           var value = s[pName];
-          return typeof value === "string" && value != "";
+          return typeof value === "string" && value !== "";
         }
-        else {
-          return false;
-        }
+        return false;
       },
 
       _c_prop_number: function(subject, propName) {
@@ -125,11 +124,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
         var exists = this._c_prop(s, pName);
         if (exists) {
           var value = s[pName];
-          return value == null || typeof value === "number";
+          return value === null || typeof value === "number";
         }
-        else {
-          return false;
-        }
+        return false;
       },
 
       _c_prop_int: function(subject, propName) {
@@ -168,11 +165,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
         var exists = this._c_prop(s, pName);
         if (exists) {
           var value = s[pName];
-          return value == null || typeof value === "boolean";
+          return value === null || typeof value === "boolean";
         }
-        else {
-          return false;
-        }
+        return false;
       },
 
       _c_prop_string: function(subject, propName) {
@@ -193,11 +188,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
         var exists = this._c_prop(s, pName);
         if (exists) {
           var value = s[pName];
-          return value == null || lang.isString(value);
+          return value === null || lang.isString(value);
         }
-        else {
-          return false;
-        }
+        return false;
       },
 
         _c_prop_date: function(subject, propName) {
@@ -218,11 +211,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
           var exists = this._c_prop(s, pName);
           if (exists) {
             var value = s[pName];
-            return value == null || js.typeOf(value) === "date";
+            return value === null || js.typeOf(value) === "date";
           }
-          else {
-            return false;
-          }
+          return false;
         },
 
         _c_prop_array: function(subject, propName) {
@@ -243,11 +234,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
         var exists = this._c_prop(s, pName);
         if (exists) {
           var value = s[pName];
-          return value == null || lang.isArray(value);
+          return value === null || lang.isArray(value);
         }
-        else {
-          return false;
-        }
+        return false;
       },
 
       _c_prop_function: function(subject, propName) {
@@ -268,11 +257,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
         var exists = this._c_prop(s, pName);
         if (exists) {
           var value = s[pName];
-          return value == null || lang.isFunction(value);
+          return value === null || lang.isFunction(value);
         }
-        else {
-          return false;
-        }
+        return false;
       },
 
       _c_prop_instance: function(subject, propName, Constructor) {
@@ -298,26 +285,22 @@ define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
         }
 
         var exists = this._c_prop(s, pName);
-        if (exists) {
-          var value = s[pName];
-          if (!value) {
-            return true;
-          }
-          else if (js.typeOf(Constr) === "function") {
-            return value.isInstanceOf ? value.isInstanceOf(Constr) : value instanceof Constr;
-          }
-          else if (js.typeOf(Constr) === "object") {
-            // value must be an EnumerationValue, but we cannot test that here, because that would
-            // create a dependency loop
-            return value.isValueOf && value.isValueOf(Constr);
-          }
-          else {
-            throw "ERROR: Constructor must be a Constructor function, or EnumerationValue definition";
-          }
-        }
-        else {
+        if (!exists) {
           return false;
         }
+        var value = s[pName];
+        if (!value) {
+          return true;
+        }
+        if (js.typeOf(Constr) === "function") {
+          return value.isInstanceOf ? value.isInstanceOf(Constr) : value instanceof Constr;
+        }
+        if (js.typeOf(Constr) === "object") {
+          // value must be an EnumerationValue, but we cannot test that here, because that would
+          // create a dependency loop
+          return value.isValueOf && value.isValueOf(Constr);
+        }
+        throw "ERROR: Constructor must be a Constructor function, or EnumerationValue definition";
       },
 
       _c_ABSTRACT: function() {

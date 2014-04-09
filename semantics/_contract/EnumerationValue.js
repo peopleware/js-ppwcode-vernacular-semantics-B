@@ -31,7 +31,8 @@ define(["dojo/_base/declare", "./Value", "../_util/contracts/doh", "../Enumerati
         }
         else {
           var found = false;
-          for(var key in EnumDef) {
+          var key;
+          for(key in EnumDef) {
             if (EnumDef[key] === subject) {
               found = true;
             }
@@ -50,6 +51,7 @@ define(["dojo/_base/declare", "./Value", "../_util/contracts/doh", "../Enumerati
       $toJSON: function(/*EnumerationValue*/ subject) {
         var result = subject.toJSON();
         doh.is("string", typeof result);
+        doh.is(subject.toString(), result);
         return result;
       },
 

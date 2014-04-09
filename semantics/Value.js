@@ -29,11 +29,11 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
         //   and parse, that are functions that can format (turn into a user-oriented
         //   string) instances of that type, and parse strings into instances
         //   of that type.
-        //   format: ValueType? x Options? --> String?
+        //   format: ValueType? x FormatOptions? --> String?
         //     postconditions:
         //       function(value) {return value || (result === null);},
         //       function(value) {return !value || value.equals(value.constructor.parse(result));}
-        //   parse: String? x Options? --> ValueType?, ParseException
+        //   parse: String? x FormatOptions? --> ValueType?, ParseException
         //     postconditions:
         //       function(str) {return str || (str === "") || (result === null);}
         //     exceptionConditions:
@@ -45,8 +45,6 @@ define(["dojo/_base/declare", "./PpwCodeObject", "./_util/contracts/_Mixin",
         //   as "". The parser would not be able to discern the two.
 
         // IDEA add options.na handling
-        // IDEA add format as instance method; this is certainly needed on the constructor for at,
-        //      but it would be handy nevertheless. Then the choice of formatting is dynamic!
 
         _c_invar: [
           function() {return typeof this.constructor.format === "function";},

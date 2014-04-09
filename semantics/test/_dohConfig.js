@@ -47,4 +47,4 @@
   e.charset = "utf-8";
   document.getElementsByTagName("head")[0].appendChild(e);
   console.log("injection of dojo.js done");
-})();
+}());

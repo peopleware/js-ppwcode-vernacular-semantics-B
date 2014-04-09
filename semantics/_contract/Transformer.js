@@ -14,15 +14,42 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/Contract", "../_util/contracts/doh", "../Value", "../ParseException"],
-  function(declare, Contract, doh, Value, ParseException) {
+define(["dojo/_base/declare", "../_util/contracts/Contract", "../_util/contracts/doh", "../ParseException"],
+  function(declare, Contract, doh, ParseException) {
+
+    // only documentation
+    var FormatOptions = {
+
+      // locale: String
+      locale: null
+
+    };
+
+    // only documentation
+    var Transformer = {
+
+      format: function(/*Value?*/ value, /*FormatOptions?*/ options) {
+        // summary:
+        //   Return an end-user String representation of `value`.
+
+        return null; // return string?
+      },
+
+      parse: function(/*string?*/ str, /*FormatOptions?*/ options) {
+        // summary:
+        //   Return a Value that is the in-memory representation of what `str` is to the end-user.
+
+        return null; // return Value?
+      }
+
+    };
 
     return declare([Contract], {
 
-      SubjectType: Value,
+      // SubjectType must be set in constructor
 
-      $format: function(/*Function*/ ValueType, /*Value?*/ value, /*Object?*/ options) {
-        var result = ValueType.format(value, options);
+      $format: function(/*Transformer*/ transformer, /*Value?*/ value, /*FormatOptions?*/ options) {
+        var result = transformer.format(value, options);
         if (!value) {
           doh.is(null, result);
         }
@@ -34,15 +61,15 @@ define(["dojo/_base/declare", "../_util/contracts/Contract", "../_util/contracts
         return result;
       },
 
-      $parse: function(/*Function*/ ValueType, /*String?*/ str, /*Object?*/ expected, /*Object?*/ options) {
+      $parse: function(/*Transformer*/ transformer, /*String?*/ str, /*FormatOptions?*/ options) {
         try {
-          var result = ValueType.parse(str, options);
+          var result = transformer.parse(str, options);
           if (!str && str !== "") {
             doh.is(null, result);
           }
           else {
             doh.t(result);
-            doh.t(result.isInstanceOf(ValueType));
+            doh.t(result.isInstanceOf(transformer));
             doh.validateInvariants(result);
           }
           return result;

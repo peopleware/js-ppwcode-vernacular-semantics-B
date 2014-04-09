@@ -45,10 +45,30 @@ define([],
       }
       var result = Object.prototype.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
       // on some browsers, the main window returns as "global" (WebKit) or "window" (FF), but this is an object too
-      if (result === "global" || result == "window") {
+      if (result === "global" || result === "window") {
         result = "object";
       }
       return result; // return String
+    }
+
+    function nub(/*Array*/ array, /*Boolean?*/ removeNull) {
+      // summary:
+      //   Returns an array that has all the elements of `array`, in order, but with later duplicates removed.
+      //   If `removeNull` is given and thruthy, nulls and undefineds are removed too.
+
+      if (!array) {
+        return array;
+      }
+      var result = array.reduce(
+        function(acc, el) {
+          if ((!removeNull || el) && acc.indexOf(el) < 0) {
+            acc.push(el);
+          }
+          return acc;
+        },
+        []
+      );
+      return result;
     }
 
     function getPrototypeChain(/*Object*/ obj) {
@@ -61,10 +81,8 @@ define([],
         if (!o) {
           return acc;
         }
-        else {
-          acc.push(o);
-          return recursive(acc, Object.getPrototypeOf(o));
-        }
+        acc.push(o);
+        return recursive(acc, Object.getPrototypeOf(o));
       }
 
       return recursive([], obj);
@@ -106,25 +124,6 @@ define([],
       return n % 1 === 0;
     }
 
-    function nub(/*Array*/ array, /*Boolean?*/ removeNull) {
-      // summary:
-      //   Returns an array that has all the elements of `array`, in order, but with later duplicates removed.
-      //   If `removeNull` is given and thruthy, nulls and undefineds are removed too.
-
-      if (!array) {
-        return array;
-      }
-      var result = array.reduce(
-        function(acc, el) {
-          if ((!removeNull || el) && acc.indexOf(el) < 0) {
-            acc.push(el);
-          }
-          return acc;
-        },
-        []
-      );
-      return result;
-    }
 //
 //    function substitute(/*String*/ str, /*Object*/ context) {
 //      // summary:
@@ -305,7 +304,7 @@ define([],
 //
 //    function haveSameElements(a1, a2) {
 //      // summary:
-//      //   Returns true if array a1 and array a2 have the samen elements, irrespective of their order.
+//      //   Returns true if array a1 and array a2 have the same elements, irrespective of their order.
 //      //   Duplicates are allowed.
 //
 //      return a1.every(function(a1i) {return a2.indexOf(a1i) >= 0;}) &&

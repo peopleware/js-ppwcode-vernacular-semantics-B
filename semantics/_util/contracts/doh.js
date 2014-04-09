@@ -41,13 +41,15 @@ define(["doh/main", "dojo/_base/lang"],
           var selection = forAllInvar.selector.call(context);
           if (selection instanceof Array) {
             // for all elements
-            for (var j = 0; j < selection.length; j++) {
+            var j;
+            for (j = 0; j < selection.length; j++) {
               doh._flattenInvars(selection[j], forAllInvar.invars, acc);
             }
           }
           else {
             // selection is Object
-            for (var propName in selection) {
+            var propName;
+            for (propName in selection) {
               if (selection.hasOwnProperty(propName)) {
                 doh._flattenInvars(selection[propName], forAllInvar.invars, acc);
               }
@@ -57,7 +59,8 @@ define(["doh/main", "dojo/_base/lang"],
         }
       }
 
-      for (var i = 0; i < a.length; i++) {
+      var i;
+      for (i = 0; i < a.length; i++) {
         var el = a[i];
         if (el instanceof Function) {
           acc.push({
@@ -84,14 +87,15 @@ define(["doh/main", "dojo/_base/lang"],
       var invars = [];
       this._flattenInvars(subject, subject._c_invar, invars);
 
-      for (var i = 0; i < invars.length; i++) {
+      var i;
+      for (i = 0; i < invars.length; i++) {
         var invar = invars[i];
         doh.isNot(null, invar);
         doh.t(invar.testMethodInContext instanceof Function);
 
         // inject for this
         var result = invar.testMethodInContext();
-        if (! result) {
+        if (!result) {
           throw new doh._AssertFailure("invariant error: " + invar.testMethodForPrint + " (on " + subject.toString() + ")");
         }
       }

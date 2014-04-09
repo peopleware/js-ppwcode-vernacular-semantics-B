@@ -19,121 +19,6 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
   function(declare, Value, ParseException,
            js, i18n, kernel, lang, module) {
 
-    var EnumerationValue = declare([Value], {
-      // summary:
-      //   Support for enum types.
-      //   Values of enum types are communicated to and from the server as Strings in JSON.
-      // description:
-      //   Enumeration types should be defined as a hash of the EnumerationValues.
-      //   This class thus defines the values, but not the type.
-      //   This hash is referenced with a Capitalized name, like a Constructor (although it is an object,
-      //   and not a function).
-      //   Note that "" might be a valid representation of an enumeration value.
-      //   It can therefore not be used to represent "no value". For this, we need to use
-      //   null or undefined.
-      //   An enumeration value can have a label (a human representation) that is different in different
-      //   languages. To enable this, place a set of nls files in the nls directory next to the module
-      //   defining the enumeration type with the same name as the module itself (or define the
-      //   name used in `bundleName`). The Constructor needs to have a property `mid` containing the
-      //   module id for this to work. The EnumerationValue Constructor then has a `format` and `parse`
-      //   method, that can take an options-argument that has a locale in the regular way.
-      //   If we don't find a locale in the options, we use the default locale.
-
-      _c_invar: [
-        function() {return js.typeOf(this.toJSON()) === "string" && this.toJSON() != "";}
-      ],
-
-      // _representation: String
-      //   The internal representation of the value.
-      //   This string is used in communication to and from the server.
-      _representation: null,
-
-      constructor: function(/*Object*/ kwargs) {
-        // summary:
-        //   Private. Don't call the constructor of an EnumerationValue type.
-
-        this._c_pre(function() {return this._c_prop_mandatory(kwargs, "representation");});
-        this._c_pre(function() {return this._c_prop_string(kwargs, "representation");});
-
-        this._representation = kwargs.representation;
-      },
-
-      isValueOf: function(/*Object*/ EnumDef) {
-        // summary:
-        //   Is this defined in `EnumDef`?
-        // description:
-        //   Similar to isInstanceOf.
-        //   Note: with the current implementation of declare, we cannot overwrite isInstanceOf.
-        //   (the declare definition of isInstanceOf overwrites anything we declare).
-
-        return Object.keys(EnumDef).some(function(ed) {return EnumDef[ed] === this;}, this);
-      },
-
-      equals: function(/*EnumerationValue*/ other) {
-        // summary:
-        //   Referential equality.
-
-        return this.inherited(arguments) && this === other;
-      },
-
-      getValue: function() {
-        return this._representation;
-      },
-
-      toJSON: function() {
-        // summary:
-        //   JSON.Stringify hook.
-        //   See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior
-
-        return this._representation;
-      },
-
-      compare: function(other) {
-        // summary:
-        //   Comparison based on getValue. Can be overriden.
-        if (!other) {
-          return -1;
-        }
-        return this.equals(other) ? 0 : (this.getValue() < other.getValue() ? -1 : +1);
-      },
-
-      toString: function() {
-        return this._representation;
-      },
-
-      getLabel: function(/*String|Object?*/ opt) {
-        // summary:
-        //   Shortcut to EnumerationValue.format(this, {locale: lang});
-        // opt: String|Object?
-        //   If a string, the locale.
-        //   If an object, format options. See EnumerationValue.format
-
-        return EnumerationValue.format(this, js.typeOf(opt) === "object" ? opt : {locale: opt /* i.e., lang*/});
-      }
-
-    });
-
-    function values(EnumDef) {
-      // summary:
-      //   The values of EnumDef as a an array.
-
-      if (!EnumDef._values) {
-        EnumDef._values = Object.keys(EnumDef).
-          filter(function(key) {return key != "superclass" && EnumDef[key] && EnumDef[key].isInstanceOf && EnumDef[key].isInstanceOf(EnumerationValue)}).
-          map(function(key) {return EnumDef[key];});
-      }
-      return EnumDef._values;
-    }
-
-    function isEnumJson(EnumDef, json) {
-      // summary:
-      //   Is `json` the String representation of a value defined in EnumDef?
-      //   Note: json must be the result of JSON.parse, not the naked JSON string.
-      //   E.g., "MALE" would be a correct "json representation", not "\"MALE\"".
-
-      return values(EnumDef).some(function(ev) {return ev._representation === json;});
-    }
-
     function enumRevive(EnumDef, json) {
       // summary:
       //   Revive a json String value into the appropriate
@@ -207,17 +92,10 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
         actualKey += "_" + options.keyExtension;
       }
       var result = getBundle(v.constructor, lang)[actualKey];
-      if (!result && result != "") {
-        if (!(options && options.keyExtension)) {
-          return v._representation;
-        }
-        else {
-          return "?" + actualKey + "?";
-        }
+      if (!result && result !== "") {
+        return !(options && options.keyExtension) ? v._representation : "?" + actualKey + "?";
       }
-      else {
-        return result;
-      }
+      return result;
     }
 
     function parse(/*Function*/ EnumValueConstructor, /*String*/ str, /*Object*/ options) {
@@ -230,7 +108,8 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       }
       var lang = (options && options.locale) || kernel.locale;
       var bundle = getBundle(EnumValueConstructor, lang);
-      for (var representation in bundle) {
+      var representation;
+      for (representation in bundle) {
         //noinspection JSUnfilteredForInLoop
         if (bundle[representation] === str) {
           //noinspection JSUnfilteredForInLoop
@@ -246,17 +125,142 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       throw new ParseException({targetType: EnumValueConstructor, str: str, options: options});
     }
 
-    function methodFactory(/*Function*/ EnumValueConstructor, /*Function*/ f) {
-      return lang.partial(f, EnumValueConstructor);
+    var EnumerationValue = declare([Value], {
+      // summary:
+      //   Support for enum types.
+      //   Values of enum types are communicated to and from the server as Strings in JSON.
+      // description:
+      //   Enumeration types should be defined as a hash of the EnumerationValues.
+      //   This class thus defines the values, but not the type.
+      //   This hash is referenced with a Capitalized name, like a Constructor (although it is an object,
+      //   and not a function).
+      //   Note that "" might be a valid representation of an enumeration value.
+      //   It can therefore not be used to represent "no value". For this, we need to use
+      //   null or undefined.
+      //   An enumeration value can have a label (a human representation) that is different in different
+      //   languages. To enable this, place a set of nls files in the nls directory next to the module
+      //   defining the enumeration type with the same name as the module itself (or define the
+      //   name used in `bundleName`). The Constructor needs to have a property `mid` containing the
+      //   module id for this to work. The EnumerationValue Constructor then has a `format` and `parse`
+      //   method, that can take an options-argument that has a locale in the regular way.
+      //   If we don't find a locale in the options, we use the default locale.
+
+      _c_invar: [
+        function() {return js.typeOf(this.toJSON()) === "string" && this.toJSON() !== "";}
+      ],
+
+      // _representation: String
+      //   The internal representation of the value.
+      //   This string is used in communication to and from the server.
+      _representation: null,
+
+      constructor: function(/*Object*/ kwargs) {
+        // summary:
+        //   Private. Don't call the constructor of an EnumerationValue type.
+
+        this._c_pre(function() {return this._c_prop_mandatory(kwargs, "representation");});
+        this._c_pre(function() {return this._c_prop_string(kwargs, "representation");});
+
+        this._representation = kwargs.representation;
+      },
+
+      isValueOf: function(/*Object*/ EnumDef) {
+        // summary:
+        //   Is this defined in `EnumDef`?
+        // description:
+        //   Similar to isInstanceOf.
+        //   Note: with the current implementation of declare, we cannot overwrite isInstanceOf.
+        //   (the declare definition of isInstanceOf overwrites anything we declare).
+
+        return Object.keys(EnumDef).some(function(ed) {return EnumDef[ed] === this;}, this);
+      },
+
+      equals: function(/*EnumerationValue*/ other) {
+        // summary:
+        //   Referential equality.
+
+        return this.inherited(arguments) && this === other;
+      },
+
+      getValue: function() {
+        return this._representation;
+      },
+
+      toJSON: function() {
+        // summary:
+        //   JSON.Stringify hook.
+        //   See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior
+
+        return this._representation;
+      },
+
+      compare: function(other) {
+        // summary:
+        //   Comparison based on getValue. Can be overridden.
+        if (!other) {
+          return -1;
+        }
+        return this.equals(other) ? 0 : (this.getValue() < other.getValue() ? -1 : +1);
+      },
+
+      toString: function() {
+        return this._representation;
+      },
+
+      getLabel: function(/*String|Object?*/ opt) {
+        // summary:
+        //   Shortcut to EnumerationValue.format(this, {locale: lang});
+        // opt: String|Object?
+        //   If a string, the locale.
+        //   If an object, format options. See EnumerationValue.format
+
+        return format(this, js.typeOf(opt) === "object" ? opt : {locale: opt /* i.e., lang*/});
+      }
+
+    });
+
+    function values(EnumDef) {
+      // summary:
+      //   The values of EnumDef as a an array.
+
+      if (!EnumDef._values) {
+        EnumDef._values = Object.keys(EnumDef)
+          .filter(function(key) {
+                    return key !== "superclass" &&
+                           EnumDef[key] &&
+                           EnumDef[key].isInstanceOf &&
+                           EnumDef[key].isInstanceOf(EnumerationValue);
+                  })
+          .map(function(key) {return EnumDef[key];});
+      }
+      return EnumDef._values;
     }
 
-    function enumDeclare(/*Function?*/ SuperType, /*Object*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String*/ mod, /*String*/ bundleName) {
+    function isEnumJson(EnumDef, json) {
+      // summary:
+      //   Is `json` the String representation of a value defined in EnumDef?
+      //   Note: json must be the result of JSON.parse, not the naked JSON string.
+      //   E.g., "MALE" would be a correct "json representation", not "\"MALE\"".
+
+      return values(EnumDef).some(function(ev) {return ev._representation === json;});
+    }
+
+    function enumDeclare(/*Function?*/ SuperType,
+                         /*Object*/ prototypeDef,
+                         /*Array|Object*/ valueDefinitions,
+                         /*module|String*/ mod,
+                         /*String*/ bundleName) {
       if (js.typeOf(SuperType) !== "function") {
         // shift arguments
+        //noinspection AssignmentToFunctionParameterJS,JSValidateTypes
         bundleName = mod;
+        //noinspection AssignmentToFunctionParameterJS,JSValidateTypes
         mod = valueDefinitions;
+        //noinspection AssignmentToFunctionParameterJS,JSValidateTypes
         valueDefinitions = prototypeDef;
+        //noinspection AssignmentToFunctionParameterJS,JSValidateTypes
         prototypeDef = SuperType;
+        //noinspection AssignmentToFunctionParameterJS,JSValidateTypes
         SuperType = EnumerationValue;
       }
 
@@ -283,11 +287,12 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
         default:
           // NOP
       }
-      Enum.isJson = methodFactory(Enum, isEnumJson);
-      Enum.revive = methodFactory(Enum, enumRevive);
-      Enum.values = methodFactory(Enum, values);
+      Enum.isJson = lang.partial(isEnumJson, Enum);
+      Enum.revive = lang.partial(enumRevive, Enum);
+      Enum.values = lang.partial(values, Enum); // basic
+      Enum.getBundle = lang.partial(getBundle, Enum);
       Enum.format = format;
-      Enum.parse = methodFactory(Enum, parse);
+      Enum.parse = lang.partial(parse, Enum);
       if (mod) {
         Enum.mid = (js.typeOf(mod) === "object") ? mod.id : mod;
       }
@@ -299,11 +304,6 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
 
     EnumerationValue.mid = module.id;
     EnumerationValue.bundleName = null;
-    EnumerationValue.getBundle = getBundle;
-    EnumerationValue.format = format;
-    EnumerationValue.generalParse = parse;
-    EnumerationValue.methodFactory = methodFactory;
-
     EnumerationValue.declare = enumDeclare;
 
     return EnumerationValue;

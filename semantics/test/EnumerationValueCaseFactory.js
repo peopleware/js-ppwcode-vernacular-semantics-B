@@ -3,6 +3,7 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "../_
 
 
     // Abstract functions are not tested.
+    //noinspection JSCheckFunctionSignatures
     var EnumerationValueStub1 = EnumerationValue.declare(
       {},
       ["first", "second", "third"],
