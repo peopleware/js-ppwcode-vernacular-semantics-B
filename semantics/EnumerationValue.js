@@ -19,60 +19,6 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
   function(declare, Value, ParseException,
            js, i18n, kernel, lang, module) {
 
-    function dirFromMid(mid) {
-      // summary:
-      //   Helper function to get the directory from a MID
-
-      var parts = mid.split("/");
-      parts.pop();
-      return parts.join("/");
-    }
-
-    function getParentDirectory(/*Function*/ EnumValueConstructor) {
-      if (!EnumValueConstructor._parentDirectory) {
-        if (!EnumValueConstructor.mid) {
-          throw "ERROR you must defined a property `mid` on the enumeration value constructor";
-        }
-        EnumValueConstructor._parentDirectory = dirFromMid(EnumValueConstructor.mid);
-      }
-      return EnumValueConstructor._parentDirectory;
-    }
-
-    function getBundleName(/*Function*/ EnumValueConstructor) {
-      return EnumValueConstructor.bundleName || EnumValueConstructor.mid.split("/").pop();
-    }
-
-    function getBundle(/*Function*/ EnumValueConstructor, /*String*/ lang) {
-      return i18n.getLocalization(
-        getParentDirectory(EnumValueConstructor),
-        getBundleName(EnumValueConstructor),
-        lang
-      );
-    }
-
-    function format(/*EnumerationValue?*/ v, /*Object?*/ options) {
-      // summary:
-      //   options.locale can be filled out; if not, the default locale is used.
-      //   The key for label lookup is the value representation, possibly extended with
-      //   options.keyExtension (`this._representation + "_" + options.keyExtension`).
-      //   If no label is found, the representation itself is returned, if the key is not extended.
-      //   A warning is issued if no label is found with a given extension.
-
-      if (!v) {
-        return null;
-      }
-      var lang = (options && options.locale) || kernel.locale;
-      var actualKey = v._representation;
-      if (options && options.keyExtension) {
-        actualKey += "_" + options.keyExtension;
-      }
-      var result = getBundle(v.constructor, lang)[actualKey];
-      if (!result && result !== "") {
-        return !(options && options.keyExtension) ? v._representation : "?" + actualKey + "?";
-      }
-      return result;
-    }
-
     var EnumerationValue = declare([Value], {
       // summary:
       //   Support for enum types.
@@ -162,7 +108,7 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
         //   If a string, the locale.
         //   If an object, format options. See EnumerationValue.format
 
-        return format(this, js.typeOf(opt) === "object" ? opt : {locale: opt /* i.e., lang*/});
+        return this.format(this, js.typeOf(opt) === "object" ? opt : {locale: opt /* i.e., lang*/});
       }
 
     });
@@ -218,6 +164,69 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       return EnumDef[match[0]]; // return EnumerationValue
     }
 
+    function dirFromMid(mid) {
+      // summary:
+      //   Helper function to get the directory from a MID
+
+      var parts = mid.split("/");
+      parts.pop();
+      return parts.join("/");
+    }
+
+    function getParentDirectory(/*Function*/ EnumValueConstructor) {
+      if (!EnumValueConstructor._parentDirectory) {
+        if (!EnumValueConstructor.mid) {
+          throw "ERROR you must defined a property `mid` on the enumeration value constructor";
+        }
+        EnumValueConstructor._parentDirectory = dirFromMid(EnumValueConstructor.mid);
+      }
+      return EnumValueConstructor._parentDirectory;
+    }
+
+    function getBundleName(/*Function*/ EnumValueConstructor) {
+      return EnumValueConstructor.bundleName || EnumValueConstructor.mid.split("/").pop();
+    }
+
+    function getBundle(/*Function*/ EnumValueConstructor, /*String*/ lang) {
+      try {
+        return i18n.getLocalization(
+          getParentDirectory(EnumValueConstructor),
+          getBundleName(EnumValueConstructor),
+          lang
+        );
+      }
+      catch (ignore) {
+        console.warn("No i18n bundle found for " +
+                     (EnumValueConstructor.mid ||
+                      "EnumerationValue type {" + values(EnumValueConstructor).join(", ") + "}"));
+        return undefined;
+      }
+    }
+
+    function format(/*Function*/ EnumValueConstructor, /*EnumerationValue?*/ v, /*Object?*/ options) {
+      // summary:
+      //   options.locale can be filled out; if not, the default locale is used.
+      //   The key for label lookup is the value representation, possibly extended with
+      //   options.keyExtension (`this._representation + "_" + options.keyExtension`).
+      //   If no label is found, the representation itself is returned, if the key is not extended.
+      //   A warning is issued if no label is found with a given extension.
+
+      if (!v) {
+        return null;
+      }
+      var lang = (options && options.locale) || kernel.locale;
+      var actualKey = v._representation;
+      if (options && options.keyExtension) {
+        actualKey += "_" + options.keyExtension;
+      }
+      var bundle = getBundle(EnumValueConstructor, lang);
+      var result = bundle && bundle[actualKey];
+      if (!result && result !== "") {
+        return !(options && options.keyExtension) ? v._representation : "?" + actualKey + "?";
+      }
+      return result;
+    }
+
     function parse(/*Function*/ EnumValueConstructor, /*String*/ str, /*Object*/ options) {
       // summary:
       //   options.locale can be filled out; if not, the default locale is used.
@@ -228,12 +237,14 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       }
       var lang = (options && options.locale) || kernel.locale;
       var bundle = getBundle(EnumValueConstructor, lang);
-      var representation;
-      for (representation in bundle) {
-        //noinspection JSUnfilteredForInLoop
-        if (bundle[representation] === str) {
+      if (bundle) {
+        var representation;
+        for (representation in bundle) {
           //noinspection JSUnfilteredForInLoop
-          return enumRevive(EnumValueConstructor, representation);
+          if (bundle[representation] === str) {
+            //noinspection JSUnfilteredForInLoop
+            return enumRevive(EnumValueConstructor, representation);
+          }
         }
       }
       // if we get here, there was no match in the bundle; try the representation itself
@@ -291,7 +302,7 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       Enum.revive = lang.partial(enumRevive, Enum);
       Enum.values = lang.partial(values, Enum); // basic
       Enum.getBundle = lang.partial(getBundle, Enum);
-      Enum.format = format;
+      Enum.format = lang.partial(format, Enum);
       Enum.parse = lang.partial(parse, Enum);
       if (mod) {
         Enum.mid = (js.typeOf(mod) === "object") ? mod.id : mod;

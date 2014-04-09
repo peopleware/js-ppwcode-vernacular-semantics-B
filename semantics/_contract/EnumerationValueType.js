@@ -110,40 +110,20 @@ define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../_util/
         }
         // noting to do; can only call the method
         return result;
-      }
+      },
 
-//      $format: function(/*EnumerationValueType*/ transformer, /*Value?*/ value, /*Object?*/ options) {
-//        var result = transformer.format(value, options);
-//        if (!value) {
-//          doh.is(null, result);
-//        }
-//        else {
-//          doh.validateInvariants(value);
-//          doh.is("string", typeof result);
-//          doh.t(value.equals(value.constructor.parse(result, options)));
-//        }
-//        return result;
-//      },
-//
-//      $parse: function(/*EnumerationValueType*/ transformer, /*String?*/ str, /*Object?*/ expected, /*Object?*/ options) {
-//        try {
-//          var result = transformer.parse(str, options);
-//          if (!str && str !== "") {
-//            doh.is(null, result);
-//          }
-//          else {
-//            doh.t(result);
-//            doh.t(result.isInstanceOf(transformer));
-//            doh.validateInvariants(result);
-//          }
-//          return result;
-//        }
-//        catch (exc) {
-//          doh.t(exc.isInstanceOf && exc.isInstanceOf(ParseException));
-//          doh.t(!!str || str === "");
-//          return exc;
-//        }
-//      }
+      $format: function(/*EnumerationValueType*/ transformer, /*EnumerationValue?*/ value, /*Object?*/ options) {
+        var result = this.inherited(arguments);
+        var expected = null;
+        if (value) {
+          var bundle = transformer.getBundle(options && options.locale);
+          var repr = value.toJSON();
+          var bundleLabel = bundle && bundle[repr];
+          expected = (bundleLabel || bundleLabel === "") ? bundleLabel : repr;
+        }
+        doh.is(expected, result);
+        return result;
+      }
 
     });
 
