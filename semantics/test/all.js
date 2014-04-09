@@ -14,24 +14,12 @@
  limitations under the License.
  */
 
-define(["../_util/contracts/createTests", "./PpwCodeObjectCaseFactory", "./ValueCaseFactory", "./EnumerationValueCaseFactory", "../_util/js"],
-  function(createMethodTests, PpwCodeObjectCaseFactory, ValueCaseFactory, EnumerationValueCaseFactory, js) {
+define(["../_util/contracts/doh", "./PpwCodeObjectCaseFactory", "./ValueCaseFactory", "./EnumerationValueCaseFactory"],
+  function(doh, PpwCodeObjectCaseFactory, ValueCaseFactory, EnumerationValueCaseFactory) {
 
-    function createTypeTests(caseFactories) {
-      if (caseFactories.typeCaseFactories) {
-        createTypeTests(caseFactories.typeCaseFactories);
-      }
-      js.getAllPropertyNames(caseFactories.contract)
-        .filter(function(methodName) {
-          return methodName[0] === "$" && typeof caseFactories.contract[methodName] === "function";
-        })
-        .forEach(function(methodName) {
-          createMethodTests(caseFactories.contract, methodName.slice(1), caseFactories[methodName]());
-        });
-    }
-
-    createTypeTests(new PpwCodeObjectCaseFactory());
-    createTypeTests(new ValueCaseFactory());
-    createTypeTests(new EnumerationValueCaseFactory());
+    var kwargs = {methodTestCreator: doh.createMethodTest};
+    new PpwCodeObjectCaseFactory(kwargs).createTypeTests();
+    new ValueCaseFactory(kwargs).createTypeTests();
+    new EnumerationValueCaseFactory(kwargs).createTypeTests();
   }
 );
