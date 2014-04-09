@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../_util/contracts/doh"],
-  function(declare, TransformerContract, EnumerationValue, doh) {
+define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../ParseException", "../_util/contracts/doh"],
+  function(declare, TransformerContract, EnumerationValue, ParseException, doh) {
 
     // only documentation
     var EnumerationValueType = function() {};
@@ -122,6 +122,30 @@ define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../_util/
           expected = (bundleLabel || bundleLabel === "") ? bundleLabel : repr;
         }
         doh.is(expected, result);
+        return result;
+      },
+
+      $parse: function(/*EnumerationValueType*/ EnumerationValueType, /*String?*/ str, /*FormatOptions?*/ options) {
+        var result = this.inherited(arguments);
+        if (str || str === "") {
+          var bundle = EnumerationValueType.getBundle(options && options.locale);
+          var repr = str;
+          if (bundle) {
+            var key;
+            for (key in bundle) {
+              if (bundle[key] === str) {
+                repr = key;
+                break;
+              }
+            }
+          }
+          if (EnumerationValueType[repr]) {
+            doh.is(EnumerationValueType[repr], result);
+          }
+          else {
+            doh.t(result && result.isInstanceOf && result.isInstanceOf(ParseException));
+          }
+        }
         return result;
       }
 
