@@ -1,10 +1,7 @@
-define([
-  "require",
-  "dojo/string",
-  "ppwcode-vernacular-semantics/EnumerationValue"
-],
+define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue"],
   function (require, string, EnumerationValue) {
 
+    var imgsrc = "demo/img/${0}/${1}.jpg";
 
     var TrafficSign = EnumerationValue.declare(
       {
@@ -16,29 +13,19 @@ define([
         // url: String
         url: null,
 
-        constructor: function (/*Object*/ kwargs) {
-          var pre;
-          this._c_pre(function () {
-            pre = this._c_prop_mandatory(kwargs, "representation");
-            return pre;
-          });
-          this._c_pre(function () {
-            pre = this._c_prop_string(kwargs, "representation");
-            return pre;
-          });
-          this._c_pre(function () {
-            pre = !kwargs.filename || this._c_prop_string(kwargs, "filename");
-            return pre;
-          });
+        // filename: String
+        filename: null,
+
+        constructor: function(/*Object*/ kwargs) {
+          this._c_pre(function () {return !kwargs.filename || this._c_prop_string(kwargs, "filename");});
+
           if (kwargs.filename) {
-            this.url = this.urlBuildSymbol(this._typeDir, kwargs.filename);
+            this.filename = kwargs.filename;
           }
         },
 
-        urlBuildSymbol: function (/*String*/ dir, /*String*/ fileName) {
-          var imgsrc = "demo/img/${0}/${1}.jpg";
-          return require.toUrl(string.substitute(imgsrc, [dir, fileName])).toString();
-
+        getUrl: function() {
+          return require.toUrl(string.substitute(imgsrc, [this._typeDir, this.filename])).toString();
         },
 
         getLabel: function () {
@@ -87,7 +74,6 @@ define([
         {representation: "max_speed_60", filename: "670V60"}
       ]
     );
-
 
     TrafficSign.WARNING = EnumerationValue.declare(
       TrafficSign.Regulatory,

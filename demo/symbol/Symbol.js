@@ -94,7 +94,7 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
         //   pre: this.get("symbol")
         //   pre: this.get("symbol").url
 
-        this._imgNode = domConstruct.create("img", {src: this.get("symbol").url}, this.domNode);
+        this._imgNode = domConstruct.create("img", {src: this.get("symbol").getUrl()}, this.domNode);
         /*
          IE has a bug, where it sets the natural width and height on an img sometimes.
          The trick is to delete that.
