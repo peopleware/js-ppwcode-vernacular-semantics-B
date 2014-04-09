@@ -48,6 +48,9 @@ define(["dojo/_base/declare", "../_util/contracts/Contract", "../_util/contracts
 
       // SubjectType must be set in constructor
 
+      FormatOptions: FormatOptions,
+      Transformer: Transformer,
+
       $format: function(/*Transformer*/ transformer, /*Value?*/ value, /*FormatOptions?*/ options) {
         var result = transformer.format(value, options);
         if (!value) {

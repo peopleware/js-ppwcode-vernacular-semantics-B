@@ -28,6 +28,15 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "./En
 
       contract: new Contract(),
 
+      createTypeCaseFactory: function(kwargs) {
+        return new EnumerationValueTypeCaseFactory({
+          SubjectType: this.contract.SubjectType,
+          methodTestCreator: kwargs.methodTestCreator,
+          subjectFactories: lang.hitch(this, this.typeSubjectFactories),
+          valueFactories: lang.hitch(this, this.subjectFactories),
+          formatOptionsFactories: lang.hitch(this, this.formatOptionsFactories)
+        });
+      },
 
       typeSubjectFactories: function() {
         return [
