@@ -72,15 +72,7 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "./En
           this.subjectFactories(),
           {
             name: "EnumDef",
-            factories: [
-              {
-                name: "EnumerationValueStub1",
-                factory: function() {return EnumerationValueStub1;}
-              },
-              {
-                name: "EnumerationValueStub2",
-                factory: function() {return EnumerationValueStub2;}
-              },
+            factories: this.typeSubjectFactories().concat([
               {},
               {
                 name: "not an EnumerationValue Type",
@@ -98,7 +90,7 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "./En
                   return aFunction;
                 }
               }
-            ]
+            ])
           }
         ];
       },
