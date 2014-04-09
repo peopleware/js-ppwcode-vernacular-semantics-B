@@ -49,7 +49,6 @@ define(["dojo/_base/declare", "./Value", "../_util/contracts/doh", "../Enumerati
 
       $toJSON: function(/*EnumerationValue*/ subject) {
         var result = subject.toJSON();
-        doh.t(result);
         doh.is("string", typeof result);
         return result;
       },
