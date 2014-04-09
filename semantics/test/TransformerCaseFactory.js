@@ -21,40 +21,24 @@ define(["dojo/_base/declare", "../_util/contracts/CaseFactory", "../_contract/Tr
 
      contract: new Contract(),
 
-     // ValueType: Function
-     //   Constructor (type) of the values to be formatted or parsed.
-     ValueType: null,
-
-     // valueFactories: Function[]
+     // valueFactories: Function return Function[]
      valueFactories: null,
 
-     // formatOptionsFactories: Function[]
+     // formatOptionsFactories: Function return Function[]
      formatOptionsFactories: null,
-
-     constructor: function(/*Function*/ ValueType, /*Function[]*/ valueFactories, /*Function[]*/ formatOptionsFactories) {
-       this.ValueType = ValueType;
-       this.valueFactories = valueFactories;
-       this.formatOptionsFactories = formatOptionsFactories;
-     },
-
-     subjectFactories: function() {
-       var self = this;
-       return [function() {return self.ValueType;}];
-     },
 
      $format: function() {
        return [
          this.subjectFactories(),
          {
            name: "value",
-           factories: [null, undefined].concat(this.valueFactories)
+           factories: [null, undefined].concat(this.valueFactories())
          },
-         this.formatOptionsFactories
+         this.formatOptionsFactories()
        ];
      },
 
      $parse: function() {
-       var subjectTypeFormat = this.ValueType.format;
        return [
          this.subjectFactories(),
          {
@@ -67,12 +51,12 @@ define(["dojo/_base/declare", "../_util/contracts/CaseFactory", "../_contract/Tr
                name: "not a value",
                factory: "XX not a formatted value XX"
              }
-           ].concat(this.valueFactories.map(function(factoryOrConstant) {
+           ].concat(this.valueFactories().map(function(factoryOrConstant) {
              var value = typeof factoryOrConstant === "function" ? factoryOrConstant() : factoryOrConstant;
-             return function() {return subjectTypeFormat(value);};
+             return function() {return value.constructor.format(value);};
            }))
          },
-         this.formatOptionsFactories
+         this.formatOptionsFactories()
        ];
      }
 

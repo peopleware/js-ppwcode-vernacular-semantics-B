@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value", "./TransformerCaseFactory", "module"],
-  function(declare, PpwCodeObjectCaseFactory, Contract, TransformerCaseFactory, module) {
+define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value", "./TransformerCaseFactory", "dojo/_base/lang", "module"],
+  function(declare, PpwCodeObjectCaseFactory, Contract, TransformerCaseFactory, lang, module) {
 
 
 
@@ -104,8 +104,17 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value"
       // typeCaseFactories: TransformerCaseFactories
       typeCaseFactories: null,
 
-      constructor: function() {
-        this.typeCaseFactories = new TransformerCaseFactory(ValueStub1, this.subjectFactories(), this.formatOptionsFactories());
+      typeSubjectFactories: function() {
+        return [function() {return ValueStub1;}];
+      },
+
+      constructor: function(kwargs) {
+        this.typeCaseFactories = new TransformerCaseFactory({
+          methodTestCreator: kwargs.methodTestCreator,
+          subjectFactories: lang.hitch(this, this.typeSubjectFactories),
+          valueFactories: lang.hitch(this, this.subjectFactories),
+          formatOptionsFactories: lang.hitch(this, this.formatOptionsFactories)
+        });
       },
 
       subjectFactories: function() {

@@ -6,15 +6,15 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "../_
     var EnumerationValueStub1 = EnumerationValue.declare(
       {},
       ["first", "second", "third"],
-      module.id + "_1"
+      module.id + "_Stub1"
       // bundle is standard
     );
 
     var EnumerationValueStub2 = EnumerationValue.declare(
       {},
       ["alpha", "beta", "gamma"],
-      module.id + "_2",
-      "EnumerationValue_2"
+      module.id + "_Stub2",
+      "EnumerationValue_Stub2"
     );
 
 
@@ -27,6 +27,13 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "../_
 
       // typeCaseFactories: TransformerCaseFactories
       typeCaseFactories: null,
+
+      typeSubjectFactories: function() {
+        return [
+          function() {return EnumerationValueStub1;},
+          function() {return EnumerationValueStub2;}
+        ];
+      },
 
       subjectFactories: function() {
         return EnumerationValueStub1.values().concat(EnumerationValueStub2.values());
