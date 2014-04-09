@@ -21,6 +21,13 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "./En
     );
 
 
+    var EnumerationValueStub3 = EnumerationValue.declare(
+      {},
+      ["aleph"],
+      module.id + "_Stub3"
+      // no bundle
+    );
+
 
 
 
@@ -41,12 +48,15 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "./En
       typeSubjectFactories: function() {
         return [
           function() {return EnumerationValueStub1;},
-          function() {return EnumerationValueStub2;}
+          function() {return EnumerationValueStub2;},
+          function() {return EnumerationValueStub3;}
         ];
       },
 
       subjectFactories: function() {
-        return EnumerationValueStub1.values().concat(EnumerationValueStub2.values());
+        return EnumerationValueStub1.values()
+          .concat(EnumerationValueStub2.values())
+          .concat(EnumerationValueStub3.values());
       },
 
       otherOfSameTypeFactories: function() {

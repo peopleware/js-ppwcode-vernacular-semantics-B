@@ -101,11 +101,16 @@ define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../_util/
           doh.f(subject.isJson(json));
         }
         return result;
+      },
+
+      $getBundle: function(/*EnumerationValueType*/ subject, /*String?*/ lang) {
+        var result = subject.getBundle(lang);
+        if (result) {
+          doh.is("object", typeof result);
+        }
+        // noting to do; can only call the method
+        return result;
       }
-//
-//      $getBundle: function(/*String?*/ json) {
-//
-//      },
 
 //      $format: function(/*EnumerationValueType*/ transformer, /*Value?*/ value, /*Object?*/ options) {
 //        var result = transformer.format(value, options);

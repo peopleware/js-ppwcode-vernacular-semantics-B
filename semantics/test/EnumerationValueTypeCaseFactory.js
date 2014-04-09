@@ -63,6 +63,16 @@ define(["dojo/_base/declare", "./TransformerCaseFactory", "../_contract/Enumerat
 
      $revive: function() {
        return [this.subjectFactories(), this.jsonFactories()];
+     },
+
+     $getBundle: function() {
+       return [
+         this.subjectFactories(),
+         {
+           name: "lang",
+           factories: [null, undefined, "", "nl", "ru"]
+         }
+       ]
      }
 
    });
