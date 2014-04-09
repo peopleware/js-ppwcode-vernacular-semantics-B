@@ -1,5 +1,5 @@
-define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue"],
-  function (require, string, EnumerationValue) {
+define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue", "module"],
+  function (require, string, EnumerationValue, module) {
 
     var imgsrc = "demo/img/${0}/${1}.jpg";
 
@@ -31,7 +31,9 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         getLabel: function () {
           return this.getValue();
         }
-      }
+      },
+      null,
+      module.id
     );
 
     TrafficSign.Regulatory = EnumerationValue.declare(
@@ -39,7 +41,9 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
       {
         name: null,
         code: null
-      }
+      },
+      null,
+      module.id + "_Regulatory"
     );
 
     TrafficSign.MANDATORY = EnumerationValue.declare(
@@ -52,7 +56,8 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         {representation: "turn_right", filename: "609A"},
         {representation: "roundabout", filename: "611.1"},
         {representation: "pass_either_side", filename: "611"}
-      ]
+      ],
+      module.id + "_MANDATORY"
     );
 
     TrafficSign.PROHIBITORY = EnumerationValue.declare(
@@ -72,7 +77,8 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         {representation: "max_speed_30", filename: "670V30"},
         {representation: "max_speed_50", filename: "670V50"},
         {representation: "max_speed_60", filename: "670V60"}
-      ]
+      ],
+      module.id + "_PROHIBITORY"
     );
 
     TrafficSign.WARNING = EnumerationValue.declare(
@@ -89,7 +95,8 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         {representation: "uneven_road_ahead", filename: "556"},
         {representation: "slippery_road_ahead", filename: "557"}
 
-      ]
+      ],
+      module.id + "_WARNING"
     );
 
     TrafficSign.DIRECTION = EnumerationValue.declare(
@@ -104,7 +111,8 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         {representation: "services", filename: "2314.1"},
         {representation: "parking", filename: "2507"}
 
-      ]
+      ],
+      module.id + "_DIRECTION"
     );
 
     return TrafficSign;

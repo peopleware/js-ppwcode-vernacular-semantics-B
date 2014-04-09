@@ -14,10 +14,24 @@
  limitations under the License.
  */
 
-define(["ppwcode-vernacular-semantics/_util/contracts/doh", "./TrafficSignCaseFactory"],
-  function(doh, TrafficSignCaseFactory) {
+define(["ppwcode-vernacular-semantics/_util/contracts/doh",
+        "./TrafficSignCaseFactory",
+        "./TrafficSign_MANDATORYCaseFactory",
+        "./TrafficSign_PROHIBITORYCaseFactory",
+        "./TrafficSign_WARNINGCaseFactory",
+        "./TrafficSign_DIRECTIONCaseFactory"],
+  function(doh,
+           TrafficSignCaseFactory,
+           TrafficSign_MANDATORYCaseFactory,
+           TrafficSign_PROHIBITORYCaseFactory,
+           TrafficSign_WARNINGCaseFactory,
+           TrafficSign_DIRECTIONCaseFactory) {
 
     var kwargs = {methodTestCreator: doh.createMethodTest};
     new TrafficSignCaseFactory(kwargs).createTypeTests();
+    new TrafficSign_MANDATORYCaseFactory(kwargs).createTypeTests();
+    new TrafficSign_PROHIBITORYCaseFactory(kwargs).createTypeTests();
+    new TrafficSign_WARNINGCaseFactory(kwargs).createTypeTests();
+    new TrafficSign_DIRECTIONCaseFactory(kwargs).createTypeTests();
   }
 );
