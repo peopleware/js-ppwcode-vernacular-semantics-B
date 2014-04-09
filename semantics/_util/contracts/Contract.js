@@ -14,14 +14,18 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare"],
-  function(declare) {
+define(["dojo/_base/declare", "dojo/_base/lang"],
+  function(declare, lang) {
 
     var Contract = declare([], {
 
       // SubjectType: Function
       //   Constructor of the type documented by this contract.
-      SubjectType: null
+      SubjectType: null,
+
+      constructor: function(kwargs) {
+        lang.mixin(this, kwargs);
+      }
 
     });
 

@@ -27,6 +27,10 @@ define(["dojo/_base/declare", "../_util/contracts/CaseFactory", "../_contract/Tr
      // formatOptionsFactories: Function return Function[]
      formatOptionsFactories: null,
 
+     constructor: function(kwargs) {
+       this.contract = new Contract({SubjectType: kwargs.SubjectType});
+     },
+
      $format: function() {
        return [
          this.subjectFactories(),
