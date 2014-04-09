@@ -17,27 +17,6 @@
 define(["doh/main", "dojo/_base/lang"],
   function(doh, lang) {
 
-    var groupCache = [];
-    var testCounter = 0;
-
-    function cached(Type) {
-      if (!Type) {
-        return "untyped";
-      }
-      var index = groupCache.indexOf(Type);
-      if (index < 0) {
-        index = groupCache.push(Type) - 1;
-      }
-      return "test group " + index;
-    }
-
-    function groupId(/*Function?*/ Type) {
-      if (Type && (Type.mid || Type.declaredClass || Type.name)) {
-        return Type.mid || Type.declaredClass || Type.name;
-      }
-      return cached(Type);
-    }
-
     console.log("Loading ppwcode contracts doh extension");
 
 //    var InvariantViolationError = declare(null, {
@@ -56,6 +35,28 @@ define(["doh/main", "dojo/_base/lang"],
       doh.isNot(null, acc);
       doh.t(acc instanceof Array);
 
+      function forAllElementsOf(forAllInvar) {
+        var conditionResult = forAllInvar.condition.call(context);
+        if (conditionResult) {
+          var selection = forAllInvar.selector.call(context);
+          if (selection instanceof Array) {
+            // for all elements
+            for (var j = 0; j < selection.length; j++) {
+              doh._flattenInvars(selection[j], forAllInvar.invars, acc);
+            }
+          }
+          else {
+            // selection is Object
+            for (var propName in selection) {
+              if (selection.hasOwnProperty(propName)) {
+                doh._flattenInvars(selection[propName], forAllInvar.invars, acc);
+              }
+              //else NOP
+            }
+          }
+        }
+      }
+
       for (var i = 0; i < a.length; i++) {
         var el = a[i];
         if (el instanceof Function) {
@@ -67,25 +68,7 @@ define(["doh/main", "dojo/_base/lang"],
         else {
           // we expect an object {condition: /*Function (optional)*/, objectSelector: /*Function*/, invars: /*Array*/ of /*Function*/
           if (el.hasOwnProperty("condition")) {
-            var conditionResult = el.condition.call(context);
-            if (conditionResult) {
-              var selection = el.selector.call(context);
-              if (selection instanceof Array) {
-                // for all elements
-                for (var j = 0; j < selection.length; j++) {
-                  doh._flattenInvars(selection[j], el.invars, acc);
-                }
-              }
-              else {
-                // selection is Object
-                for (var propName in selection) {
-                  if (selection.hasOwnProperty(propName)) {
-                    doh._flattenInvars(selection[propName], el.invars, acc);
-                  }
-                  //else NOP
-                }
-              }
-            }
+            forAllElementsOf(el);
           }
         }
       }
@@ -134,49 +117,93 @@ define(["doh/main", "dojo/_base/lang"],
     };
     doh.exc = doh.unexpectedException;
 
-    doh.createMethodTest = function(Type, methodName, testMethod, argFactories) {
 
-      function argInstance(argFactoryOrConstant) {
-        if (typeof argFactoryOrConstant.factoryOrConstant === "function") {
-          return argFactoryOrConstant.factoryOrConstant();
+    var Test = function(kwargs) {
+      lang.mixin(this, kwargs);
+    };
+    Test.prototype = {
+
+      name: null,
+
+      argFactories: null, // lock a copy in scope of this test
+
+      testMethod: null,
+
+      instantiateArguments: function() {
+
+        function argInstance(argFactoryOrConstant) {
+          if (typeof argFactoryOrConstant.factoryOrConstant === "function") {
+            return argFactoryOrConstant.factoryOrConstant();
+          }
+          return argFactoryOrConstant.factoryOrConstant;
         }
-        return argFactoryOrConstant.factoryOrConstant;
+
+        var self = this;
+        var args = self.argFactories.map(argInstance);
+        args = args.map(function(arg) {
+          if (arg === "$this") {
+            return args[0];
+          }
+          if (arg === "$this()") {
+            return argInstance(self.argFactories[0]);
+          }
+          var match = /^\$args\[(\d+)\](\(\))?$/.exec(arg);
+          if (match) {
+            if (match.length === 3) {
+              return argInstance(self.argFactories[match[1]]);
+            }
+            if (match.length === 2) {
+              return args[match[1]];
+            }
+          }
+          return arg;
+        });
+        return args;
+      },
+
+      runTest: function() {
+        var args = this.instantiateArguments();
+        this.testMethod.apply(this, args);
       }
 
-      doh.register(
-        groupId(Type),
-        {
-          argFactories: argFactories.slice(), // lock a copy in scope of this test
-          name: "(" + testCounter + ") " + methodName + " - " +
-                argFactories.map(function(af) {return af.argRepr;}).join("; "),
-          runTest: function() {
-            var self = this;
-            var args = this.argFactories.map(argInstance);
-            args = args.map(
-              function(arg) {
-                if (arg === "$this") {
-                  return args[0];
-                }
-                if (arg === "$this()") {
-                  return argInstance(self.argFactories[0]);
-                }
-                var match = /^\$args\[(\d+)\](\(\))?$/.exec(arg);
-                if (match) {
-                  if (match.length === 3) {
-                    return argInstance(self.argFactories[match[1]]);
-                  }
-                  if (match.length === 2) {
-                    return args[match[1]];
-                  }
-                }
-                return arg;
-              }
-            );
-            testMethod.apply(this, args);
-          }
-        }
-      );
-      testCounter++;
+    };
+
+    var groupCache = [];
+
+    function cached(Type) {
+      if (!Type) {
+        return "untyped";
+      }
+      var index = groupCache.indexOf(Type);
+      if (index < 0) {
+        index = groupCache.push(Type) - 1;
+      }
+      return "test group " + index;
+    }
+
+    function groupId(/*Function?*/ Type) {
+      if (Type && (Type.mid || Type.declaredClass || Type.name)) {
+        return Type.mid || Type.declaredClass || Type.name;
+      }
+      return cached(Type);
+    }
+
+    var testCounter = 0;
+
+    doh.createMethodTest = function(Type, methodName, testMethod, argFactories) {
+
+      if (argFactories.length > 0) {
+        doh.register(
+          groupId(Type),
+          new Test({
+            name: "(" + testCounter + ") " + methodName + " - " +
+                  argFactories.map(function(af) {return af.argRepr;}).join("; "),
+            argFactories: argFactories.slice(), // lock a copy in scope of this test
+            testMethod: testMethod
+          })
+        );
+        testCounter++;
+      }
     };
 
     return doh;
