@@ -101,21 +101,25 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value"
 
       contract: new Contract(),
 
-      // typeCaseFactories: TransformerCaseFactories
-      typeCaseFactories: null,
+      // typeCaseFactory: TransformerCaseFactories
+      typeCaseFactory: null,
 
-      typeSubjectFactories: function() {
-        return [function() {return ValueStub1;}];
-      },
-
-      constructor: function(kwargs) {
-        this.typeCaseFactories = new TransformerCaseFactory({
+      createTypeCaseFactory: function(kwargs) {
+        return new TransformerCaseFactory({
           SubjectType: this.contract.SubjectType,
           methodTestCreator: kwargs.methodTestCreator,
           subjectFactories: lang.hitch(this, this.typeSubjectFactories),
           valueFactories: lang.hitch(this, this.subjectFactories),
           formatOptionsFactories: lang.hitch(this, this.formatOptionsFactories)
         });
+      },
+
+      typeSubjectFactories: function() {
+        return [function() {return ValueStub1;}];
+      },
+
+      constructor: function(kwargs) {
+        this.typeCaseFactory = this.createTypeCaseFactory(kwargs);
       },
 
       subjectFactories: function() {

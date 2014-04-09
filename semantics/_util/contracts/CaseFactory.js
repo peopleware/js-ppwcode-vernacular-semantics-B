@@ -35,9 +35,9 @@ define(["dojo/_base/declare", "../js", "dojo/_base/lang"],
 
       methodTestCreator: null,
 
-      // typeCaseFactories: CaseFactories
+      // typeCaseFactory: CaseFactories
       //   Optional instance for testing the type (the Constructor function object) itself.
-      typeCaseFactories: null,
+      typeCaseFactory: null,
 
       constructor: function(kwargs) {
         lang.mixin(this, kwargs);
@@ -86,8 +86,8 @@ define(["dojo/_base/declare", "../js", "dojo/_base/lang"],
       },
 
       createTypeTests: function() {
-        if (this.typeCaseFactories) {
-          this.typeCaseFactories.createTypeTests();
+        if (this.typeCaseFactory) {
+          this.typeCaseFactory.createTypeTests();
         }
         var self = this;
         js.getAllPropertyNames(self.contract)

@@ -1,5 +1,7 @@
-define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "../_contract/EnumerationValue", "module"],
-  function(declare, EnumerationValue, ValueCaseFactory, Contract, module) {
+define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "./EnumerationValueTypeCaseFactory",
+        "dojo/_base/lang", "../_contract/EnumerationValue", "module"],
+  function(declare, EnumerationValue, ValueCaseFactory, EnumerationValueTypeCaseFactory,
+           lang, Contract, module) {
 
 
     // Abstract functions are not tested.
@@ -26,8 +28,6 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "../_
 
       contract: new Contract(),
 
-      // typeCaseFactories: TransformerCaseFactories
-      typeCaseFactories: null,
 
       typeSubjectFactories: function() {
         return [

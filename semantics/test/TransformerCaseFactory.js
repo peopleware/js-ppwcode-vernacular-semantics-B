@@ -19,8 +19,6 @@ define(["dojo/_base/declare", "../_util/contracts/CaseFactory", "../_contract/Tr
 
    return declare([CaseFactory], {
 
-     contract: new Contract(),
-
      // valueFactories: Function return Function[]
      valueFactories: null,
 
