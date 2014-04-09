@@ -48,6 +48,12 @@ define(["dojo/_base/declare", "./Value", "../_util/contracts/doh", "../Enumerati
         return result;
       },
 
+      $getValue: function(/*EnumerationValue*/ subject) {
+        var result = this.inherited(arguments);
+        doh.is(subject.toString(), result);
+        return result;
+      },
+
       $toJSON: function(/*EnumerationValue*/ subject) {
         var result = subject.toJSON();
         doh.is("string", typeof result);
