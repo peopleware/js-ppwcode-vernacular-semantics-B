@@ -14,12 +14,17 @@
  limitations under the License.
  */
 
-define(["../_util/contracts/doh", "./PpwCodeObjectCaseFactory", "./ValueCaseFactory", "./EnumerationValueCaseFactory"],
-  function(doh, PpwCodeObjectCaseFactory, ValueCaseFactory, EnumerationValueCaseFactory) {
+define(["../_util/contracts/doh",
+        "./PpwCodeObjectCaseFactory", "./ValueCaseFactory",
+        "./EnumerationValueConstructorCaseFactory", "./EnumerationValueCaseFactory"],
+  function(doh,
+           PpwCodeObjectCaseFactory, ValueCaseFactory,
+           EnumerationValueConstructorCaseFactory, EnumerationValueCaseFactory) {
 
     var kwargs = {methodTestCreator: doh.createMethodTest};
     new PpwCodeObjectCaseFactory(kwargs).createTypeTests();
     new ValueCaseFactory(kwargs).createTypeTests();
+    new EnumerationValueConstructorCaseFactory(kwargs).createTypeTests();
     new EnumerationValueCaseFactory(kwargs).createTypeTests();
   }
 );
