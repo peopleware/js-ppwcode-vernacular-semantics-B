@@ -31,8 +31,20 @@ define(["dojo/_base/declare", "./TransformerCaseFactory", "../_contract/Enumerat
            undefined,
            "",
            {
+             name: "2 quotes",
+             factory: "\"\""
+           },
+           {
+             name: "valid but quoted",
+             factory: "\"first\""
+           },
+           {
              name: "not a value",
              factory: "XX not a JSON value XX"
+           },
+           {
+             name: "not a value, quoted",
+             factory: "\"XX not a JSON value XX\""
            }
          ].concat(this.valueFactories().map(function(factoryOrConstant) {
            var value = typeof factoryOrConstant === "function" ? factoryOrConstant() : factoryOrConstant;
