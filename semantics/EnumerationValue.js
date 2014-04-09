@@ -19,31 +19,6 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
   function(declare, Value, ParseException,
            js, i18n, kernel, lang, module) {
 
-    function enumRevive(EnumDef, json) {
-      // summary:
-      //   Revive a json String value into the appropriate
-      //   EnumDef value.
-      // description:
-      //   Returns undefined if no such value is found.
-      //   *Note that `enum` is a reserved word.*
-      //   https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Reserved_Words
-
-      // pre: json is a String;
-      // pre: isEnumJson(EnumDef, json);
-
-      if (!json) {
-        return undefined;
-      }
-      var match = Object.keys(EnumDef).filter(function(ed) {return EnumDef[ed]._representation === json;});
-      if (match.length > 1) {
-        throw "Error: there are different values in enum type " + EnumDef + " with the same value.";
-      }
-      if (match.length < 1) {
-        return undefined;
-      }
-      return EnumDef[match[0]]; // return EnumerationValue
-    }
-
     function dirFromMid(mid) {
       // summary:
       //   Helper function to get the directory from a MID
@@ -96,33 +71,6 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
         return !(options && options.keyExtension) ? v._representation : "?" + actualKey + "?";
       }
       return result;
-    }
-
-    function parse(/*Function*/ EnumValueConstructor, /*String*/ str, /*Object*/ options) {
-      // summary:
-      //   options.locale can be filled out; if not, the default locale is used.
-      //   If no label is found, the representation itself is returned.
-
-      if (!str && str !== "") {
-        return null;
-      }
-      var lang = (options && options.locale) || kernel.locale;
-      var bundle = getBundle(EnumValueConstructor, lang);
-      var representation;
-      for (representation in bundle) {
-        //noinspection JSUnfilteredForInLoop
-        if (bundle[representation] === str) {
-          //noinspection JSUnfilteredForInLoop
-          return enumRevive(EnumValueConstructor, representation);
-        }
-      }
-      // if we get here, there was no match in the bundle; try the representation itself
-      var possibleResult = enumRevive(EnumValueConstructor, str);
-      if (possibleResult) {
-        return possibleResult;
-      }
-      // nope, got no answer for you
-      throw new ParseException({targetType: EnumValueConstructor, str: str, options: options});
     }
 
     var EnumerationValue = declare([Value], {
@@ -236,13 +184,65 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       return EnumDef._values;
     }
 
-    function isEnumJson(EnumDef, json) {
+    function isEnumJson(EnumDef, /*String?*/ json) {
       // summary:
       //   Is `json` the String representation of a value defined in EnumDef?
       //   Note: json must be the result of JSON.parse, not the naked JSON string.
       //   E.g., "MALE" would be a correct "json representation", not "\"MALE\"".
 
       return values(EnumDef).some(function(ev) {return ev._representation === json;});
+    }
+
+    function enumRevive(EnumDef, json) {
+      // summary:
+      //   Revive a json String value into the appropriate
+      //   EnumDef value.
+      // description:
+      //   Returns undefined if no such value is found.
+      //   *Note that `enum` is a reserved word.*
+      //   https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Reserved_Words
+
+      // pre: json is a String;
+      // pre: isEnumJson(EnumDef, json);
+
+      if (!json) {
+        return undefined;
+      }
+      var match = Object.keys(EnumDef).filter(function(ed) {return EnumDef[ed]._representation === json;});
+      if (match.length > 1) {
+        throw "Error: there are different values in enum type " + EnumDef + " with the same value.";
+      }
+      if (match.length < 1) {
+        return undefined;
+      }
+      return EnumDef[match[0]]; // return EnumerationValue
+    }
+
+    function parse(/*Function*/ EnumValueConstructor, /*String*/ str, /*Object*/ options) {
+      // summary:
+      //   options.locale can be filled out; if not, the default locale is used.
+      //   If no label is found, the representation itself is returned.
+
+      if (!str && str !== "") {
+        return null;
+      }
+      var lang = (options && options.locale) || kernel.locale;
+      var bundle = getBundle(EnumValueConstructor, lang);
+      var representation;
+      for (representation in bundle) {
+        //noinspection JSUnfilteredForInLoop
+        if (bundle[representation] === str) {
+          //noinspection JSUnfilteredForInLoop
+          return enumRevive(EnumValueConstructor, representation);
+        }
+      }
+      // if we get here, there was no match in the bundle; try the representation itself
+      var possibleResult = enumRevive(EnumValueConstructor, str);
+      if (possibleResult) {
+        return possibleResult;
+      }
+      // nope, got no answer for you
+      throw new ParseException({targetType: EnumValueConstructor, str: str, options: options});
     }
 
     function enumDeclare(/*Function?*/ SuperType,
