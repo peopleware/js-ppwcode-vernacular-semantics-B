@@ -52,7 +52,7 @@
   <script>
     require(["dojo/parser", "dijit/registry", "dojo/store/Memory", "dojo/_base/lang", "demo/viewmodel/TrafficSign",
 
-             "demo/combo/Combo", "demo/symbol/SymbolList",
+             "demo/widget/combo/Combo", "demo/widget/symbol/SymbolList",
              "dojo/domReady!"],
       function (parser, registry, Memory, lang, TrafficSign) {
 
@@ -111,29 +111,29 @@
       On selection, the traffic sign will appear in the correct area below, depending on the type of traffic sign.
       Duplicates are not allowed, so selecting an already selected traffic sign will not result in added the sign to an area below.
     </p>
-    <div id="trafficSignSelection" data-dojo-type="demo/combo/Combo"></div>
+    <div id="trafficSignSelection" data-dojo-type="demo/widget/combo/Combo"></div>
   </section>
   <section class="trafficSignLists">
     <h1>Selected signs</h1>
 
     <section>
       <h2>MANDATORY LIST: enum == TrafficSign.MANDATORY</h2>
-      <ul id="mandatory" data-dojo-type="demo/symbol/SymbolList"></ul>
+      <ul id="mandatory" data-dojo-type="demo/widget/symbol/SymbolList"></ul>
     </section>
 
     <section>
       <h2>PROHIBITORY LIST: enum == TrafficSign.PROHIBITORY</h2>
-      <ul id="prohibitory" data-dojo-type="demo/symbol/SymbolList"></ul>
+      <ul id="prohibitory" data-dojo-type="demo/widget/symbol/SymbolList"></ul>
     </section>
 
     <section>
       <h2>WARNING LIST: enum == TrafficSign.WARNING</h2>
-      <ul id="warning" data-dojo-type="demo/symbol/SymbolList"></ul>
+      <ul id="warning" data-dojo-type="demo/widget/symbol/SymbolList"></ul>
     </section>
 
     <section>
       <h2> DIRECTION LIST: enum == TrafficSign.DIRECTION</h2>
-      <ul id="direction" data-dojo-type="demo/symbol/SymbolList"></ul>
+      <ul id="direction" data-dojo-type="demo/widget/symbol/SymbolList"></ul>
     </section>
   </section>
 
