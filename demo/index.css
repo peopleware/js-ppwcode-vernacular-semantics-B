@@ -15,43 +15,25 @@
  */
 
 html,body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    border: 0;
-    background-color: white;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  border: 0;
+  background-color: white;
 }
 
-#mainPane {
-    margin: 0;
-    padding: 0;
-}
-
-h2, h3 {
-    color: #0a92df;
-    margin: 0;
-    padding: 10px 0px;
+h1 {
+  color: #0a92df;
+  margin: 0;
+  padding: 10px 0;
 }
 
 p {
-    margin: 0;
-    padding: 10px 0px;
-}
-
-dl {
-    border: 1px solid #7AC142;
-    margin: 10px 0px 10px 0px !important;
-    overflow: auto;
-}
-
-dl dt {
-    font-weight: bold;
-    color: #7AC142;
-    border-bottom: 1px solid #7AC142;
-    padding: 4px 10px;
-    background-color: #F1FFE6;
-    text-align: left;
+  margin: 0;
+  padding-left: 10px;
+  color: #666;
+  font-style: italic;
 }
 
 .trafficSignSelection {
@@ -60,17 +42,26 @@ dl dt {
     padding: 0px 20px 20px 20px;
 }
 
-.trafficSignLists {
-    background-color: white;
-    padding: 0px 20px 20px 20px;
+section.trafficSignLists {
+  background-color: white;
+  padding: 0 20px 20px 20px;
 }
 
-dl dd.emptySelection {
-    color: #666;
-    font-style: italic;
+section.trafficSignLists section {
+  border: 1px solid #7AC142;
+  margin: 10px 0 10px 0 !important;
+  overflow: auto;
 }
 
 .demoInfo {
     color: #666;
     font-style: italic;
+section.trafficSignLists section h2 {
+  font-weight: bold;
+  color: #7AC142;
+  border-bottom: 1px solid #7AC142;
+  padding: 4px 10px;
+  background-color: #F1FFE6;
+  text-align: left;
+  margin: 0;
 }

@@ -1,63 +1,78 @@
-/* Symbol */
+/*
+ Copyright 2014 - $Date $ by PeopleWare n.v.
 
-.traffic_symbol,
-.traffic_symbol img {
-    padding: 10px;
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+.symbol,
+.symbol img {
+  padding: 10px;
 }
 
-.traffic_symbol {
-    margin: 0;
-    min-height: 50px;
-    min-width: 50px;
-    display: inline-block;
-    opacity: 0; /* initial opacity */
+.symbol {
+  margin: 0;
+  min-height: 50px;
+  min-width: 50px;
+  display: inline-block;
+  opacity: 0; /* initial opacity */
 }
 
-.traffic_symbol img {
-    width: 50px; /* no height: keep ratio */
-    top: 0;
-    /* center horizontally */
-    left: 50%;
-    margin: 0;
+.symbol img {
+  width: 50px; /* no height: keep ratio */
+  top: 0;
+  /* center horizontally */
+  left: 50%;
+  margin: 0;
 }
 
-.big .traffic_symbol img,
-.traffic_symbol.big img {
-    /* symbols a big context list are bigger */
-    width: 100px;
+.big .symbol img,
+.symbol.big img {
+  /* symbols a big context list are bigger */
+  width: 100px;
 }
 
-.traffic_symbol span {
-    display: block;
-    margin: 0;
-    text-align: center;
-    font-weight: bold;
+.symbol span {
+  display: block;
+  margin: 0;
+  text-align: center;
+  font-weight: bold;
 }
 
 /* List */
 
-dl.symbolList,
-dl.symbolList dd {
-    padding: 0;
+ul.symbolList,
+ul.symbolList li {
+  padding: 0;
 }
 
-dl.symbolList {
-    display: block;
-    margin: 0.5em 0;
-    text-align: center;
+ul.symbolList {
+  display: block;
+  margin: 0.5em 0;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }
 
-dl.symbolList dd {
-    display: inline-block;
-    margin: 0.5em;
+ul.symbolList li {
+  display: inline-block;
+  margin: 0.5em;
 }
 
-dl.symbolList dd:first-of-type {
-    margin-left: 0;
+ul.symbolList li:first-of-type {
+  margin-left: 0;
 }
 
-dl.symbolList dd:last-child {
-    margin-right: 0;
+ul.symbolList li:last-child {
+  margin-right: 0;
 }
 
 

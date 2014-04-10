@@ -1,19 +1,68 @@
-define(["dojo/_base/declare", "dijit/_WidgetBase",
-  "dojo/dom-class", "dojo/dom-construct", "dojo/dom-style", "dojo/dom-attr", "dojo/_base/fx", "dojo/fx", "dojo/_base/connect",
-  "xstyle/css!./symbol.css"],
-  function (declare, _WidgetBase, domClass, domConstruct, domStyle, domAttr, baseFx, fx, connect) {
+/*
+ Copyright 2014 - $Date $ by PeopleWare n.v.
 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+define(["dojo/_base/declare", "dijit/_WidgetBase", "ppwcode-vernacular-semantics/_util/contracts/_Mixin",
+        "dojo/dom-class", "dojo/dom-construct", "dojo/dom-attr",
+        "dojo/_base/fx", "dojo/fx", "dojo/_base/connect",
+
+        "xstyle/css!./symbol.css"],
+  function (declare, _WidgetBase, _ContractsMixin,
+            domClass, domConstruct, domAttr,
+            baseFx, fx, connect) {
+
+    /*=====
+    var Symbol = {
+
+      getUrl: function() {
+        return null; // return String
+      },
+
+      getLabel: function(lang) {
+        // lang: String?
+
+        return null; // return String
+      }
+
+    };
+    =====*/
+
+    function hasMethod(anything, methodName) {
+      return typeof anything[methodName] === "function";
+    }
+
+    function isSymbol(anything) {
+      return anything && hasMethod(anything, "getUrl") && hasMethod(anything, "getLabel");
+    }
+
+
+    //noinspection MagicNumberJS
     var animDuration = 500; // ms
 
-    return declare([_WidgetBase], {
+    var SymbolWidget = declare([_WidgetBase, _ContractsMixin], {
       // summary:
-      //   Widget that shows a Symbol (or not). Use with a block or table-cell element.
+      //   Widget that shows a symbol (or not). Use with a block or table-cell element.
+      //
       // description:
-      //   If there is no Symbol to show, there is no img tag.
-      //   If the `symbol` is changed, a new img is added.
+      //   If there is no symbol to show, there is no img tag.
+      //   If the `sign` is changed, a new img is added.
       //   A fade animation is used to switch.
       //
-      //   Some symbols have extra i18n text. This is shown below the img.
+      //   For symbols we need to be able to get a url for the image that represents them,
+      //   (`getUrl`), and optionally a label in a given language (`getLabel`).
+      //   A symbol needs to have a valid URL.
 
       // symbol: Symbol
       symbol: null,
@@ -33,17 +82,20 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
 
       postCreate: function () {
         this.inherited(arguments);
-        domClass.add(this.domNode, "traffic_symbol");
-        if (this.symbol && this.symbol.getUrl()) {
-          this._createNodes();
-          domStyle.set(this.domNode, "opacity", 1);
+        domClass.add(this.domNode, "symbol");
+        var symbol = this.get("symbol");
+        if (symbol && symbol.getUrl()) {
+          this._showNewSymbolAnimation().play();
         }
       },
 
       _setSymbolAttr: function (/*Symbol*/ symbol) {
-        if (this.symbol !== symbol) {
+        this._c_pre(function() {return !symbol || isSymbol(symbol);});
+
+        if (this.get("symbol") !== symbol) {
+          //noinspection JSCheckFunctionSignatures
           this._set("symbol", symbol);
-          this._symbolChangeAnimation().play();
+          this._changeAnimation().play();
         }
       },
 
@@ -59,21 +111,21 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
         }
       },
 
-      _symbolChangeAnimation: function () {
+      _changeAnimation: function () {
         // summary:
         //   Animation to switch the symbol.
-        // description:
-        //   pre: (this.get("symbol") && this.get("symbol").getUrl()) || this._imgNode
+        this._c_pre(function() {return (this.get("symbol") && this.get("symbol").getUrl()) ||
+                                       (this._imgNode && this._labelNode);});
 
-        if (!this.get("symbol") || !this.get("symbol").getUrl()) { // change from some symbol to no symbol
+        if (!this.get("symbol") || !this.get("symbol").getUrl()) {
+        // change from some symbol to no symbol
           return this._removeOldSymbolAnimation(); // return baseFx.Animation
         }
-        // this.get("symbol") && this.get("symbol").getUrl()
         // there is a symbol to show
-        if (!this._imgNode) { // change from no symbol to a symbol
+        if (!this._imgNode) {
+        // change from no symbol to a symbol
           return this._showNewSymbolAnimation(); // return baseFx.Animation
         }
-        // this.get("symbol") && this.get("symbol").getUrl() && this._imgNode
         // there is a symbol to show, and there is a symbol shown that is different
         return fx.combine([this._removeOldSymbolAnimation(), this._showNewSymbolAnimation()]); // return baseFx.Animation
       },
@@ -81,18 +133,16 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
       _showNewSymbolAnimation: function () {
         // summary:
         //   An animation to create an _imgNode.
-        // description:
-        //   pre: this.get("symbol")
-        //   pre: this.get("symbol").getUrl()
+        this._c_pre(function() {return this.get("symbol");});
+        this._c_pre(function() {return this.get("symbol").getUrl();});
 
         this._createNodes();
         return baseFx.fadeIn({node: this.domNode, duration: animDuration}); // return baseFx.Animation
       },
 
       _createNodes: function () {
-        // description:
-        //   pre: this.get("symbol")
-        //   pre: this.get("symbol").getUrl()
+        this._c_pre(function() {return this.get("symbol");});
+        this._c_pre(function() {return this.get("symbol").getUrl();});
 
         this._imgNode = domConstruct.create("img", {src: this.get("symbol").getUrl()}, this.domNode);
         /*
@@ -110,11 +160,11 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
       _removeOldSymbolAnimation: function () {
         // summary:
         //   An animation to remove the current _imgNode.
-        // description:
-        //   pre: this._imgNode
+        this._c_pre(function() {return this._imgNode;});
+        this._c_pre(function() {return this._labelNode;});
 
         var /*DOMNode*/ oldImgNode = this._imgNode; // lock reference in closure for when play executes
-        var /*DOMNode*/ oldLabelNode = this._imgNode; // lock reference in closure for when play executes
+        var /*DOMNode*/ oldLabelNode = this._labelNode; // lock reference in closure for when play executes
         this._imgNode = null;
         this._labelNode = null;
         var /*Animation*/ anim = baseFx.fadeOut({node: this.domNode, duration: animDuration});
@@ -127,5 +177,9 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
       }
 
     });
+
+    SymbolWidget.isSymbol = isSymbol;
+
+    return SymbolWidget;
   }
 );

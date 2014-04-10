@@ -81,7 +81,7 @@
                 function() {return "ERROR: No list found for traffic sign " +
                                    trafficSign.constructor.mid + "@" + trafficSign.toJSON();}
               );
-              trafficSignList.updateSymbols(trafficSign);
+              trafficSignList.addSymbol(trafficSign);
             });
           },
           function (err) {
@@ -105,28 +105,29 @@
     </p>
     <div id="trafficSignSelection" data-dojo-type="demo/combo/Combo"></div>
   </div>
-  <div class="trafficSignLists">
-    <h2 style="text-align: left;">Selected signs</h2>
-    <dl id="mandatory" data-dojo-type="demo/symbol/SymbolList">
-      <dt>MANDATORY LIST: enum == TrafficSign.MANDATORY</dt>
-      <dd class="emptySelection">No traffic signs selected yet</dd>
-    </dl>
+  <section class="trafficSignLists">
+    <h1>Selected signs</h1>
 
-    <dl id="prohibitory" data-dojo-type="demo/symbol/SymbolList">
-      <dt>PROHIBITORY LIST: enum == TrafficSign.PROHIBITORY</dt>
-      <dd class="emptySelection">No traffic signs selected yet</dd>
-    </dl>
+    <section>
+      <h2>MANDATORY LIST: enum == TrafficSign.MANDATORY</h2>
+      <ul id="mandatory" data-dojo-type="demo/symbol/SymbolList"></ul>
+    </section>
 
-    <dl id="warning" data-dojo-type="demo/symbol/SymbolList">
-      <dt>WARNING LIST: enum == TrafficSign.WARNING</dt>
-      <dd class="emptySelection">No traffic signs selected yet</dd>
-    </dl>
+    <section>
+      <h2>PROHIBITORY LIST: enum == TrafficSign.PROHIBITORY</h2>
+      <ul id="prohibitory" data-dojo-type="demo/symbol/SymbolList"></ul>
+    </section>
 
-    <dl id="direction" data-dojo-type="demo/symbol/SymbolList">
-      <dt> DIRECTION LIST: enum == TrafficSign.DIRECTION</dt>
-      <dd class="emptySelection">No traffic signs selected yet</dd>
-    </dl>
-  </div>
+    <section>
+      <h2>WARNING LIST: enum == TrafficSign.WARNING</h2>
+      <ul id="warning" data-dojo-type="demo/symbol/SymbolList"></ul>
+    </section>
+
+    <section>
+      <h2> DIRECTION LIST: enum == TrafficSign.DIRECTION</h2>
+      <ul id="direction" data-dojo-type="demo/symbol/SymbolList"></ul>
+    </section>
+  </section>
 
 </body>
 </html>
