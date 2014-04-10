@@ -34,14 +34,13 @@
   <script src="../lib/dojo/dojo/dojo.js"></script>
 
   <script>
-    require(["dojo/parser", "dijit/registry",
-             "demo/trafficSign/TrafficSign",
-             "dijit/layout/ContentPane", "demo/symbol/SymbolList",
-             "demo/combo/Combo",
+    require(["dojo/parser", "dijit/registry", "demo/trafficSign/TrafficSign",
+
+             "dijit/layout/ContentPane", "demo/combo/Combo", "demo/symbol/SymbolList",
              "dojo/domReady!"],
       function (parser, registry, TrafficSign) {
-        var parsePromise = parser.parse();
-        parsePromise.then(
+        var parsed = parser.parse();
+        parsed.then(
           function() {
             registry.byId("enumChoice").onEnumValueChanged = function(enumvalue) {
               if (enumvalue.enum.isValueOf(TrafficSign.MANDATORY)) {
@@ -76,16 +75,16 @@
 <body class="claro">
 
   <div id="mainPane" data-dojo-type="dijit/layout/ContentPane">
-    <div class="boardsInput">
-      <h2>Choose a sign</h2>
+    <div class="trafficSignSelection">
+      <h2>Choose a traffic sign</h2>
       <p class="demoInfo">
-        The signs in the drop-down are traffic signs stored as an enumeration.
+        The signs in the drop-down are traffic signs stored as an enumeration.<br />
         On selection, the traffic sign will appear in the correct area below, depending on the type of traffic sign.
         Duplicates are not allowed, so selecting an already selected traffic sign will not result in added the sign to an area below.
       </p>
       <div id="enumChoice" data-dojo-type="demo/combo/Combo"></div>
     </div>
-    <div class="boardsOutput">
+    <div class="trafficSignLists">
       <h2 style="text-align: left;">Selected signs</h2>
       <dl id="mandatory" data-dojo-type="demo/symbol/SymbolList">
         <dt>MANDATORY LIST: enum == TrafficSign.MANDATORY</dt>
