@@ -19,6 +19,8 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
   function(declare, Value, ParseException,
            js, i18n, kernel, lang, module) {
 
+    var warnedFor = [];
+
     var EnumerationValue = declare([Value], {
       // summary:
       //   Support for enum types.
@@ -196,9 +198,12 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
         );
       }
       catch (ignore) {
-        console.warn("No i18n bundle found for " +
-                     (EnumValueConstructor.mid ||
-                      "EnumerationValue type {" + values(EnumValueConstructor).join(", ") + "}"));
+        var warnFor = (EnumValueConstructor.mid ||
+                       "EnumerationValue type {" + values(EnumValueConstructor).join(", ") + "}");
+        if (warnedFor.indexOf(warnFor) < 0) { // don't warn more than once
+          warnedFor.push(warnFor);
+          console.warn("No i18n bundle found for " + warnFor);
+        }
         return undefined;
       }
     }
