@@ -79,13 +79,11 @@ define(["require",
             dropDown.on("onBlur", function () {
               toggle(false);
             });
-            self.own(
-              on(self.getParent().domNode, "click", function (evt) {
-                if (domClass.contains(dropDown.domNode, "opened") && !dom.isDescendant(evt.target, self._enumSelect)) {
-                  toggle(false);
-                }
-              })
-            );
+            self.own(on(window, "click", function (evt) {
+              if (domClass.contains(dropDown.domNode, "opened") && !dom.isDescendant(evt.target, self._enumSelect)) {
+                toggle(false);
+              }
+            }));
           });
 
       },
