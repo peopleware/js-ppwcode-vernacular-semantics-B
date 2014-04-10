@@ -135,6 +135,7 @@ define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../ParseE
             for (key in bundle) {
               if (bundle[key] === str) {
                 repr = key;
+                //noinspection BreakStatementJS
                 break;
               }
             }
