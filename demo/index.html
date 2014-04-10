@@ -50,7 +50,7 @@
   <script src="../lib/dojo/dojo/dojo.js"></script>
 
   <script>
-    require(["dojo/parser", "dijit/registry", "dojo/store/Memory", "dojo/_base/lang", "demo/trafficSign/TrafficSign",
+    require(["dojo/parser", "dijit/registry", "dojo/store/Memory", "dojo/_base/lang", "demo/viewmodel/TrafficSign",
 
              "demo/combo/Combo", "demo/symbol/SymbolList",
              "dojo/domReady!"],
@@ -80,7 +80,7 @@
                   function() {return "event doesn't contain trafficSign";}
               );
               var trafficSign = event.detail.symbol;
-              var shortName = /^demo\/trafficSign\/TrafficSign_(.*)$/.exec(trafficSign.constructor.mid);
+              var shortName = /^demo\/viewmodel\/TrafficSign_(.*)$/.exec(trafficSign.constructor.mid);
               assert(shortName && shortName[1], function() {return "traffic sign of unexpected type";});
               var trafficSignList = registry.byId(shortName[1].toLowerCase());
               assert(

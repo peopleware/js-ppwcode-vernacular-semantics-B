@@ -14,4 +14,4 @@
  limitations under the License.
  */
 
-define(["../trafficSign/_test/all"], 1);
+define(["../viewmodel/_test/all"], 1);
