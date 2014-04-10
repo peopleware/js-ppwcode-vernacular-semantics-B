@@ -1,5 +1,5 @@
 define(["dojo/_base/declare", "ppwcode-vernacular-semantics/test/EnumerationValueCaseFactory",
-        "../_contract/TrafficSign", "ppwcode-vernacular-semantics/EnumerationValue", "../boards/TrafficSign",
+        "../_contract/TrafficSign", "ppwcode-vernacular-semantics/EnumerationValue", "../TrafficSign",
        "module"],
   function(declare, EnumerationValueCaseFactory, Contract, EnumerationValue, TrafficSign, module) {
 

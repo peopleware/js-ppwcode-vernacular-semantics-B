@@ -1,7 +1,7 @@
 define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue", "module"],
   function (require, string, EnumerationValue, module) {
 
-    var imgsrc = "demo/img/${0}/${1}.jpg";
+    var imgPathTemplate = "./img/${0}/${1}.jpg";
 
     var TrafficSign = EnumerationValue.declare(
       {
@@ -25,7 +25,7 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         },
 
         getUrl: function() {
-          return require.toUrl(string.substitute(imgsrc, [this._typeDir, this.filename])).toString();
+          return require.toUrl(string.substitute(imgPathTemplate, [this._typeDir, this.filename])).toString();
         },
 
         getLabel: function () {
@@ -48,7 +48,7 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
 
     TrafficSign.MANDATORY = EnumerationValue.declare(
       TrafficSign.Regulatory,
-      {_typeDir: "regulatory-signs/mandatory-signs"},
+      {_typeDir: "regulatory/mandatory"},
       [
         {representation: "proceed_left", filename: "606"},
         {representation: "proceed_right", filename: "606B"},
@@ -62,7 +62,7 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
 
     TrafficSign.PROHIBITORY = EnumerationValue.declare(
       TrafficSign.Regulatory,
-      {_typeDir: "regulatory-signs/prohibitory-signs"},
+      {_typeDir: "regulatory/prohibitory"},
       [
         {representation: "stop", filename: "601.1"},
         {representation: "give_way", filename: "602"},
@@ -83,7 +83,7 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
 
     TrafficSign.WARNING = EnumerationValue.declare(
       TrafficSign.Regulatory,
-      {_typeDir: "regulatory-signs/warning-signs"},
+      {_typeDir: "regulatory/warning"},
       [
         {representation: "crossroad_ahead", filename: "504.1"},
         {representation: "side_road_ahead_right", filename: "506.1"},
@@ -101,7 +101,7 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
 
     TrafficSign.DIRECTION = EnumerationValue.declare(
       TrafficSign,
-      {_typeDir: "direction-signs"},
+      {_typeDir: "direction"},
       [
         {representation: "zoo", filename: "2202"},
         {representation: "village", filename: "2203"},

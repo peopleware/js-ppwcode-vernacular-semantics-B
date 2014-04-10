@@ -14,12 +14,12 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "./TrafficSign", "../boards/TrafficSign"],
+define(["dojo/_base/declare", "./TrafficSign", "../TrafficSign"],
   function(declare, TrafficSignContract, TrafficSign) {
 
     return declare([TrafficSignContract], {
 
-      SubjectType: TrafficSign.DIRECTION
+      SubjectType: TrafficSign.Regulatory
 
     });
 

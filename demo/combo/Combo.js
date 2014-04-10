@@ -1,7 +1,7 @@
 define(["require",
   "dojo/_base/declare",
   "dojo/string",
-  "demo/boards/TrafficSign",
+  "../trafficSign/TrafficSign",
   "dojo/on",
   "dojo/_base/Deferred",
   "dojo/_base/array",
@@ -15,10 +15,10 @@ define(["require",
   "dijit/_TemplatedMixin",
   "dijit/_WidgetsInTemplateMixin",
   "dojo/text!./combo.html",
-  "xstyle/css!./css/combo.css"
+  "xstyle/css!./combo.css"
 ],
   function (require, declare, string, TrafficSign, on, Deferred, array, Memory, dom, domStyle, domConstruct, domClass, put, WidgetBase, TemplatedMixin, WidgetsInTemplateMixin, template) {
-    return declare("enumDemo.EnumCombo", [WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
+    return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
       templateString: template,
 
       // select

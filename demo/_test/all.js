@@ -1,5 +1,5 @@
 /*
- Copyright 2014 - $Date $ by PeopleWare n.v.
+ Copyright 2012 - $Date $ by PeopleWare n.v.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -14,15 +14,4 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "./TrafficSign_Regulatory", "../boards/TrafficSign"],
-  function(declare, TrafficSign_RegulatoryContract, TrafficSign) {
-
-    return declare([TrafficSign_RegulatoryContract], {
-
-      SubjectType: TrafficSign.WARNING
-
-    });
-
-  }
-);
-
+define(["../trafficSign/_test/all"], 1);

@@ -14,20 +14,12 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_contract/EnumerationValue", "../boards/TrafficSign",
-        "ppwcode-vernacular-semantics/_util/contracts/doh"],
-  function(declare, EnumerationValueContract, TrafficSign, doh) {
+define(["dojo/_base/declare", "./TrafficSign_Regulatory", "../TrafficSign"],
+  function(declare, TrafficSign_RegulatoryContract, TrafficSign) {
 
-    return declare([EnumerationValueContract], {
+    return declare([TrafficSign_RegulatoryContract], {
 
-      SubjectType: TrafficSign,
-
-      $getUrl: function(/*TrafficSign*/ subject) {
-        var result = subject.getUrl();
-        doh.is("string", typeof result);
-        doh.t(result.indexOf("/" + subject._typeDir + "/" + subject.filename + ".jpg") >= 0);
-        return result;
-      }
+      SubjectType: TrafficSign.PROHIBITORY
 
     });
 

@@ -6,7 +6,7 @@
 
   <link rel="stylesheet" href="../lib/dojo/dojo/resources/dojo.css" />
   <link rel="stylesheet" href="../lib/dojo/dijit/themes/claro/claro.css" />
-  <link rel="stylesheet" href="css/boardsDemo.css" />
+  <link rel="stylesheet" href="index.css" />
 
   <script>
     var dojoConfig = {
@@ -35,9 +35,9 @@
 
   <script>
     require(["dojo/parser", "dijit/registry",
-             "demo/boards/TrafficSign",
+             "demo/trafficSign/TrafficSign",
              "dijit/layout/ContentPane", "demo/symbol/SymbolList",
-             "demo/combo/comboBoards",
+             "demo/combo/Combo",
              "dojo/domReady!"],
       function (parser, registry, TrafficSign) {
         var parsePromise = parser.parse();
@@ -83,7 +83,7 @@
         On selection, the traffic sign will appear in the correct area below, depending on the type of traffic sign.
         Duplicates are not allowed, so selecting an already selected traffic sign will not result in added the sign to an area below.
       </p>
-      <div id="enumChoice" data-dojo-type="demo/combo/comboBoards"></div>
+      <div id="enumChoice" data-dojo-type="demo/combo/Combo"></div>
     </div>
     <div class="boardsOutput">
       <h2 style="text-align: left;">Selected signs</h2>
