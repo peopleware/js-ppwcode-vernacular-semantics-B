@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue", "module"],
-  function (require, string, EnumerationValue, module) {
+define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string", "module"],
+  function (require, EnumerationValue, string, module) {
 
     var imgPathTemplate = "./img/${0}/${1}.jpg";
 
