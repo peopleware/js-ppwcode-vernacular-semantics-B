@@ -113,6 +113,12 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
       module.id + "_WARNING"
     );
 
+    TrafficSign.Regulatory.allValues = function() {
+      return TrafficSign.MANDATORY.values()
+        .concat(TrafficSign.PROHIBITORY.values())
+        .concat(TrafficSign.WARNING.values());
+    };
+
     TrafficSign.DIRECTION = EnumerationValue.declare(
       TrafficSign,
       {_typeDir: "direction"},
@@ -124,10 +130,14 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         {representation: "picnic", filename: "2306"},
         {representation: "services", filename: "2314.1"},
         {representation: "parking", filename: "2507"}
-
       ],
       module.id + "_DIRECTION"
     );
+
+    TrafficSign.allValues = function() {
+      return TrafficSign.Regulatory.allValues()
+        .concat(TrafficSign.DIRECTION.values());
+    };
 
     return TrafficSign;
   }
