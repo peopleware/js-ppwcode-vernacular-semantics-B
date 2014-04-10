@@ -1,0 +1,12 @@
+* compare is not general; create ComparableValue or Comparable
+* use compare in demo
+* add description, contract, test for keyExtension in format / parse
+* contract / test allValues in demo (x2)
+* split projects
+** semantics
+** semantics-dev (can run tests) -- or put runTest/dohConfig someplace else?
+** demo
+
+* test on all platforms
+** intern?
+* npm? cpm? keep git modules?
