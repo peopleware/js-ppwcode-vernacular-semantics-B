@@ -16,44 +16,62 @@
 
 define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
         "dgrid/OnDemandList", "dgrid/Selection", "dgrid/Keyboard",
-        "../trafficSign/TrafficSign",
-        "dojo/store/Memory", "dojo/dom-style", "dojo/dom-construct", "dojo/dom-class", "dojo/dom", "dojo/on",
+        "dojo/dom-style", "dojo/dom-construct", "dojo/dom-class", "dojo/dom", "dojo/on",
         "dojo/text!./combo.html",
 
         "xstyle/css!./combo.css"],
   function (declare, _WidgetBase, TemplatedMixin,
             OnDemandList, Selection, Keyboard,
-            TrafficSign, Memory, domStyle, domConstruct, domClass, dom, on,
+            domStyle, domConstruct, domClass, dom, on,
             template) {
 
     /*=====
-    var Entry = {
+    var Symbol = {
 
-      // id: String
-      id: null,
+      getUrl: function() {
+        return null; // return String
+      },
 
-      // trafficSign: TrafficSign
-      trafficSign: null
+      getLabel: function(lang) {
+        // lang: String?
+
+        return null; // return String
+      }
 
     };
     =====*/
 
+    function hasMethod(anything, methodName) {
+      return typeof anything[methodName] === "function";
+    }
+
+    function isSymbol(anything) {
+      return anything && hasMethod(anything, "getUrl") && hasMethod(anything, "getLabel");
+    }
 
     var DropDown = declare([OnDemandList, Selection, Keyboard], {
 
       selectionMode: "single",
 
-      renderRow: function(/*Entry*/ entry) {
-        var divNode = domConstruct.create("div", {"className": "trafficSignEntry"});
-        domConstruct.create("img", {src: entry.trafficSign.getUrl()}, divNode);
-        var textNode = document.createTextNode(entry.trafficSign.getLabel());
+      renderRow: function(/*Symbol*/ symbol) {
+        var divNode = domConstruct.create("div", {"className": "entry"});
+        domConstruct.create("img", {src: symbol.getUrl()}, divNode);
+        var textNode = document.createTextNode(symbol.getLabel());
         domConstruct.place(textNode, divNode);
         return divNode;
       }
 
     });
 
-    return declare([_WidgetBase, TemplatedMixin], {
+    var Combo = declare([_WidgetBase, TemplatedMixin], {
+      // summary:
+      //   Widget that allows to select a symbol from a drop-down. Symbols are provided in
+      //   a Store.
+      //
+      // description:
+      //   For symbols we need to be able to get a url for the image that represents them,
+      //   (`getUrl`), and optionally a label in a given language (`getLabel`).
+      //   A symbol needs to have a valid URL.
 
       templateString: template,
 
@@ -63,25 +81,19 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
       // dropDownOpen: boolean
       dropDownOpen: false,
 
-      // _store
-      _store: null,
+      // symbols: Store<Symbol>
+      store: null,
 
       postCreate: function() {
         var self = this;
         self.inherited(arguments);
-        self._store = new Memory({
-          identifier: "id",
-          data: TrafficSign.allValues().map(function(trafficSign) {
-            return {id: trafficSign.toJSON(), trafficSign: trafficSign};
-          })
-        });
         self._dropDown = new DropDown({store: self._store});
         domStyle.set(self._dropDown.domNode, "height", "200px");
         self.own(self._dropDown.on(
           "dgrid-select",
           function (e) {
             self.set("dropDownOpen", false);
-            self.emit("selected", {detail: {trafficSign: e.rows[0].data.trafficSign}});
+            self.emit("selected", {detail: {symbol: e.rows[0].data}});
           }
         ));
         self.own(on(
@@ -110,12 +122,21 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
         this.inherited(arguments);
       },
 
+      _setStoreAttr: function(/*Store<Symbol>*/ store) {
+        this._set("store", store);
+        this._dropDown.set("store", store);
+      },
+
       _setDropDownOpenAttr: function(dropDownOpen) {
         this._set("dropDownOpen", dropDownOpen);
         domClass.toggle(this._dropDown.domNode, "opened", dropDownOpen);
       }
 
     });
+
+    Combo.isSymbol = isSymbol;
+
+    return Combo;
 
   })
 ;

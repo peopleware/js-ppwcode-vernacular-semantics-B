@@ -50,11 +50,11 @@
   <script src="../lib/dojo/dojo/dojo.js"></script>
 
   <script>
-    require(["dojo/parser", "dijit/registry",
+    require(["dojo/parser", "dijit/registry", "dojo/store/Memory", "dojo/_base/lang", "demo/trafficSign/TrafficSign",
 
              "demo/combo/Combo", "demo/symbol/SymbolList",
              "dojo/domReady!"],
-      function (parser, registry) {
+      function (parser, registry, Memory, lang, TrafficSign) {
 
         function assert(condition, msgFunction) {
           if (!condition) {
@@ -65,16 +65,23 @@
         }
 
         var parsed = parser.parse();
+        var store = new Memory({
+           identifier: "id",
+           data: TrafficSign.allValues().map(function(symbol) {
+             return lang.delegate(symbol, {id: symbol.toJSON()});
+           })
+         });
         parsed.then(
           function() {
-            registry.byId("trafficSignSelection").on("selected", function(event) {
+            var trafficSignSelection = registry.byId("trafficSignSelection");
+            trafficSignSelection.on("selected", function(event) {
               assert(
-                  event && event.detail && event.detail.trafficSign,
+                  event && event.detail && event.detail.symbol,
                   function() {return "event doesn't contain trafficSign";}
               );
-              var trafficSign = event.detail.trafficSign;
+              var trafficSign = event.detail.symbol;
               var shortName = /^demo\/trafficSign\/TrafficSign_(.*)$/.exec(trafficSign.constructor.mid);
-              assert(shortName && shortName[1], function() {return "traffic sign of unexpected type"});
+              assert(shortName && shortName[1], function() {return "traffic sign of unexpected type";});
               var trafficSignList = registry.byId(shortName[1].toLowerCase());
               assert(
                 trafficSignList,
@@ -83,6 +90,7 @@
               );
               trafficSignList.addSymbol(trafficSign);
             });
+            trafficSignSelection.set("store", store);
           },
           function (err) {
             assert(err, function() {return "Main content not parsed: " +(err.message || err);});
@@ -96,15 +104,15 @@
 
 <body class="claro">
 
-  <div class="trafficSignSelection">
-    <h2>Choose a traffic sign</h2>
-    <p class="demoInfo">
+  <section class="trafficSignSelection">
+    <h1>Choose a traffic sign</h1>
+    <p>
       The signs in the drop-down are traffic signs stored as an enumeration.<br />
       On selection, the traffic sign will appear in the correct area below, depending on the type of traffic sign.
       Duplicates are not allowed, so selecting an already selected traffic sign will not result in added the sign to an area below.
     </p>
     <div id="trafficSignSelection" data-dojo-type="demo/combo/Combo"></div>
-  </div>
+  </section>
   <section class="trafficSignLists">
     <h1>Selected signs</h1>
 
