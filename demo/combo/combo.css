@@ -1,81 +1,85 @@
+/*
+ Copyright 2014 - $Date $ by PeopleWare n.v.
 
-.enumSelect {
-    border: 1px solid #b5bcc7;
-    background-color: #ffffff;
-    width: 210px;
-    height: 20px;
-    /* Make this position: relative so our arrow is positioned within */
-    position: relative;
-    padding: 0;
-    color: black;
-    text-align: right;
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+.combo {
+  border: 1px solid #b5bcc7;
+  background-color: #ffffff;
+  width: 210px;
+  height: 20px;
+  /* Make this position: relative so our arrow is positioned within */
+  position: relative;
+  padding: 0;
+  color: black;
 }
 
-.enumSelect .label {
-    line-height: 17px;
-    vertical-align: middle;
+.combo .label {
+  line-height: 17px;
+  vertical-align: middle;
+  text-align: left;
 }
 
-.enumSelect .arrow {
-    /* Position the arrow on the right-hand side */
-    position: absolute;
-    top: 0;
-    right: 0;
+.combo .arrow {
+  /* Position the arrow on the right-hand side */
+  position: absolute;
+  top: 0;
+  right: 0;
 
-    /* Use claro's arrow image */
-    background-image: url("img/commonFormArrows.png");
-    background-position: -35px 70%;
-    background-repeat: no-repeat;
+  /* Use claro's arrow image */
+  background-image: url("img/commonFormArrows.png");
+  background-position: -35px 70%;
+  background-repeat: no-repeat;
 
-    /* 16x16 with a white border and a gray background */
-    width: 16px;
-    height: 18px;
-    border: 1px solid #ffffff;
-    border-top: none;
-    background-color: #efefef;
+  /* 16x16 with a white border and a gray background */
+  width: 16px;
+  height: 18px;
+  border: 1px solid #ffffff;
+  border-top: none;
+  background-color: #efefef;
 }
 
-.enumSelect .dgrid {
-    position: absolute;
-    top: 21px;
-    left: -1px;
-    width: 100%;
-    display: none;
+.combo .dgrid {
+  position: absolute;
+  top: 21px;
+  left: -1px;
+  width: 100%;
+  display: none;
+  background: rgba(255, 255, 255, 0.80);
 }
 
-.enumSelect .opened {
-    display: block;
+.combo .dgrid.opened {
+  display: block;
 }
 
-.dgrid {
-    background: azure;
+.combo div.dgrid-scroller {
+  margin-top: 0 !important;
 }
 
-.enumSelect div.dgrid-scroller {
-    margin-top: 0px !important;
+.combo .dgrid .trafficSignEntry {
+  position: relative;
+  line-height: 30px;
+  margin-top: 1px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  text-align: right;
+  padding-right: 5px;
 }
 
-.langSelect {
-    position: relative;
-    line-height: 30px;
-    margin-top: 1px;
-    margin-bottom: 2px;
-    cursor: pointer;
-}
-
-.langSelect img {
-    position: absolute;
-    left: 5px;
-    top: 5px;
-    height: 20px;
-}
-
-.langGlob {
-    font-size: 20px;
-    background: white;
-    padding-left: 10px;
-}
-
-.langGlob img {
-    margin-right: 10px;
+.combo .dgrid .trafficSignEntry img {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  height: 20px;
 }

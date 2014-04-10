@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!--
+  Copyright 2014 - $Date $ by PeopleWare n.v.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>ppwcode vernacular semantics EnumerationValue Demo</title>
 
@@ -34,36 +50,42 @@
   <script src="../lib/dojo/dojo/dojo.js"></script>
 
   <script>
-    require(["dojo/parser", "dijit/registry", "demo/trafficSign/TrafficSign",
+    require(["dojo/parser", "dijit/registry",
 
              "demo/combo/Combo", "demo/symbol/SymbolList",
              "dojo/domReady!"],
-      function (parser, registry, TrafficSign) {
+      function (parser, registry) {
+
+        function assert(condition, msgFunction) {
+          if (!condition) {
+            var msg = msgFunction();
+            console.error(msg);
+            throw "ERROR: " + msg;
+          }
+        }
+
         var parsed = parser.parse();
         parsed.then(
           function() {
-            registry.byId("enumChoice").onEnumValueChanged = function(enumvalue) {
-              if (enumvalue.enum.isValueOf(TrafficSign.MANDATORY)) {
-                registry.byId("mandatory").updateSymbols(enumvalue.enum);
-              }
-              else if (enumvalue.enum.isValueOf(TrafficSign.PROHIBITORY)) {
-                registry.byId("prohibitory").updateSymbols(enumvalue.enum);
-              }
-              else if (enumvalue.enum.isValueOf(TrafficSign.WARNING)) {
-                registry.byId("warning").updateSymbols(enumvalue.enum);
-              }
-              else if (enumvalue.enum.isValueOf(TrafficSign.DIRECTION)) {
-                registry.byId("direction").updateSymbols(enumvalue.enum);
-              }
-              else {
-                var msg = "ERROR: not a known Enumeration type";
-                console.error(msg);
-                throw msg;
-              }
-            };
+            registry.byId("trafficSignSelection").on("selected", function(event) {
+              assert(
+                  event && event.detail && event.detail.trafficSign,
+                  function() {return "event doesn't contain trafficSign";}
+              );
+              var trafficSign = event.detail.trafficSign;
+              var shortName = /^demo\/trafficSign\/TrafficSign_(.*)$/.exec(trafficSign.constructor.mid);
+              assert(shortName && shortName[1], function() {return "traffic sign of unexpected type"});
+              var trafficSignList = registry.byId(shortName[1].toLowerCase());
+              assert(
+                trafficSignList,
+                function() {return "ERROR: No list found for traffic sign " +
+                                   trafficSign.constructor.mid + "@" + trafficSign.toJSON();}
+              );
+              trafficSignList.updateSymbols(trafficSign);
+            });
           },
           function (err) {
-            console.error("Main content not parsed: " + (err.message || err));
+            assert(err, function() {return "Main content not parsed: " +(err.message || err);});
           }
         );
       }
@@ -81,7 +103,7 @@
       On selection, the traffic sign will appear in the correct area below, depending on the type of traffic sign.
       Duplicates are not allowed, so selecting an already selected traffic sign will not result in added the sign to an area below.
     </p>
-    <div id="enumChoice" data-dojo-type="demo/combo/Combo"></div>
+    <div id="trafficSignSelection" data-dojo-type="demo/combo/Combo"></div>
   </div>
   <div class="trafficSignLists">
     <h2 style="text-align: left;">Selected signs</h2>

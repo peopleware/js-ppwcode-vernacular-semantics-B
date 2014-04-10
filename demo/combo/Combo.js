@@ -1,122 +1,120 @@
-define(["require",
-  "dojo/_base/declare",
-  "dojo/string",
-  "../trafficSign/TrafficSign",
-  "dojo/on",
-  "dojo/_base/Deferred",
-  "dojo/_base/array",
-  "dojo/store/Memory",
-  "dojo/dom",
-  "dojo/dom-style",
-  "dojo/dom-construct",
-  "dojo/dom-class",
-  "put-selector/put",
-  "dijit/_WidgetBase",
-  "dijit/_TemplatedMixin",
-  "dijit/_WidgetsInTemplateMixin",
-  "dojo/text!./combo.html",
-  "xstyle/css!./combo.css"
-],
-  function (require, declare, string, TrafficSign, on, Deferred, array, Memory, dom, domStyle, domConstruct, domClass, put, WidgetBase, TemplatedMixin, WidgetsInTemplateMixin, template) {
-    return declare([WidgetBase, TemplatedMixin, WidgetsInTemplateMixin], {
-      templateString: template,
+/*
+ Copyright 2014 - $Date $ by PeopleWare n.v.
 
-      // select
-      _enumSelect: null,
-      _gridDropDown: null,
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
+define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
+        "dgrid/OnDemandList", "dgrid/Selection", "dgrid/Keyboard",
+        "../trafficSign/TrafficSign",
+        "dojo/store/Memory", "dojo/dom-style", "dojo/dom-construct", "dojo/dom-class", "dojo/dom", "dojo/on",
+        "dojo/text!./combo.html",
+
+        "xstyle/css!./combo.css"],
+  function (declare, _WidgetBase, TemplatedMixin,
+            OnDemandList, Selection, Keyboard,
+            TrafficSign, Memory, domStyle, domConstruct, domClass, dom, on,
+            template) {
+
+    /*=====
+    var Entry = {
+
+      // id: String
+      id: null,
+
+      // trafficSign: TrafficSign
+      trafficSign: null
+
+    };
+    =====*/
 
 
-      renderItem: function (item) {
-        var divNode, textNode;
-        textNode = document.createTextNode(item.id);
-        divNode = domConstruct.create("div", {
-          "class": "langSelect"
-        });
-        put(divNode, this.getImageSource(item.boardImage));
+    var DropDown = declare([OnDemandList, Selection, Keyboard], {
+
+      selectionMode: "single",
+
+      renderRow: function(/*Entry*/ entry) {
+        var divNode = domConstruct.create("div", {"className": "trafficSignEntry"});
+        domConstruct.create("img", {src: entry.trafficSign.getUrl()}, divNode);
+        var textNode = document.createTextNode(entry.trafficSign.getLabel());
         domConstruct.place(textNode, divNode);
         return divNode;
-      },
-
-
-      getImageSource: function (src) {
-        return string.substitute("img[src=${0}]", [src]);
-      },
-
-      _showDropDown: function (boardsdata) {
-        var self = this;
-
-        require(["dgrid/OnDemandList", "dgrid/Selection", "dgrid/Keyboard"],
-          function (OnDemandList, Selection, Keyboard) {
-
-            var DropDown = declare([OnDemandList, Selection, Keyboard]);
-            var store = new Memory({
-              identifier: "representation",
-              data: boardsdata
-            });
-            var dropDown = self._gridDropDown = new DropDown({
-              selectionMode: "single",
-              store: store,
-              renderRow: self.renderItem.bind(self)
-            });
-            domConstruct.place(dropDown.domNode, self._enumSelect);
-            dropDown.startup();
-            domStyle.set(dropDown.domNode, "height", "200px");
-            var open = false;
-
-            function toggle(state) {
-              open = state;
-              domClass[open ? "add" : "remove"](dropDown.domNode, "opened");
-            }
-
-            on(self._enumSelect, ".button:click", function () {
-              toggle(!open);
-            });
-
-            dropDown.on("dgrid-select", function (e) {
-              toggle(false);
-              self.emit("EnumValueChanged", {enum: e.rows[0].data.enum});
-            });
-            dropDown.on("onBlur", function () {
-              toggle(false);
-            });
-            self.own(on(window, "click", function (evt) {
-              if (domClass.contains(dropDown.domNode, "opened") && !dom.isDescendant(evt.target, self._enumSelect)) {
-                toggle(false);
-              }
-            }));
-          });
-
-      },
-      _loadEnumerations: function () {
-        var self = this;
-
-        // get all enums
-        var allboards = TrafficSign.MANDATORY.values().concat(TrafficSign.PROHIBITORY.values()).concat(TrafficSign.WARNING.values()).concat(TrafficSign.DIRECTION.values())
-          , dfd = new Deferred(),
-          makeOptions = function () {
-            if (!Array.isArray(allboards)) {
-              return false;
-            }
-            var boards = array.map(allboards, function (board) {
-
-              var obj = {id: board.getLabel(), enum: board, boardImage: board.getUrl()};
-              // obj.onClick = self.emit("EnumValueChanged",{enum:obj.enum});
-              return obj;
-            });
-            dfd.resolve(boards);
-          };
-        makeOptions();
-
-        return dfd;
-      },
-
-      startup: function () {
-        var self = this;
-        this._loadEnumerations().then(function (boards) {
-          self._showDropDown(boards);
-        });
-        this.inherited(arguments);
       }
+
+    });
+
+    return declare([_WidgetBase, TemplatedMixin], {
+
+      templateString: template,
+
+      // _dropDown: DropDown
+      _dropDown: null,
+
+      // dropDownOpen: boolean
+      dropDownOpen: false,
+
+      // _store
+      _store: null,
+
+      postCreate: function() {
+        var self = this;
+        self.inherited(arguments);
+        self._store = new Memory({
+          identifier: "id",
+          data: TrafficSign.allValues().map(function(trafficSign) {
+            return {id: trafficSign.toJSON(), trafficSign: trafficSign};
+          })
+        });
+        self._dropDown = new DropDown({store: self._store});
+        domStyle.set(self._dropDown.domNode, "height", "200px");
+        self.own(self._dropDown.on(
+          "dgrid-select",
+          function (e) {
+            self.set("dropDownOpen", false);
+            self.emit("selected", {detail: {trafficSign: e.rows[0].data.trafficSign}});
+          }
+        ));
+        self.own(on(
+          self.domNode,
+          "click",
+          function() {self.set("dropDownOpen", !self.get("dropDownOpen"));}
+        ));
+        self.own(self._dropDown.on(
+          "blur",
+          function() {self.set("dropDownOpen", false);}
+        ));
+        self.own(on(
+          window,
+          "click",
+          function (evt) {
+            if (self.get("dropDownOpen") && !dom.isDescendant(evt.target, self.domNode)) {
+              self.set("dropDownOpen", false);
+            }
+          }
+        ));
+        domConstruct.place(self._dropDown.domNode, self.domNode);
+      },
+
+      startup: function() {
+        this._dropDown.startup();
+        this.inherited(arguments);
+      },
+
+      _setDropDownOpenAttr: function(dropDownOpen) {
+        this._set("dropDownOpen", dropDownOpen);
+        domClass.toggle(this._dropDown.domNode, "opened", dropDownOpen);
+      }
+
     });
 
   })
