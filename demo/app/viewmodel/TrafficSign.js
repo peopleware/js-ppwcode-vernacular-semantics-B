@@ -39,10 +39,6 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
 
         getUrl: function() {
           return require.toUrl(string.substitute(imgPathTemplate, [this._typeDir, this.filename])).toString();
-        },
-
-        getLabel: function () {
-          return this.getValue();
         }
 
       },
