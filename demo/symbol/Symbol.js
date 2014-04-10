@@ -34,7 +34,7 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
       postCreate: function () {
         this.inherited(arguments);
         domClass.add(this.domNode, "traffic_symbol");
-        if (this.symbol && this.symbol.url) {
+        if (this.symbol && this.symbol.getUrl()) {
           this._createNodes();
           domStyle.set(this.domNode, "opacity", 1);
         }
@@ -63,17 +63,17 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
         // summary:
         //   Animation to switch the symbol.
         // description:
-        //   pre: (this.get("symbol") && this.get("symbol").url) || this._imgNode
+        //   pre: (this.get("symbol") && this.get("symbol").getUrl()) || this._imgNode
 
-        if (!this.get("symbol") || !this.get("symbol").url) { // change from some symbol to no symbol
+        if (!this.get("symbol") || !this.get("symbol").getUrl()) { // change from some symbol to no symbol
           return this._removeOldSymbolAnimation(); // return baseFx.Animation
         }
-        // this.get("symbol") && this.get("symbol").url
+        // this.get("symbol") && this.get("symbol").getUrl()
         // there is a symbol to show
         if (!this._imgNode) { // change from no symbol to a symbol
           return this._showNewSymbolAnimation(); // return baseFx.Animation
         }
-        // this.get("symbol") && this.get("symbol").url && this._imgNode
+        // this.get("symbol") && this.get("symbol").getUrl() && this._imgNode
         // there is a symbol to show, and there is a symbol shown that is different
         return fx.combine([this._removeOldSymbolAnimation(), this._showNewSymbolAnimation()]); // return baseFx.Animation
       },
@@ -83,7 +83,7 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
         //   An animation to create an _imgNode.
         // description:
         //   pre: this.get("symbol")
-        //   pre: this.get("symbol").url
+        //   pre: this.get("symbol").getUrl()
 
         this._createNodes();
         return baseFx.fadeIn({node: this.domNode, duration: animDuration}); // return baseFx.Animation
@@ -92,7 +92,7 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",
       _createNodes: function () {
         // description:
         //   pre: this.get("symbol")
-        //   pre: this.get("symbol").url
+        //   pre: this.get("symbol").getUrl()
 
         this._imgNode = domConstruct.create("img", {src: this.get("symbol").getUrl()}, this.domNode);
         /*

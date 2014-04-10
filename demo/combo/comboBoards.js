@@ -101,7 +101,7 @@ define(["require",
             }
             var boards = array.map(allboards, function (board) {
 
-              var obj = {id: board.getLabel(), enum: board, boardImage: board.url};
+              var obj = {id: board.getLabel(), enum: board, boardImage: board.getUrl()};
               // obj.onClick = self.emit("EnumValueChanged",{enum:obj.enum});
               return obj;
             });
