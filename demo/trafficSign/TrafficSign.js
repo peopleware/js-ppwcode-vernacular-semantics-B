@@ -1,3 +1,19 @@
+/*
+ Copyright 2014 - $Date $ by PeopleWare n.v.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+
 define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue", "module"],
   function (require, string, EnumerationValue, module) {
 
@@ -9,9 +25,6 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         // _dir: String
         //   Directory in base path.
         _typeDir: null,
-
-        // url: String
-        url: null,
 
         // filename: String
         filename: null,
@@ -31,6 +44,7 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         getLabel: function () {
           return this.getValue();
         }
+
       },
       null,
       module.id
@@ -107,7 +121,7 @@ define(["require", "dojo/string", "ppwcode-vernacular-semantics/EnumerationValue
         {representation: "village", filename: "2203"},
         {representation: "tourist_info", filename: "2204"},
         {representation: "youth_hostel", filename: "2304"},
-        {representation: "picknick", filename: "2306"},
+        {representation: "picnic", filename: "2306"},
         {representation: "services", filename: "2314.1"},
         {representation: "parking", filename: "2507"}
 
