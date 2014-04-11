@@ -16,12 +16,16 @@
 
 define(["ppwcode-vernacular-semantics/_util/contracts/doh",
         "./TrafficSignCaseFactory",
+        "./TrafficSignConstructorCaseFactory",
+        "./TrafficSign_RegulatoryConstructorCaseFactory",
         "./TrafficSign_MandatoryCaseFactory",
         "./TrafficSign_ProhibitoryCaseFactory",
         "./TrafficSign_WarningCaseFactory",
         "./TrafficSign_DirectionCaseFactory"],
   function(doh,
            TrafficSignCaseFactory,
+           TrafficSignConstructorCaseFactory,
+           TrafficSign_RegulatoryConstructorCaseFactory,
            TrafficSign_MandatoryCaseFactory,
            TrafficSign_ProhibitoryCaseFactory,
            TrafficSign_WarningCaseFactory,
@@ -29,6 +33,8 @@ define(["ppwcode-vernacular-semantics/_util/contracts/doh",
 
     var kwargs = {methodTestCreator: doh.createMethodTest};
     new TrafficSignCaseFactory(kwargs).createTypeTests();
+    new TrafficSignConstructorCaseFactory(kwargs).createTypeTests();
+    new TrafficSign_RegulatoryConstructorCaseFactory(kwargs).createTypeTests();
     new TrafficSign_MandatoryCaseFactory(kwargs).createTypeTests();
     new TrafficSign_ProhibitoryCaseFactory(kwargs).createTypeTests();
     new TrafficSign_WarningCaseFactory(kwargs).createTypeTests();

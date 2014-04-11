@@ -4,7 +4,7 @@
 ** demo
 
 * compare is not general; create ComparableValue or Comparable
-* contract / test allValues in demo (x2)
+* list is empty note
 * contracten naar condities
 * add description, contract, test for keyExtension in format / parse
 
