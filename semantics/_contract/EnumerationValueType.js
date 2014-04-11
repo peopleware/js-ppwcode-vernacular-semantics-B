@@ -65,6 +65,11 @@ define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../ParseE
                 !subject[key].isInstanceOf(EnumerationValue) ||
                 result.indexOf(subject[key] >= 0));
         });
+        result.forEach(function(enumValue) {
+          result.every(function(otherEnumValue) {
+            return enumValue === otherEnumValue || enumValue.toJSON() !== otherEnumValue.toJSON();
+          })
+        });
         return result;
       },
 

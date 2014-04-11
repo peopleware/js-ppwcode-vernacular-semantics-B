@@ -57,12 +57,14 @@ define(["dojo/_base/declare", "../EnumerationValue",
                 one: {representation: "1", someProp: 5},
                 two: {representation: "2", someProp: 5},
                 three: {representation: "3", someProp: 7, someOtherProp: new Date()}
-              },
-              ["aleph", "aleph"],
+              }
+              // precondition violation ["aleph", "aleph"],
+              /* precondition violation
               {
                 blue: {representation: "0000FF"},
                 two: {representation: "0000FF"}
               }
+              */
             ]
           },
           {

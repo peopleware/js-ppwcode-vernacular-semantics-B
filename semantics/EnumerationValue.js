@@ -266,6 +266,8 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
                          /*Array|Object*/ valueDefinitions,
                          /*module|String?*/ mod,
                          /*String?*/ bundleName) {
+      /*pre: no duplicate representations*/
+      /*pre: no duplicate instance names if true valueDefinitions is an array*/
       if (js.typeOf(SuperType) !== "function") {
         // shift arguments
         //noinspection AssignmentToFunctionParameterJS,JSValidateTypes
@@ -284,6 +286,10 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       Enum._values = [];
 
       function create(instanceName, vDef) {
+        /*pre*/ if (Enum[instanceName]) {
+          throw "Precondition: instance name " + instanceName + " defined more than once";
+        }
+
         var newValue = new Enum((js.typeOf(vDef) === "string") ? {representation: vDef} : vDef);
         Enum[instanceName] = newValue;
         Enum._values.push(newValue);
@@ -291,6 +297,7 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
 
       switch (js.typeOf(valueDefinitions)) {
         case "array":
+          /*pre: no duplicate instance names */
           valueDefinitions.forEach(function(vDef) {
             create((js.typeOf(vDef) === "string") ? vDef : vDef.representation, vDef);
           });
@@ -303,6 +310,15 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
         default:
           // NOP
       }
+
+      /*pre*/ if (Enum._values.some(function(v1) {
+                    return Enum._values.some(function(v2) {
+                      return v1 !== v2 && v1._representation === v2._representation;
+                    });
+                  })) {
+        throw "Precondition: duplicate representations";
+      }
+
       Enum.isJson = lang.partial(isEnumJson, Enum);
       Enum.revive = lang.partial(enumRevive, Enum);
       Enum.values = lang.partial(values, Enum); // basic
