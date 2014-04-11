@@ -93,6 +93,11 @@
               );
               trafficSignList.addSymbol(trafficSign);
             });
+            trafficSignSelection.set("sort", function(one, other) {
+              return one ?
+                     (other ? one.compare(other) : +1) :
+                     (other ? -1 : 0);
+            });
             trafficSignSelection.set("store", store);
           },
           function (err) {
@@ -110,7 +115,7 @@
   <section class="trafficSignSelection">
     <h1>Choose a traffic sign</h1>
     <p>
-      The signs in the drop-down are traffic signs stored as an enumeration.<br />
+      The signs in the drop-down are values TrafficSign, an enumeration type, sorted by there compare method.<br />
       On selection, the traffic sign will appear in the correct area below, depending on the type of traffic sign.
       Duplicates are not allowed, so selecting an already selected traffic sign will not result in added the sign to an area below.
     </p>

@@ -32,6 +32,21 @@ define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_contract/Enumeratio
           doh.f(result);
         }
         return result;
+      },
+
+      $compare: function(/*TrafficSign*/ subject, /*TrafficSign*/ other) {
+        var result = this.inherited(arguments);
+        if (result < 0) {
+          doh.t((!subject.filename && other.filename) ||
+                subject.filename < other.filename ||
+                (subject.filename === other.filename && subject.toJSON() < other.toJSON()));
+        }
+        if (result > 0) {
+          doh.t((subject.filename && !other.filename) ||
+                subject.filename > other.filename ||
+                (subject.filename === other.filename && subject.toJSON() > other.toJSON()));
+        }
+        return result;
       }
 
     });

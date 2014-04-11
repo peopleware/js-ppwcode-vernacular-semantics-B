@@ -84,6 +84,10 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
       // symbols: Store<Symbol>
       store: null,
 
+      // sort
+      //   Sort passed to the grid
+      sort: null,
+
       postCreate: function() {
         var self = this;
         self.inherited(arguments);
@@ -130,6 +134,11 @@ define(["dojo/_base/declare", "dijit/_WidgetBase", "dijit/_TemplatedMixin",
       _setDropDownOpenAttr: function(dropDownOpen) {
         this._set("dropDownOpen", dropDownOpen);
         domClass.toggle(this._dropDown.domNode, "opened", dropDownOpen);
+      },
+
+      _setSortAttr: function(sort) {
+        this._set("sort", sort);
+        this._dropDown.set("sort", sort);
       }
 
     });

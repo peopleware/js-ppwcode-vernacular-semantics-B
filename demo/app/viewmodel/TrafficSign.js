@@ -44,6 +44,25 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
 
         getUrl: function() {
           return this.filename && require.toUrl(string.substitute(imgPathTemplate, [this.typeDir, this.filename])).toString();
+        },
+
+        compare: function(other) {
+          // summary:
+          //   Comparison based on file name. Null / undefined comes first.
+          //   Equal file names defer to the super class.
+
+          return this.equals(other) ? 0 :
+                 (this.filename ?
+                   (other.filename ?
+                     ((this.filename < other.filename) ?
+                       -1 :
+                       (this.filename === other.filename ?
+                         this.inherited(arguments) :
+                         +1)) :
+                     +1) :
+                   (other.filename ?
+                     -1 :
+                     this.inherited(arguments)));
         }
 
       },
