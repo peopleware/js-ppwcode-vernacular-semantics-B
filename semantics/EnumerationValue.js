@@ -93,9 +93,7 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       compare: function(other) {
         // summary:
         //   Comparison based on getValue. Can be overridden.
-        if (!other) {
-          return -1;
-        }
+
         return this.equals(other) ? 0 : (this.getValue() < other.getValue() ? -1 : +1);
       },
 
