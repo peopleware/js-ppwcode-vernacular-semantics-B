@@ -63,6 +63,12 @@
           }
         }
 
+        function midToId(/*Function*/ EnumType) {
+          var shortName = /^demo\/viewmodel\/TrafficSign_(.*)$/.exec(EnumType.mid);
+          assert(shortName && shortName[1], function() {return "traffic sign of unexpected type";});
+          return shortName[1].toLowerCase();
+        }
+
         var parsed = parser.parse();
         var store = new Memory({
            identifier: "id",
@@ -79,9 +85,7 @@
                   function() {return "event doesn't contain trafficSign";}
               );
               var trafficSign = event.detail.symbol;
-              var shortName = /^demo\/viewmodel\/TrafficSign_(.*)$/.exec(trafficSign.constructor.mid);
-              assert(shortName && shortName[1], function() {return "traffic sign of unexpected type";});
-              var trafficSignList = registry.byId(shortName[1].toLowerCase());
+              var trafficSignList = registry.byId(midToId(trafficSign.constructor));
               assert(
                 trafficSignList,
                 function() {return "ERROR: No list found for traffic sign " +
