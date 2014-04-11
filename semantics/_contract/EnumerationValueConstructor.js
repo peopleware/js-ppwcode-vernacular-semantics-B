@@ -14,80 +14,78 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/Contract", "../EnumerationValue", "../_util/js", "../_util/contracts/doh"],
-  function(declare, Contract, EnumerationValue, js, doh) {
+define(["dojo/_base/declare", "../_util/contracts/Contract", "../EnumerationValue", "../_util/js"],
+  function(declare, Contract, EnumerationValue, js) {
+
+    var overridden = ["__proto__", "constructor", "toString", "valueOf"];
+
+    function normalizeArguments(/*Function*/ condition) {
+      return function(SuperType /*...*/) {
+        return condition.apply(this, (typeof SuperType === "function") ? arguments : [undefined].concat(Array.prototype.slice.apply(arguments)));
+      };
+    }
+
+    function reprFromDef(valueDefinition) {
+      return (typeof valueDefinition === "string") ? valueDefinition : valueDefinition.representation;
+    }
+
+    function instanceExistsAndOk(Result, expectedInstanceName, expectedRepresentation) {
+      var instance = Result[expectedInstanceName];
+      return !!instance && expectedRepresentation === instance.toJSON() && instance.isInstanceOf(Result) && instance.isValueOf(Result);
+    }
 
     return declare([Contract], {
 
       SubjectType: EnumerationValue,
 
-      // values is a basic inspector, but we check the sync with the type as object here
-      $declare: function(/*Function*/ Subject,
-                         /*Function?*/ SuperType,
-                         /*Object?*/ prototypeDef,
-                         /*Array|Object*/ valueDefinitions,
-                         /*module|String?*/ mod,
-                         /*String?*/ bundleName) {
-        var Result;
-        if (SuperType) {
-          Result = Subject.declare(SuperType, prototypeDef, valueDefinitions, mod, bundleName);
-        }
-        else {
-          Result = Subject.declare(prototypeDef, valueDefinitions, mod, bundleName);
-        }
-        doh.is("function", typeof Result);
-        doh.is("function", typeof Result.isJson);
-        doh.is("function", typeof Result.revive);
-        doh.is("function", typeof Result.values);
-        doh.is("function", typeof Result.getBundle);
-        doh.is("function", typeof Result.format);
-        doh.is("function", typeof Result.parse);
-        doh.t(Result.prototype.isInstanceOf(SuperType || EnumerationValue));
-        if (prototypeDef) {
-          js.getAllPropertyNames(prototypeDef).forEach(function(key) {
-            if (key !== "__proto__") {
-              var overridden = ["constructor", "toString", "valueOf"];
-              var expected = (overridden.indexOf(key) >= 0) ? Result.prototype[key] : prototypeDef[key];
-              doh.is(expected, Result.prototype[key]);
-            }
-          });
-        }
-        if (mod) {
-          doh.is(mod.id || mod, Result.mid);
-        }
-        if (bundleName) {
-          doh.is(bundleName, Result.bundleName);
-        }
-
-
-
-        function reprFromDef(valueDefinition) {
-          return (typeof valueDefinition === "string") ?
-                 valueDefinition :
-                 valueDefinition.representation;
-        }
-
-        function instanceExistsAndOk(expectedInstanceName, expectedRepresentation) {
-          var instance = Result[expectedInstanceName];
-          doh.t(!!instance);
-          doh.is(expectedRepresentation, instance.toJSON());
-          doh.t(instance.isInstanceOf(Result));
-          doh.t(instance.isValueOf(Result));
-        }
-
-        if (valueDefinitions instanceof Array) {
-          valueDefinitions.forEach(function(valueDefinition) {
+      $declare: [
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return typeof Result === "function";
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return typeof Result.isJson === "function";
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return typeof Result.revive === "function";
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return typeof Result.values === "function";
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return typeof Result.getBundle === "function";
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return typeof Result.format === "function";
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return typeof Result.parse === "function";
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return Result.prototype.isInstanceOf(SuperType || EnumerationValue);
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return js.getAllPropertyNames(prototypeDef)
+            .filter(function(key) {return overridden.indexOf(key) < 0;})
+            .every(function(key) {return Result.prototype[key] === prototypeDef[key];});
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return !mod || Result.mid === (mod.id || mod);
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return !bundleName || Result.bundleName === bundleName;
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return !valueDefinitions || !(valueDefinitions instanceof Array) || valueDefinitions.every(function(valueDefinition) {
             var expectedInstanceNameAndRepresentation = reprFromDef(valueDefinition);
-            instanceExistsAndOk(expectedInstanceNameAndRepresentation, expectedInstanceNameAndRepresentation);
+            return instanceExistsAndOk(Result, expectedInstanceNameAndRepresentation, expectedInstanceNameAndRepresentation);
           });
-        }
-        else if (valueDefinitions) {
-          Object.keys(valueDefinitions).forEach(function(key) {
-            instanceExistsAndOk(key, reprFromDef(valueDefinitions[key]));
+        }),
+        normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
+          return !valueDefinitions || valueDefinitions instanceof Array || Object.keys(valueDefinitions).every(function(key) {
+            return instanceExistsAndOk(Result, key, reprFromDef(valueDefinitions[key]));
           });
-        }
-        return Result;
-      }
+        })
+      ]
 
     });
 

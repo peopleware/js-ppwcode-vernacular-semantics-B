@@ -14,33 +14,29 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_util/contracts/Contract", "../TrafficSign",
-        "ppwcode-vernacular-semantics//_util/contracts/doh"],
-  function(declare, Contract, TrafficSign, doh) {
+define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_util/contracts/Contract", "../TrafficSign"],
+  function(declare, Contract, TrafficSign) {
 
     return declare([Contract], {
 
       SubjectType: TrafficSign,
 
       // values is a basic inspector, but we check the sync with the type as object here
-      $allValues: function(/*Function*/ Subject) {
-        var result = Subject.allValues();
-        doh.t(result instanceof Array);
-        result.forEach(function(ts) {
-          doh.t(ts && ts.isInstanceOf && ts.isInstanceOf(Subject));
-        });
-        doh.t(result.every(function(ts) {
-          return Subject.concreteSubTypes.some(function(TsType) {
-            return ts.valueOf(TsType);
+      $allValues: [
+        function(result) {return result instanceof Array;},
+        function(result) {return result.every(function(ts) {return ts && ts.isInstanceOf && ts.isInstanceOf(this);}, this);},
+        function(result) {
+          return result.every(
+            function(ts) {return this.concreteSubTypes.some(function(TsType) {return ts.valueOf(TsType);});},
+            this
+          );
+        },
+        function(result) {
+          return this.concreteSubTypes.every(function(TsType) {
+            return TsType.values().every(function(ts) {return result.indexOf(ts) >= 0;});
           });
-        }));
-        doh.t(Subject.concreteSubTypes.every(function(TsType) {
-          return TsType.values().every(function(ts) {
-            return result.indexOf(ts) >= 0;
-          });
-        }));
-        return result;
-      }
+        }
+      ]
 
     });
 

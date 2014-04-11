@@ -25,9 +25,8 @@ define(["dojo/_base/declare", "../EnumerationValue",
           this.subjectFactories(),
           {
             name: "SuperType",
+            canBeSkipped: true,
             factories: [
-              undefined,
-              null,
               function() {return EnumerationValueStub1;}
             ]
           },

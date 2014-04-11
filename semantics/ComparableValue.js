@@ -22,8 +22,7 @@ define(["dojo/_base/declare", "./Value","module"],
         //   ComparableValues have a compare method. Natural order is not sensible in most cases,
         //   but it is for values. The order defined by compare must be complete.
 
-        _c_invar: [
-        ],
+        _c_invar: [],
 
         compare: function(/*Value*/ other) {
           // summary:

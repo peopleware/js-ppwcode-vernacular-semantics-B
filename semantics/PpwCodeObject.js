@@ -20,7 +20,10 @@ define(["dojo/_base/declare", "./_util/contracts/_Mixin", "./_util/js", "module"
       var PpwCodeObject = declare([_ContractMixin], {
 
         _c_invar: [
-          function() {return js.typeOf(this.getTypeDescription()) === "string";}
+          function() {return js.typeOf(this.getTypeDescription()) === "string";},
+          function() {return this.getTypeDescription() !== "";},
+          function() {return js.typeOf(this.toString()) === "string";},
+          function() {return this.toString() !== "";}
         ],
 
         getTypeDescription: function() {
@@ -31,7 +34,7 @@ define(["dojo/_base/declare", "./_util/contracts/_Mixin", "./_util/js", "module"
           //   The default is a property `mid` of the Constructor. If this
           //   does not exist, it is the declared class. Subtypes can override.
           // tags
-          //   protected extension
+          //   basic public extension
 
           if (this.constructor.mid) {
             return this.constructor.mid;

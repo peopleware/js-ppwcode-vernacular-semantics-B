@@ -42,7 +42,8 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
       //   If we don't find a locale in the options, we use the default locale.
 
       _c_invar: [
-        function() {return js.typeOf(this.toJSON()) === "string" && this.toJSON() !== "";}
+        function() {return js.typeOf(this.toJSON()) === "string" && this.toJSON() !== "";},
+        function() {return this.getValue() === this.toJSON();} // getValue is deprecated
       ],
 
       // _representation: String
@@ -84,8 +85,11 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
 
       toJSON: function() {
         // summary:
+        // description:
         //   JSON.Stringify hook.
         //   See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior
+        // tags:
+        //   basic
 
         return this._representation;
       },

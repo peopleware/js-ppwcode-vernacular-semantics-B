@@ -14,38 +14,19 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/Contract", "../_util/contracts/doh", "../PpwCodeObject"],
-  function(declare, Contract, doh, PpwCodeObject) {
+define(["dojo/_base/declare", "../_util/contracts/Contract", "../PpwCodeObject"],
+  function(declare, Contract, PpwCodeObject) {
 
     return declare([Contract], {
 
       SubjectType: PpwCodeObject,
 
-      $constructor: function(/*Function*/ Constructor) {
-        var result = new Constructor();
-        doh.t(!!result);
-        doh.t(result.isInstanceOf(PpwCodeObject));
-        doh.t(result.isInstanceOf(Constructor));
-        doh.validateInvariants(result);
-        return result;
-      },
-
-      $getTypeDescription: function(/*PpwCodeObject*/ subject) {
-        var result = subject.getTypeDescription();
-        doh.validateInvariants(subject);
-        // postconditions
-        doh.t(!!result);
-        doh.is("string", typeof result);
-        return result;
-      },
-
-      $toString: function(/*PpwCodeObject*/ subject) {
-        var result = subject.toString();
-        doh.validateInvariants(subject);
-        // postconditions
-        doh.is("string", typeof result);
-        return result;
-      }
+      $constructor: [
+        function(result) {return result;},
+        function(result) {return result.isInstanceOf;},
+        function(result) {return result.isInstanceOf(PpwCodeObject);},
+        function(result) {return result.isInstanceOf(this);}
+      ]
 
     });
 

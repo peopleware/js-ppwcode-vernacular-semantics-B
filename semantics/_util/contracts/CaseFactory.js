@@ -29,7 +29,7 @@ define(["dojo/_base/declare", "../js", "dojo/_base/lang"],
 
     var CaseFactory = declare([], {
 
-      // contract: MethodTests
+      // contract: Contract
       //   Instance of the contract we are supplying cases for.
       contract: null,
 
@@ -48,17 +48,21 @@ define(["dojo/_base/declare", "../js", "dojo/_base/lang"],
         var self = this;
         var remainingArgFactories = self["$" + methodName]();
         var partialInstanceArgFactories = [];
+        var postconditions = self.contract.gatherPostconditions(methodName);
 
         function fillTests() {
           if (remainingArgFactories.length <= 0) {
             self.methodTestCreator(
               self.contract.SubjectType,
               methodName,
-              lang.hitch(self.contract, self.contract["$" + methodName]),
+              postconditions,
               partialInstanceArgFactories);
           }
           else {
             var nextArg = remainingArgFactories.shift();
+            if (nextArg.canBeSkipped) {
+              fillTests(); // go deep skipping this argument
+            }
             nextArg = {
               name: nextArg.name ||
                     (partialInstanceArgFactories.length <= 0 ?
@@ -92,7 +96,9 @@ define(["dojo/_base/declare", "../js", "dojo/_base/lang"],
         var self = this;
         js.getAllPropertyNames(self.contract)
           .filter(function(methodName) {
-            return methodName[0] === "$" && typeof self.contract[methodName] === "function";
+            return methodName[0] === "$" &&
+                   (self.contract[methodName] instanceof Array ||
+                    (self.contract[methodName].nominal instanceof Array && self.contract[methodName].exceptional instanceof Array));
           })
           .forEach(function(methodName) {
             self.createMethodTests(methodName.slice(1));

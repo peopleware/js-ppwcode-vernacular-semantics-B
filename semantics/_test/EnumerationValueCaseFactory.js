@@ -101,10 +101,6 @@ define(["dojo/_base/declare", "../EnumerationValue", "../ComparableValue", "./Va
         ];
       },
 
-      $toJSON: function() {
-        return [this.subjectFactories()];
-      },
-
       $getLabel: function() {
         var formatOptionFactories = this.formatOptionsFactories();
         formatOptionFactories.factories.push("");

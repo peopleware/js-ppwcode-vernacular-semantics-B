@@ -14,27 +14,21 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "./Value", "../_util/contracts/doh", "../ComparableValue"],
-  function(declare, ValueContract, doh, ComparableValue) {
+define(["dojo/_base/declare", "./Value", "../ComparableValue"],
+  function(declare, ValueContract, ComparableValue) {
 
     return declare([ValueContract], {
 
       SubjectType: ComparableValue,
 
-      $compare: function(/*Value*/ subject, /*Value*/ other) {
-        var result = subject.compare(other);
-        doh.validateInvariants(subject);
-        doh.validateInvariants(other);
-        doh.is("number", typeof result);
-        if (result === 0) {
-          doh.t(subject.equals(other));
+      $compare: [
+        function(/*Value*/ other, result) {return typeof result === "number";},
+        function(/*Value*/ other, result) {return result !== 0 || this.equals(other);},
+        function(/*Value*/ other, result) {
+          var inverse = other.compare(this);
+          return result === 0 ? (inverse === 0) : ((result < 0) === (inverse > 0));
         }
-        var otherResult = other.compare(subject);
-        doh.validateInvariants(subject);
-        doh.validateInvariants(other);
-        doh.is(-1 * (result / Math.abs(result)), otherResult / Math.abs(otherResult));
-        return result;
-      }
+      ]
 
     });
 

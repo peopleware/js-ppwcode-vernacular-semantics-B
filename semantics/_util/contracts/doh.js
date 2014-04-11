@@ -19,30 +19,30 @@ define(["doh/main", "dojo/_base/lang"],
 
     console.log("Loading ppwcode contracts doh extension");
 
-    doh._flattenInvars = function(context, /*Array*/ a, /*Array*/ acc) {
+    doh._flattenConditions = function(context, args, /*Array*/ a, /*Array*/ acc) {
       doh.isNot(null, context);
       doh.isNot(null, a);
       doh.t(a instanceof Array);
       doh.isNot(null, acc);
       doh.t(acc instanceof Array);
 
-      function forAllElementsOf(forAllInvar) {
-        var conditionResult = forAllInvar.condition.call(context);
+      function forAllElementsOf(forAllCondition) {
+        var conditionResult = forAllCondition.condition.call(context);
         if (conditionResult) {
-          var selection = forAllInvar.selector.call(context);
+          var selection = forAllCondition.selector.call(context);
           if (selection instanceof Array) {
-            // for all elements
-            var j;
-            for (j = 0; j < selection.length; j++) {
-              doh._flattenInvars(selection[j], forAllInvar.invars, acc);
-            }
+            selection.forEach(
+              function(el) {
+                doh._flattenConditions(el, args, forAllCondition.invars, acc);
+              }
+            );
           }
           else {
             // selection is Object
             var propName;
             for (propName in selection) {
               if (selection.hasOwnProperty(propName)) {
-                doh._flattenInvars(selection[propName], forAllInvar.invars, acc);
+                doh._flattenConditions(selection[propName], args, forAllCondition.invars, acc);
               }
               //else NOP
             }
@@ -50,23 +50,57 @@ define(["doh/main", "dojo/_base/lang"],
         }
       }
 
-      var i;
-      for (i = 0; i < a.length; i++) {
-        var el = a[i];
+      a.forEach(function(el) {
         if (el instanceof Function) {
           acc.push({
-            testMethodForPrint: el.toString(),
-            testMethodInContext: lang.hitch(context, el)
-          });
+                     testMethodForPrint: el.toString(),
+                     testMethodInContext: function() {
+                       var conditionResult = el.apply(context, args);
+                       return conditionResult;
+                     }
+                   });
         }
         else {
-          // we expect an object {condition: /*Function (optional)*/, objectSelector: /*Function*/, invars: /*Array*/ of /*Function*/
+          // we expect an object {condition: /*Function (optional)*/, selector: /*Function*/, invars: /*Array*/ of /*Function*/
           if (el.hasOwnProperty("condition")) {
             forAllElementsOf(el);
           }
         }
-      }
+      });
     };
+
+    doh.validateConditions = function(subject, conditions, args, outcome) {
+      doh.isNot(null, subject);
+      doh.isNot(null, conditions);
+      doh.t(conditions instanceof Array);
+
+      var flattenedConditions = [];
+      this._flattenConditions(subject, (args ||[]).concat([outcome]), conditions, flattenedConditions);
+
+      flattenedConditions.forEach(function(condition) {
+        doh.isNot(null, condition);
+        doh.t(condition.testMethodInContext instanceof Function);
+
+        var result = condition.testMethodInContext();
+        if (!result) {
+          throw new doh._AssertFailure("contract error: " + condition.testMethodForPrint + " (on " + subject.toString() + ")");
+        }
+      });
+    };
+
+
+    function gatherInvariants(subject) {
+      return subject.constructor._meta.bases.reduceRight(
+        function(acc, base) {
+          var definition = base.prototype.hasOwnProperty("_c_invar") && base.prototype._c_invar;
+          if (definition) {
+            Array.prototype.push.apply(acc, definition);
+          }
+          return acc;
+        },
+        []
+      );
+    }
 
     doh.validateInvariants = function(subject) {
       // subject is a _Mixin IDEA check with duck typing
@@ -75,21 +109,7 @@ define(["doh/main", "dojo/_base/lang"],
       doh.isNot(null, subject._c_invar);
       doh.t(subject._c_invar instanceof Array);
 
-      var invars = [];
-      this._flattenInvars(subject, subject._c_invar, invars);
-
-      var i;
-      for (i = 0; i < invars.length; i++) {
-        var invar = invars[i];
-        doh.isNot(null, invar);
-        doh.t(invar.testMethodInContext instanceof Function);
-
-        // inject for this
-        var result = invar.testMethodInContext();
-        if (!result) {
-          throw new doh._AssertFailure("invariant error: " + invar.testMethodForPrint + " (on " + subject.toString() + ")");
-        }
-      }
+      doh.validateConditions(subject, gatherInvariants(subject));
     };
     doh.invars = doh.validateInvariants;
 
@@ -118,11 +138,19 @@ define(["doh/main", "dojo/_base/lang"],
     };
     Test.prototype = {
 
+      // methodName: String
+      methodName: null,
+
+      // name: String
       name: null,
 
       argFactories: null, // lock a copy in scope of this test
 
-      testMethod: null,
+      // nominalPostConditions: Function[]
+      nominalPostConditions: null,
+
+      // exceptionalPostConditions: Function[]?
+      exceptionalPostConditions: null,
 
       instantiateArguments: function() {
 
@@ -158,7 +186,51 @@ define(["doh/main", "dojo/_base/lang"],
 
       runTest: function() {
         var args = this.instantiateArguments();
-        this.testMethod.apply(this, args);
+        var subject = args[0];
+        var trueArgs = args.slice(1);
+        var result;
+        try {
+          if (typeof subject === "function" && this.methodName === "constructor") {
+            // "apply" of a constructor
+            var ApplyConstructor = function() {
+              subject.apply(this, trueArgs);
+            };
+            ApplyConstructor.prototype = subject.prototype;
+            result = new ApplyConstructor();
+          }
+          else {
+            result = subject[this.methodName].apply(subject, trueArgs);
+          }
+        }
+        catch (exc) {
+          var applicableConditions = this.exceptionalPostConditions && this.exceptionalPostConditions.filter(function(c) {
+            return c.exception.call(null, exc);
+          });
+          if (!applicableConditions || applicableConditions.length <= 0) {
+            doh.unexpectedException(exc); // throw
+          }
+          var conditions = applicableConditions.reduce(
+            function(acc, c) {
+              Array.prototype.push.apply(acc, c.conditions);
+              return acc;
+            },
+            []
+          );
+          doh.validateConditions(subject, conditions, trueArgs, exc);
+          return;
+        }
+        if (subject._c_invar) {
+          doh.validateInvariants(subject);
+        }
+        if (result && result._c_invar) {
+          doh.validateInvariants(result);
+        }
+        trueArgs.forEach(function(arg) {
+          if (arg && arg._c_invar) {
+            doh.validateInvariants(arg);
+          }
+        });
+        doh.validateConditions(subject, this.nominalPostConditions, trueArgs, result);
       }
 
     };
@@ -185,16 +257,18 @@ define(["doh/main", "dojo/_base/lang"],
 
     var testCounter = 0;
 
-    doh.createMethodTest = function(Type, methodName, testMethod, argFactories) {
+    doh.createMethodTest = function(Type, methodName, postConditions, argFactories) {
 
       if (argFactories.length > 0) {
         doh.register(
           groupId(Type),
           new Test({
+            methodName: methodName,
             name: "(" + testCounter + ") " + methodName + " - " +
                   argFactories.map(function(af) {return af.argRepr;}).join("; "),
             argFactories: argFactories.slice(), // lock a copy in scope of this test
-            testMethod: testMethod
+            nominalPostConditions: postConditions.nominal,
+            exceptionalPostConditions: postConditions.exceptional
           })
         );
         testCounter++;

@@ -14,40 +14,29 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_contract/EnumerationValue", "ppwcode-vernacular-semantics/_contract/ComparableValue", "../TrafficSign",
-        "ppwcode-vernacular-semantics/_util/contracts/doh"],
-  function(declare, EnumerationValueContract, ComparableValueContract, TrafficSign, doh) {
+define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_contract/EnumerationValue",
+        "ppwcode-vernacular-semantics/_contract/ComparableValue", "../TrafficSign"],
+  function(declare, EnumerationValueContract, ComparableValueContract,
+           TrafficSign) {
 
     return declare([EnumerationValueContract, ComparableValueContract], {
 
       SubjectType: TrafficSign,
 
-      $getUrl: function(/*TrafficSign*/ subject) {
-        var result = subject.getUrl();
-        doh.is("string", typeof result);
-        if (subject.filename) {
-          doh.t(result.indexOf("/" + subject.typeDir + "/" + subject.filename + ".jpg") >= 0);
+      $compare: [
+        function(/*TrafficSign*/ other, result) {
+          return result >= 0 ||
+                 (!this.filename && other.filename) ||
+                 this.filename < other.filename ||
+                 (this.filename === other.filename && this.toJSON() < other.toJSON());
+        },
+        function(/*TrafficSign*/ other, result) {
+          return result <= 0 ||
+                 (this.filename && !other.filename) ||
+                 this.filename > other.filename ||
+                 (this.filename === other.filename && this.toJSON() > other.toJSON());
         }
-        else {
-          doh.f(result);
-        }
-        return result;
-      },
-
-      $compare: function(/*TrafficSign*/ subject, /*TrafficSign*/ other) {
-        var result = this.inherited(arguments);
-        if (result < 0) {
-          doh.t((!subject.filename && other.filename) ||
-                subject.filename < other.filename ||
-                (subject.filename === other.filename && subject.toJSON() < other.toJSON()));
-        }
-        if (result > 0) {
-          doh.t((subject.filename && !other.filename) ||
-                subject.filename > other.filename ||
-                (subject.filename === other.filename && subject.toJSON() > other.toJSON()));
-        }
-        return result;
-      }
+      ]
 
     });
 

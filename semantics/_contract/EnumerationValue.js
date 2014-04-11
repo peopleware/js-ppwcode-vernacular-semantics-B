@@ -14,58 +14,29 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "./Value", "../_util/contracts/doh", "../EnumerationValue"],
-  function(declare, ValueContract, doh, EnumerationValue) {
+define(["dojo/_base/declare", "./Value", "../EnumerationValue"],
+  function(declare, ValueContract, EnumerationValue) {
 
     return declare([ValueContract], {
 
       SubjectType: EnumerationValue,
 
-      $isValueOf: function(/*EnumerationValue*/ subject, /*Object*/ EnumDef) {
-        var result = subject.isValueOf(EnumDef);
-        doh.validateInvariants(subject);
-        // postconditions
-        doh.is("boolean", typeof result);
-        if (EnumDef.values) {
-         doh.is(EnumDef.values().indexOf(subject) >= 0, result);
+      $isValueOf: [
+        function(/*Object*/ EnumDef, result) {return typeof result === "boolean";},
+        function(/*Object*/ EnumDef, result) {
+          return result === (EnumDef.values ?
+                             (EnumDef.values().indexOf(this) >= 0) :
+                             Object.keys(EnumDef).some(function(k) {return EnumDef[k] === this;}, this));
         }
-        else {
-          var found = false;
-          var key;
-          for(key in EnumDef) {
-            if (EnumDef[key] === subject) {
-              found = true;
-            }
-          }
-          doh.is(found, result);
-        }
-        return result;
-      },
+      ],
 
-      $equals: function(/*EnumerationValue*/ subject, other) {
-        var result = this.inherited(arguments);
-        doh.is(subject === other, result);
-        return result;
-      },
+      $equals: [
+        function(other, result) {return result === (this === other);}
+      ],
 
-      $getValue: function(/*EnumerationValue*/ subject) {
-        var result = this.inherited(arguments);
-        doh.is(subject.toString(), result);
-        return result;
-      },
-
-      $toJSON: function(/*EnumerationValue*/ subject) {
-        var result = subject.toJSON();
-        doh.is("string", typeof result);
-        doh.is(subject.toString(), result);
-        return result;
-      },
-
-      $getLabel: function(/*EnumerationValue*/ subject, options) {
-        var result = subject.getLabel(options);
-        doh.is("string", typeof result);
-        return result;
-      }
+      $getLabel: [
+        function(options, result) {return typeof result === "string";}
+      ]
 
    });
 

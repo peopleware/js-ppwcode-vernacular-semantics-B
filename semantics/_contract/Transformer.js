@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "../_util/contracts/Contract", "../_util/contracts/doh", "../ParseException"],
-  function(declare, Contract, doh, ParseException) {
+define(["dojo/_base/declare", "../_util/contracts/Contract", "../ParseException"],
+  function(declare, Contract, ParseException) {
 
     // only documentation
     var FormatOptions = {
@@ -51,37 +51,25 @@ define(["dojo/_base/declare", "../_util/contracts/Contract", "../_util/contracts
       FormatOptions: FormatOptions,
       Transformer: Transformer,
 
-      $format: function(/*Transformer*/ transformer, /*Value?*/ value, /*FormatOptions?*/ options) {
-        var result = transformer.format(value, options);
-        if (!value) {
-          doh.is(null, result);
-        }
-        else {
-          doh.validateInvariants(value);
-          doh.is("string", typeof result);
-          doh.t(value.equals(value.constructor.parse(result, options)));
-        }
-        return result;
-      },
+      $format: [
+        function(/*Value?*/ value, /*FormatOptions?*/ options, result) {return value || result === null;},
+        function(/*Value?*/ value, /*FormatOptions?*/ options, result) {return !value || typeof result === "string";},
+        function(/*Value?*/ value, /*FormatOptions?*/ options, result) {return !value || value.equals(value.constructor.parse(result, options));}
+      ],
 
-      $parse: function(/*Transformer*/ transformer, /*String?*/ str, /*FormatOptions?*/ options) {
-        try {
-          var result = transformer.parse(str, options);
-          if (!str && str !== "") {
-            doh.is(null, result);
+      $parse: {
+        nominal: [
+          function(/*String?*/ str, /*FormatOptions?*/ options, result) {return str || str === "" || result === null;},
+          function(/*String?*/ str, /*FormatOptions?*/ options, result) {return (!str && str !== "") || (result && result.constructor === this);}
+        ],
+        exceptional: [
+          {
+            exception: function(exc) {return exc && exc.isInstanceOf && exc.isInstanceOf(ParseException);},
+            conditions: [
+              function(/*String?*/ str, /*FormatOptions?*/ options, exc) {return !!str || str === "";}
+            ]
           }
-          else {
-            doh.t(result);
-            doh.t(result.isInstanceOf(transformer));
-            doh.validateInvariants(result);
-          }
-          return result;
-        }
-        catch (exc) {
-          doh.t(exc.isInstanceOf && exc.isInstanceOf(ParseException));
-          doh.t(!!str || str === "");
-          return exc;
-        }
+        ]
       }
 
     });

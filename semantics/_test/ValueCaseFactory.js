@@ -202,18 +202,6 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value"
         ];
       },
 
-      $valueOf: function() {
-        return [
-          this.subjectFactories()
-        ];
-      },
-
-      $getValue: function() {
-        return [
-          this.subjectFactories()
-        ];
-      },
-
       $coerceTo: function() {
         var self = this;
         return [

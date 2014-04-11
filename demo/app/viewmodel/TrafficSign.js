@@ -14,8 +14,10 @@
  limitations under the License.
  */
 
-define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "ppwcode-vernacular-semantics/ComparableValue", "dojo/string", "module"],
-  function (require, EnumerationValue, ComparableValue, string, module) {
+define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "ppwcode-vernacular-semantics/ComparableValue",
+        "dojo/string", "module"],
+  function (require, EnumerationValue, ComparableValue,
+            string, module) {
 
     var imgPathTemplate = "./img/${0}/${1}.jpg";
 
@@ -25,7 +27,9 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "ppwcode-ver
 
         _c_invar: [
           function() {return typeof this.typeDir === "string";},
-          function() {return !this.filename || typeof this.filename === "string";}
+          function() {return !this.filename || typeof this.filename === "string";},
+          function() {return this.filename ? typeof this.getUrl() === "string" : !this.getUrl();},
+          function() {return !this.filename || this.getUrl().indexOf("/" + this.typeDir + "/" + this.filename + ".jpg") >= 0;}
         ],
 
         // _dir: String

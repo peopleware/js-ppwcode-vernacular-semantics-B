@@ -35,16 +35,11 @@ define(["dojo/_base/declare", "../_util/contracts/CaseFactory", "../_contract/Pp
 
      $constructor: function() {
        return [
-         [function() {return PpwCodeObjectStub1;}]
+         [
+           function() {return PpwCodeObjectStub1;},
+           function() {return PpwCodeObjectStub2;}
+         ]
        ];
-     },
-
-     $getTypeDescription: function() {
-       return [this.subjectFactories()];
-     },
-
-     $toString: function() {
-       return [this.subjectFactories()];
      }
 
    });

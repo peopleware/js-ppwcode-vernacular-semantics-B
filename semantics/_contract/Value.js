@@ -14,74 +14,34 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "./PpwCodeObject", "../_util/contracts/doh", "../Value"],
-  function(declare, PpwCodeObjectContract, doh, Value) {
+define(["dojo/_base/declare", "./PpwCodeObject", "../Value"],
+  function(declare, PpwCodeObjectContract, Value) {
 
     return declare([PpwCodeObjectContract], {
 
       SubjectType: Value,
 
-      $constructor: function(/*Function*/ Constructor, /*Object*/ kwargs) {
-        var result = new Constructor(kwargs);
-        doh.t(!!result);
-        doh.t(result.isInstanceOf(Value));
-        doh.t(result.isInstanceOf(Constructor));
-        doh.validateInvariants(result);
-        return result;
-      },
+      $constructor: [
+        function(/*Object*/ kwargs, result) {return result;},
+        function(/*Object*/ kwargs, result) {return result.isInstanceOf;},
+        function(/*Object*/ kwargs, result) {return result.isInstanceOf(Value);},
+        function(/*Object*/ kwargs, result) {return result.isInstanceOf(this);}
+      ],
 
-      $equals: function(/*Value*/ subject, other) {
-        var result = !!subject.equals(other);
-        doh.validateInvariants(subject);
-        if (other && other.isInstanceOf && other.isInstanceOf(Value)) {
-          doh.validateInvariants(other);
-        }
-        // postconditions
-        if (subject === other) {
-          doh.t(result);
-        }
-        if (!other) {
-          doh.f(result);
-        }
-        else if (other.constructor !== subject.constructor) {
-          doh.f(result);
-        }
-        return result;
-      },
-
-      $valueOf: function(/*Value*/ subject) {
-        var result = subject.valueOf();
-        doh.validateInvariants(subject);
-        var resultType = typeof result;
-        doh.t(result === subject || resultType === "number" || resultType === "boolean" || resultType === "string");
-        return result;
-      },
-
-      $getValue: function(/*Value*/ subject) {
-        var result = subject.getValue();
-        doh.validateInvariants(subject);
-        doh.is("string", typeof result);
-        return result;
-      },
+      $equals: [
+        function(other, result) {return other !== this || !!result;},
+        function(other, result) {return (other && other.constructor === this.constructor) || !result;}
+      ],
 
       // canCoerceTo is basic
 
-      $coerceTo: function(/*Value*/ subject, /*Function?*/ Type) {
-        var result = subject.coerceTo(Type);
-        doh.validateInvariants(subject);
-        if (result && result.isInstanceOf && result.isInstanceOf(Value)) {
-          doh.validateInvariants(result);
-        }
-        return result;
-      },
+      $coerceTo: [
+        function(/*Function?*/ Type, result) {return !result || (result.isInstanceOf && result.isInstanceOf(Value));}
+      ],
 
-      $format: function(/*Value*/ subject, /*FormatOptions?*/ options) {
-        var result = subject.format(options);
-        doh.validateInvariants(subject);
-        var expected = subject.constructor.format(subject, options);
-        doh.is(expected, result);
-        return result;
-      }
+      $format: [
+        function(/*FormatOptions?*/ options, result) {return result === this.constructor.format(this, options);}
+      ]
 
     });
 

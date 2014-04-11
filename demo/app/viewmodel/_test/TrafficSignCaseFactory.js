@@ -40,12 +40,6 @@ define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_test/EnumerationVal
 
       subjectFactories: function() {
         return TrafficSignStub.values();
-      },
-
-      $getUrl: function() {
-        return [
-          this.subjectFactories()
-        ];
       }
 
     });

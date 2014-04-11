@@ -25,6 +25,39 @@ define(["dojo/_base/declare", "dojo/_base/lang"],
 
       constructor: function(kwargs) {
         lang.mixin(this, kwargs);
+      },
+
+      gatherPostconditions: function(methodName) {
+
+        function addToConditions(obj, acc) {
+          var conditionPropertyName = "$" + methodName;
+          var definition = obj.hasOwnProperty(conditionPropertyName) && obj[conditionPropertyName];
+          if (definition) {
+            if (definition instanceof Array) {
+              Array.prototype.push.apply(acc.nominal, definition);
+            }
+            else {
+              Array.prototype.push.apply(acc.nominal, definition.nominal);
+              Array.prototype.push.apply(acc.exceptional, definition.exceptional);
+            }
+          }
+          return acc;
+        }
+
+        if (methodName === "constructor") {
+          var definition = this.$constructor;
+          return {
+            nominal: definition ? (definition instanceof Array ? definition : definition.nominal) : [],
+            exceptional: definition && definition.exceptional ? definition.exceptional : []
+          };
+        }
+        return this.constructor._meta.bases.reduceRight(
+          function(acc, base) {return addToConditions(base.prototype, acc);},
+          addToConditions(this, {
+            nominal: [],
+            exceptional: []
+          })
+        );
       }
 
     });

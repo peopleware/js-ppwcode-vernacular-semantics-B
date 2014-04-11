@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../ParseException", "../_util/contracts/doh"],
-  function(declare, TransformerContract, EnumerationValue, ParseException, doh) {
+define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../ParseException", "../_util/js"],
+  function(declare, TransformerContract, EnumerationValue, ParseException, js) {
 
     // only documentation
     var EnumerationValueType = function() {};
@@ -42,117 +42,86 @@ define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../ParseE
 
       // SubjectType must be set in constructor
 
-      // values is a basic inspector, but we check the sync with the type as object here
-      $values: function(/*EnumerationValueType*/ subject) {
-        var result = subject.values();
-        doh.t(result instanceof Array);
-        result.forEach(function(enumValue) {
-          var candidateKey;
-          var found = true;
-          for (candidateKey in subject) {
-            if (subject[candidateKey] === enumValue) {
-              found = true;
-              //noinspection BreakStatementJS
-              break;
-            }
+      // values is a basic inspector, but we check the sync with the type as object here,
+      // because we have no invariants yet for "Constructors"
+      $values: [
+        function(result) {return result instanceof Array;},
+        function(result) {
+          return result.every(function(v) {return Object.keys(this).some(function(k) {return v === this[k];}, this);}, this);
+        },
+        function(result) {
+          return Object.keys(this).every(
+            function(k) {
+              return k ===
+                     "superclass" ||
+                     !this[k] ||
+                     !this[k].isInstanceOf ||
+                     !this[k].isInstanceOf(EnumerationValue) ||
+                     result.indexOf(this[k] >= 0);
+            },
+            this
+          );
+        },
+        function(result) {
+          return result.every(function(v) {
+            return result.every(function(otherV) {
+              return v === otherV || v.toJSON() !== otherV.toJSON();
+            });
+          });
+        }
+      ],
+
+      $isJson: [
+        function(/*String?*/ json, result) {return typeof result === "boolean";},
+        function(/*String?*/ json, result) {return result === this.values().some(function(v) {return v.toJSON() === json;});}
+      ],
+
+      $revive: [
+        function(/*String?*/ json, result) {return result || !this.isJson(json);},
+        function(/*String?*/ json, result) {return !result || result.isValueOf(this);},
+        function(/*String?*/ json, result) {return !result || result.toJSON() === json;}
+      ],
+
+      $getBundle: [
+        function(/*String?*/ lang, result) {return result === undefined || js.typeOf(result) === "object";}
+      ],
+
+      $format: [
+        function(/*EnumerationValue?*/ value, /*Object?*/ options, result) {
+          if (!value) {
+            return true;
           }
-          doh.t(found);
-        });
-        Object.keys(subject).forEach(function(key) {
-          doh.t(key === "superclass" ||
-                !subject[key] ||
-                !subject[key].isInstanceOf ||
-                !subject[key].isInstanceOf(EnumerationValue) ||
-                result.indexOf(subject[key] >= 0));
-        });
-        result.forEach(function(enumValue) {
-          result.every(function(otherEnumValue) {
-            return enumValue === otherEnumValue || enumValue.toJSON() !== otherEnumValue.toJSON();
-          })
-        });
-        return result;
-      },
-
-
-      $isJson: function(/*EnumerationValueType*/ subject, /*String?*/ json) {
-        var result = subject.isJson(json);
-        doh.is("boolean", typeof result);
-        var expected = false;
-        if (typeof json === "string") {
-          var candidateKey;
-          for (candidateKey in subject) {
-            if (subject[candidateKey] &&
-                subject[candidateKey].toJSON &&
-                subject[candidateKey].toJSON() === json) {
-              expected = true;
-              //noinspection BreakStatementJS
-              break;
-            }
-          }
-        }
-        doh.is(expected, result);
-        return result;
-      },
-
-      $revive: function(/*EnumerationValueType*/ subject, /*String?*/ json) {
-        var result = subject.revive(json);
-        if (result) {
-          doh.t(result.isValueOf(subject));
-          doh.t(subject.isJson(json));
-          doh.is(json, result.toJSON());
-          doh.validateInvariants(result);
-        }
-        else {
-          doh.f(subject.isJson(json));
-        }
-        return result;
-      },
-
-      $getBundle: function(/*EnumerationValueType*/ subject, /*String?*/ lang) {
-        var result = subject.getBundle(lang);
-        if (result) {
-          doh.is("object", typeof result);
-        }
-        // noting to do; can only call the method
-        return result;
-      },
-
-      $format: function(/*EnumerationValueType*/ transformer, /*EnumerationValue?*/ value, /*Object?*/ options) {
-        var result = this.inherited(arguments);
-        var expected = null;
-        if (value) {
-          var bundle = transformer.getBundle(options && options.locale);
+          var bundle = this.getBundle(options && options.locale);
           var repr = value.toJSON();
           var bundleLabel = bundle && bundle[repr];
-          expected = (bundleLabel || bundleLabel === "") ? bundleLabel : repr;
+          return result === ((bundleLabel || bundleLabel === "") ? bundleLabel : repr);
         }
-        doh.is(expected, result);
-        return result;
-      },
+      ],
 
-      $parse: function(/*EnumerationValueType*/ EnumerationValueType, /*String?*/ str, /*FormatOptions?*/ options) {
-        var result = this.inherited(arguments);
-        if (str || str === "") {
-          var bundle = EnumerationValueType.getBundle(options && options.locale);
-          var repr = str;
-          if (bundle) {
-            var key;
-            for (key in bundle) {
-              if (bundle[key] === str) {
-                repr = key;
-                //noinspection BreakStatementJS
-                break;
-              }
+      $parse: {
+        nominal: [
+          function(/*String?*/ str, /*FormatOptions?*/ options, result) {return !result || result.isValueOf(this);},
+          function(/*String?*/ str, /*FormatOptions?*/ options, result) {
+            if (!result) {
+              return true;
             }
+            var bundle = this.getBundle(options && options.locale);
+            return str === bundle ? bundle[result.toJSON()] : result.toJSON();
           }
-          if (EnumerationValueType[repr]) {
-            doh.is(EnumerationValueType[repr], result);
+        ],
+        exceptional: [
+          {
+            exception: function(exc) {return exc && exc.isInstanceOf && exc.isInstanceOf(ParseException);},
+            conditions: [
+              function(/*String?*/ str, /*FormatOptions?*/ options) {
+                var bundle = this.getBundle(options && options.locale);
+                return bundle ?
+                       Object.keys(bundle).every(function(k) {return bundle[k] !== str;}) :
+                       (!this[str] || this.values().indexOf(this[str]) < 0);
+              }
+            ]
           }
-          else {
-            doh.t(result && result.isInstanceOf && result.isInstanceOf(ParseException));
-          }
-        }
-        return result;
+        ]
       }
 
     });
