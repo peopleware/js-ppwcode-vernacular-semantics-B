@@ -111,11 +111,7 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
       module.id + "_Warning"
     );
 
-    TrafficSign.Regulatory.allValues = function() {
-      return TrafficSign.Mandatory.values()
-        .concat(TrafficSign.Prohibitory.values())
-        .concat(TrafficSign.Warning.values());
-    };
+    TrafficSign.Regulatory.concreteSubTypes = [TrafficSign.Mandatory, TrafficSign.Prohibitory, TrafficSign.Warning];
 
     TrafficSign.Direction = EnumerationValue.declare(
       TrafficSign,
@@ -132,10 +128,19 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
       module.id + "_Direction"
     );
 
-    TrafficSign.allValues = function() {
-      return TrafficSign.Regulatory.allValues()
-        .concat(TrafficSign.Direction.values());
-    };
+    TrafficSign.concreteSubTypes = TrafficSign.Regulatory.concreteSubTypes.concat([TrafficSign.Direction]);
+
+    function allValues() {
+      return this.concreteSubTypes.reduce(
+        function(acc, TSType) {
+          return acc.concat(TSType.values());
+        },
+        []
+      );
+    }
+
+    TrafficSign.Regulatory.allValues = allValues;
+    TrafficSign.allValues = allValues;
 
     return TrafficSign;
   }
