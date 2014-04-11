@@ -30,21 +30,6 @@ define(["dojo/_base/declare", "./PpwCodeObject", "../_util/contracts/doh", "../V
         return result;
       },
 
-      $compare: function(/*Value*/ subject, /*Value*/ other) {
-        var result = subject.compare(other);
-        doh.validateInvariants(subject);
-        doh.validateInvariants(other);
-        doh.is("number", typeof result);
-        if (result === 0) {
-          doh.t(subject.equals(other));
-        }
-        var otherResult = other.compare(subject);
-        doh.validateInvariants(subject);
-        doh.validateInvariants(other);
-        doh.is(-1 * (result / Math.abs(result)), otherResult / Math.abs(otherResult));
-        return result;
-      },
-
       $equals: function(/*Value*/ subject, other) {
         var result = !!subject.equals(other);
         doh.validateInvariants(subject);

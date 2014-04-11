@@ -266,6 +266,7 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
                          /*String?*/ bundleName) {
       /*pre: no duplicate representations*/
       /*pre: no duplicate instance names if true valueDefinitions is an array*/
+      var superTypes;
       if (js.typeOf(SuperType) !== "function") {
         // shift arguments
         //noinspection AssignmentToFunctionParameterJS,JSValidateTypes
@@ -277,10 +278,17 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
         //noinspection AssignmentToFunctionParameterJS,JSValidateTypes
         prototypeDef = SuperType;
         //noinspection AssignmentToFunctionParameterJS,JSValidateTypes
-        SuperType = EnumerationValue;
+        superTypes = [EnumerationValue];
+      }
+      else if (SuperType.prototype.isInstanceOf && SuperType.prototype.isInstanceOf(EnumerationValue)) {
+        superTypes = [SuperType];
+      }
+      else {
+        // multiple inheritance
+        superTypes = [EnumerationValue, SuperType];
       }
 
-      var Enum = declare([SuperType], prototypeDef);
+      var Enum = declare(superTypes, prototypeDef);
       Enum._values = [];
 
       function create(instanceName, vDef) {

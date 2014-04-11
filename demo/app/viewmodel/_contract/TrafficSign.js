@@ -14,11 +14,11 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_contract/EnumerationValue", "../TrafficSign",
+define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_contract/EnumerationValue", "ppwcode-vernacular-semantics/_contract/ComparableValue", "../TrafficSign",
         "ppwcode-vernacular-semantics/_util/contracts/doh"],
-  function(declare, EnumerationValueContract, TrafficSign, doh) {
+  function(declare, EnumerationValueContract, ComparableValueContract, TrafficSign, doh) {
 
-    return declare([EnumerationValueContract], {
+    return declare([EnumerationValueContract, ComparableValueContract], {
 
       SubjectType: TrafficSign,
 

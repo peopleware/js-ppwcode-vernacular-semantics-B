@@ -1,6 +1,6 @@
-define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "./EnumerationValueTypeCaseFactory",
+define(["dojo/_base/declare", "../EnumerationValue", "../ComparableValue", "./ValueCaseFactory", "./EnumerationValueTypeCaseFactory",
         "dojo/_base/lang", "../_contract/EnumerationValue", "module"],
-  function(declare, EnumerationValue, ValueCaseFactory, EnumerationValueTypeCaseFactory,
+  function(declare, EnumerationValue, ComparableValue, ValueCaseFactory, EnumerationValueTypeCaseFactory,
            lang, Contract, module) {
 
 
@@ -14,7 +14,12 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "./En
     );
 
     var EnumerationValueStub2 = EnumerationValue.declare(
-      {},
+      ComparableValue,
+      {
+        compare: function(other) {
+          return this === other ? 0 : this._representation < other._representation ? -1 : +1;
+        }
+      },
       ["alpha", "beta", "gamma"],
       module.id + "_Stub2",
       "EnumerationValue_Stub2"
@@ -22,6 +27,7 @@ define(["dojo/_base/declare", "../EnumerationValue", "./ValueCaseFactory", "./En
 
 
     var EnumerationValueStub3 = EnumerationValue.declare(
+      EnumerationValueStub1,
       {},
       ["aleph"],
       module.id + "_Stub3"

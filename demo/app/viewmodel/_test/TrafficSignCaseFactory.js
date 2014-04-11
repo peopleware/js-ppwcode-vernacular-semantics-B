@@ -14,10 +14,10 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "ppwcode-vernacular-semantics/test/EnumerationValueCaseFactory",
+define(["dojo/_base/declare", "ppwcode-vernacular-semantics/test/EnumerationValueCaseFactory", "ppwcode-vernacular-semantics/test/ComparableValueCaseFactory",
         "../_contract/TrafficSign", "ppwcode-vernacular-semantics/EnumerationValue", "../TrafficSign",
        "module"],
-  function(declare, EnumerationValueCaseFactory, Contract, EnumerationValue, TrafficSign, module) {
+  function(declare, EnumerationValueCaseFactory, ComparableValueCaseFactory, Contract, EnumerationValue, TrafficSign, module) {
 
     var TrafficSignStub = EnumerationValue.declare(
       TrafficSign,
@@ -30,7 +30,7 @@ define(["dojo/_base/declare", "ppwcode-vernacular-semantics/test/EnumerationValu
       module.id + "_Stub1"
     );
 
-    return declare([EnumerationValueCaseFactory], {
+    return declare([ComparableValueCaseFactory, EnumerationValueCaseFactory], { // order of inheritance is important to get the methods of Comparable...
 
       contract: new Contract(),
 

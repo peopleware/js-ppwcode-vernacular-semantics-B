@@ -3,7 +3,6 @@
 ** semantics-dev (can run tests) -- or put runTest/dohConfig someplace else?
 ** demo
 
-* compare is not general; create ComparableValue or Comparable
 * list is empty note
 * contracten naar condities
 * add description, contract, test for keyExtension in format / parse

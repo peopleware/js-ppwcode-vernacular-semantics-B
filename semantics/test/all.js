@@ -15,15 +15,16 @@
  */
 
 define(["../_util/contracts/doh",
-        "./PpwCodeObjectCaseFactory", "./ValueCaseFactory",
+        "./PpwCodeObjectCaseFactory", "./ValueCaseFactory", "./ComparableValueCaseFactory",
         "./EnumerationValueConstructorCaseFactory", "./EnumerationValueCaseFactory"],
   function(doh,
-           PpwCodeObjectCaseFactory, ValueCaseFactory,
+           PpwCodeObjectCaseFactory, ValueCaseFactory, ComparableValueCaseFactory,
            EnumerationValueConstructorCaseFactory, EnumerationValueCaseFactory) {
 
     var kwargs = {methodTestCreator: doh.createMethodTest};
     new PpwCodeObjectCaseFactory(kwargs).createTypeTests();
     new ValueCaseFactory(kwargs).createTypeTests();
+    new ComparableValueCaseFactory(kwargs).createTypeTests();
     new EnumerationValueConstructorCaseFactory(kwargs).createTypeTests();
     new EnumerationValueCaseFactory(kwargs).createTypeTests();
   }

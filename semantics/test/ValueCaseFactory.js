@@ -16,10 +16,6 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value"
         return this.inherited(arguments) && (other._data === this._data);
       },
 
-      compare: function(/*Value*/ other) {
-        return this._data < other._data ? -1 : (this._data === other._data ? 0 : +1);
-      },
-
       getValue: function() {
         return this._data;
       }
@@ -163,19 +159,6 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value"
             factories: [
               function() {return {data: "CONSTRUCTOR TEST"};}
             ]
-          }
-        ];
-      },
-
-      $compare: function() {
-        return [
-          this.subjectFactories(),
-          {
-            name: "other",
-            factories: [
-              "$this",
-              "$this()"
-            ].concat(this.otherOfSameTypeFactories())
           }
         ];
       },

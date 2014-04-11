@@ -14,12 +14,13 @@
  limitations under the License.
  */
 
-define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string", "module"],
-  function (require, EnumerationValue, string, module) {
+define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "ppwcode-vernacular-semantics/ComparableValue", "dojo/string", "module"],
+  function (require, EnumerationValue, ComparableValue, string, module) {
 
     var imgPathTemplate = "./img/${0}/${1}.jpg";
 
     var TrafficSign = EnumerationValue.declare(
+      ComparableValue,
       {
 
         _c_invar: [
