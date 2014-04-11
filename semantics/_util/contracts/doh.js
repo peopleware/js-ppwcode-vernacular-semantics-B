@@ -19,15 +19,6 @@ define(["doh/main", "dojo/_base/lang"],
 
     console.log("Loading ppwcode contracts doh extension");
 
-//    var InvariantViolationError = declare(null, {
-//      instance: null,
-//      invariant: null,
-//      constructor: function(instance, invariant) {
-//        this.instance = instance;
-//        this.invariant = invariant;
-//      }
-//    });
-
     doh._flattenInvars = function(context, /*Array*/ a, /*Array*/ acc) {
       doh.isNot(null, context);
       doh.isNot(null, a);
