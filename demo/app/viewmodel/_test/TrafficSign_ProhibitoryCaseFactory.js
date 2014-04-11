@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "./TrafficSign_RegulatoryCaseFactory", "../_contract/TrafficSign_Mandatory1"],
+define(["dojo/_base/declare", "./TrafficSign_RegulatoryCaseFactory", "../_contract/TrafficSign_Prohibitory"],
   function(declare, TrafficSign_RegulatoryCaseFactory, Contract) {
 
     return declare([TrafficSign_RegulatoryCaseFactory], {
