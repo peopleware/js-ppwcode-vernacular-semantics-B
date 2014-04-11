@@ -58,7 +58,7 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
       module.id + "_Regulatory"
     );
 
-    TrafficSign.MANDATORY = EnumerationValue.declare(
+    TrafficSign.Mandatory = EnumerationValue.declare(
       TrafficSign.Regulatory,
       {typeDir: "regulatory/mandatory"},
       [
@@ -69,10 +69,10 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
         {representation: "roundabout", filename: "611.1"},
         {representation: "pass_either_side", filename: "611"}
       ],
-      module.id + "_MANDATORY"
+      module.id + "_Mandatory"
     );
 
-    TrafficSign.PROHIBITORY = EnumerationValue.declare(
+    TrafficSign.Prohibitory = EnumerationValue.declare(
       TrafficSign.Regulatory,
       {typeDir: "regulatory/prohibitory"},
       [
@@ -90,10 +90,10 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
         {representation: "max_speed_50", filename: "670V50"},
         {representation: "max_speed_60", filename: "670V60"}
       ],
-      module.id + "_PROHIBITORY"
+      module.id + "_Prohibitory"
     );
 
-    TrafficSign.WARNING = EnumerationValue.declare(
+    TrafficSign.Warning = EnumerationValue.declare(
       TrafficSign.Regulatory,
       {typeDir: "regulatory/warning"},
       [
@@ -108,16 +108,16 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
         {representation: "slippery_road_ahead", filename: "557"}
 
       ],
-      module.id + "_WARNING"
+      module.id + "_Warning"
     );
 
     TrafficSign.Regulatory.allValues = function() {
-      return TrafficSign.MANDATORY.values()
-        .concat(TrafficSign.PROHIBITORY.values())
-        .concat(TrafficSign.WARNING.values());
+      return TrafficSign.Mandatory.values()
+        .concat(TrafficSign.Prohibitory.values())
+        .concat(TrafficSign.Warning.values());
     };
 
-    TrafficSign.DIRECTION = EnumerationValue.declare(
+    TrafficSign.Direction = EnumerationValue.declare(
       TrafficSign,
       {typeDir: "direction"},
       [
@@ -129,12 +129,12 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
         {representation: "services", filename: "2314.1"},
         {representation: "parking", filename: "2507"}
       ],
-      module.id + "_DIRECTION"
+      module.id + "_Direction"
     );
 
     TrafficSign.allValues = function() {
       return TrafficSign.Regulatory.allValues()
-        .concat(TrafficSign.DIRECTION.values());
+        .concat(TrafficSign.Direction.values());
     };
 
     return TrafficSign;

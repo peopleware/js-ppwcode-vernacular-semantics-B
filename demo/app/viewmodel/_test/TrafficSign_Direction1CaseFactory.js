@@ -14,12 +14,21 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "./TrafficSign_RegulatoryCaseFactory", "../_contract/TrafficSign_MANDATORY"],
-  function(declare, TrafficSign_RegulatoryCaseFactory, Contract) {
+define(["dojo/_base/declare", "./TrafficSignCaseFactory", "../_contract/TrafficSign_Direction1"],
+  function(declare, TrafficSignCaseFactory, Contract) {
 
-    return declare([TrafficSign_RegulatoryCaseFactory], {
+    return declare([TrafficSignCaseFactory], {
 
-      contract: new Contract()
+      contract: new Contract(),
+
+      typeSubjectFactories: function() {
+        var SubjectType = this.contract.SubjectType;
+        return [function() {return SubjectType;}];
+      },
+
+      subjectFactories: function() {
+        return this.contract.SubjectType.values();
+      }
 
     });
 
