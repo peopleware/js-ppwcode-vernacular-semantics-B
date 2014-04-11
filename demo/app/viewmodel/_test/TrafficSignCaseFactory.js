@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "ppwcode-vernacular-semantics/test/EnumerationValueCaseFactory", "ppwcode-vernacular-semantics/test/ComparableValueCaseFactory",
+define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_test/EnumerationValueCaseFactory", "ppwcode-vernacular-semantics/_test/ComparableValueCaseFactory",
         "../_contract/TrafficSign", "ppwcode-vernacular-semantics/EnumerationValue", "../TrafficSign",
        "module"],
   function(declare, EnumerationValueCaseFactory, ComparableValueCaseFactory, Contract, EnumerationValue, TrafficSign, module) {
