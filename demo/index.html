@@ -50,10 +50,12 @@
 
   <script>
     require(["dojo/parser", "dijit/registry", "dojo/store/Memory", "dojo/_base/lang", "demo/viewmodel/TrafficSign",
+             "ppwcode-vernacular-semantics/_util/js",
 
              "demo/widget/combo/Combo", "demo/widget/symbol/SymbolList",
              "dojo/domReady!"],
-      function (parser, registry, Memory, lang, TrafficSign) {
+      function (parser, registry, Memory, lang, TrafficSign,
+                js) {
 
         function assert(condition, msgFunction) {
           if (!condition) {
@@ -93,11 +95,7 @@
               );
               trafficSignList.addSymbol(trafficSign);
             });
-            trafficSignSelection.set("sort", function(one, other) {
-              return one ?
-                     (other ? one.compare(other) : +1) :
-                     (other ? -1 : 0);
-            });
+            trafficSignSelection.set("sort", js.sortComparable);
             trafficSignSelection.set("store", store);
           },
           function (err) {

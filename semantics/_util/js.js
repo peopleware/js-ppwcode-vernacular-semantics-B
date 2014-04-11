@@ -124,7 +124,6 @@ define([],
       return n % 1 === 0;
     }
 
-//
 //    function substitute(/*String*/ str, /*Object*/ context) {
 //      // summary:
 //      //  All occurrences of "${...}$" in `str` are replaced by the result of the
@@ -149,36 +148,36 @@ define([],
 //        }
 //      );
 //    }
-//
-//    function sortComparable(/*Object*/ c1, /*Object*/ c2) {
-//      // summary:
-//      //   A sort function for objects that have a compare function.
-//      //   undefined < null < the compare function of the objects
-//
-//      return c1 === undefined ? (
-//               c2 === undefined ? 0 : -1
-//             )
-//             : (
-//               c1 === null ? (
-//                 c2 === undefined ?
-//                   +1 :
-//                   c2 === null ? 0 : -1
-//               )
-//               : (
-//                 !c2 ? +1 : c1.compare(c2)
-//               )
-//             );
-//    }
-//
-//    function sortReversed(/*Function*/ sort) {
-//      // summary:
-//      //   Produces a compare function that does the reverse sort defined by sort.
-//
-//      return function(o1, o2) {
-//        return -sort(o1, o2);
-//      }
-//    }
-//
+
+    function sortComparable(/*Object*/ c1, /*Object*/ c2) {
+      // summary:
+      //   A sort function for objects that have a compare function.
+      //   undefined < null < the compare function of the objects
+
+      return c1 === undefined ? (
+               c2 === undefined ? 0 : -1
+             )
+             : (
+               c1 === null ? (
+                 c2 === undefined ?
+                   +1 :
+                   c2 === null ? 0 : -1
+               )
+               : (
+                 !c2 ? +1 : c1.compare(c2)
+               )
+             );
+    }
+
+    function sortReversed(/*Function*/ sort) {
+      // summary:
+      //   Produces a compare function that does the reverse sort defined by sort.
+
+      return function(o1, o2) {
+        return -sort(o1, o2);
+      };
+    }
+
 //    function sortVersionNumbers(/*Array*/ arrayToSort) {
 //      /**
 //       * Compares two software version numbers (e.g. "1.7.1" or "1.2b").
@@ -334,11 +333,11 @@ define([],
       getAllKeys: getAllKeys,
       getAllPropertyNames: getAllPropertyNames,
       isInt: isInt,
-      nub: nub
+      nub: nub,
 //      flatten: flatten,
 //      substitute: substitute,
-//      sortComparable: sortComparable,
-//      sortReversed: sortReversed,
+      sortComparable: sortComparable,
+      sortReversed: sortReversed
 //      sortVersionNumbers: sortVersionNumbers,
 //      string2CharCode: string2CharCode,
 //      charCode2String: charCode2String,
