@@ -39,6 +39,8 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",  "ppwcode-vernacular-semantic
       postCreate: function() {
         this.inherited(arguments);
         domClass.add(this.domNode, "symbolList");
+        domConstruct.create("li", {className: "empty", innerHTML: "No Entries"}, this.domNode);
+        this._updateSymbolWidgets(this.get("symbols") || [], []);
       },
 
       _getSymbolsAttr: function() {
@@ -90,6 +92,7 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",  "ppwcode-vernacular-semantic
           var widget = new SymbolWidget({symbol: symbol}, li);
           self._widgets.push({symbol: symbol, widget: widget});
         });
+        domClass.toggle(this.domNode, "empty", self._widgets.length <= 0);
       }
 
     });

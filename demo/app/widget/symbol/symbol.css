@@ -75,4 +75,16 @@ ul.symbolList li:last-child {
   margin-right: 0;
 }
 
+ul.symbolList li.empty {
+  text-align: center;
+  font-style: italic;
+  font-size: 120%;
+  color: darkgray;
+  display: none;
+}
+
+ul.symbolList.empty li.empty {
+  display: block;
+}
+
 
