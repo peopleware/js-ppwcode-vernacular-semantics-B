@@ -22,9 +22,14 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
     var TrafficSign = EnumerationValue.declare(
       {
 
+        _c_invar: [
+          function() {return typeof this.typeDir === "string";},
+          function() {return !this.filename || typeof this.filename === "string";}
+        ],
+
         // _dir: String
         //   Directory in base path.
-        _typeDir: null,
+        typeDir: null,
 
         // filename: String
         filename: null,
@@ -38,7 +43,7 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
         },
 
         getUrl: function() {
-          return require.toUrl(string.substitute(imgPathTemplate, [this._typeDir, this.filename])).toString();
+          return this.filename && require.toUrl(string.substitute(imgPathTemplate, [this.typeDir, this.filename])).toString();
         }
 
       },
@@ -48,17 +53,14 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
 
     TrafficSign.Regulatory = EnumerationValue.declare(
       TrafficSign,
-      {
-        name: null,
-        code: null
-      },
+      {},
       null,
       module.id + "_Regulatory"
     );
 
     TrafficSign.MANDATORY = EnumerationValue.declare(
       TrafficSign.Regulatory,
-      {_typeDir: "regulatory/mandatory"},
+      {typeDir: "regulatory/mandatory"},
       [
         {representation: "proceed_left", filename: "606"},
         {representation: "proceed_right", filename: "606B"},
@@ -72,7 +74,7 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
 
     TrafficSign.PROHIBITORY = EnumerationValue.declare(
       TrafficSign.Regulatory,
-      {_typeDir: "regulatory/prohibitory"},
+      {typeDir: "regulatory/prohibitory"},
       [
         {representation: "stop", filename: "601.1"},
         {representation: "give_way", filename: "602"},
@@ -93,7 +95,7 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
 
     TrafficSign.WARNING = EnumerationValue.declare(
       TrafficSign.Regulatory,
-      {_typeDir: "regulatory/warning"},
+      {typeDir: "regulatory/warning"},
       [
         {representation: "crossroad_ahead", filename: "504.1"},
         {representation: "side_road_ahead_right", filename: "506.1"},
@@ -117,7 +119,7 @@ define(["require", "ppwcode-vernacular-semantics/EnumerationValue", "dojo/string
 
     TrafficSign.DIRECTION = EnumerationValue.declare(
       TrafficSign,
-      {_typeDir: "direction"},
+      {typeDir: "direction"},
       [
         {representation: "zoo", filename: "2202"},
         {representation: "village", filename: "2203"},

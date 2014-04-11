@@ -25,7 +25,12 @@ define(["dojo/_base/declare", "ppwcode-vernacular-semantics/_contract/Enumeratio
       $getUrl: function(/*TrafficSign*/ subject) {
         var result = subject.getUrl();
         doh.is("string", typeof result);
-        doh.t(result.indexOf("/" + subject._typeDir + "/" + subject.filename + ".jpg") >= 0);
+        if (subject.filename) {
+          doh.t(result.indexOf("/" + subject.typeDir + "/" + subject.filename + ".jpg") >= 0);
+        }
+        else {
+          doh.f(result);
+        }
         return result;
       }
 

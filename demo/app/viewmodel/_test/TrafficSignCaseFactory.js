@@ -22,7 +22,7 @@ define(["dojo/_base/declare", "ppwcode-vernacular-semantics/test/EnumerationValu
     var TrafficSignStub = EnumerationValue.declare(
       TrafficSign,
       {
-        _typeDir: "DIR_NAME"
+        typeDir: "DIR_NAME"
       },
       [
         {representation: "repr", filename: "reprFILENAME"}
