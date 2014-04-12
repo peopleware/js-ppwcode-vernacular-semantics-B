@@ -275,6 +275,13 @@ define(["doh/main", "dojo/_base/lang"],
       }
     };
 
+    doh.createTypeTest = function(/*Function*/ SubjectType, /*String[]*/ methodNames, /*Function*/ createMethodTests) {
+      methodNames.forEach(function(methodName) {
+        createMethodTests(methodName.slice(1), doh.createMethodTest);
+      });
+    };
+
     return doh;
+
   }
 );

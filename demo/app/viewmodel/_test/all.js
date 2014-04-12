@@ -31,7 +31,7 @@ define(["ppwcode-vernacular-semantics/_util/contracts/doh",
            TrafficSign_WarningCaseFactory,
            TrafficSign_DirectionCaseFactory) {
 
-    var kwargs = {methodTestCreator: doh.createMethodTest};
+    var kwargs = {typeTestCreator: doh.createTypeTest};
     new TrafficSignCaseFactory(kwargs).createTypeTests();
     new TrafficSignConstructorCaseFactory(kwargs).createTypeTests();
     new TrafficSign_RegulatoryConstructorCaseFactory(kwargs).createTypeTests();

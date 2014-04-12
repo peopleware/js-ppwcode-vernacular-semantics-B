@@ -21,7 +21,7 @@ define(["../_util/contracts/doh",
            PpwCodeObjectCaseFactory, ValueCaseFactory, ComparableValueCaseFactory,
            EnumerationValueConstructorCaseFactory, EnumerationValueCaseFactory) {
 
-    var kwargs = {methodTestCreator: doh.createMethodTest};
+    var kwargs = {typeTestCreator: doh.createTypeTest};
     new PpwCodeObjectCaseFactory(kwargs).createTypeTests();
     new ValueCaseFactory(kwargs).createTypeTests();
     new ComparableValueCaseFactory(kwargs).createTypeTests();

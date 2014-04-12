@@ -33,7 +33,7 @@ define(["dojo/_base/declare", "../js", "dojo/_base/lang"],
       //   Instance of the contract we are supplying cases for.
       contract: null,
 
-      methodTestCreator: null,
+      typeTestCreator: null,
 
       // typeCaseFactory: CaseFactories
       //   Optional instance for testing the type (the Constructor function object) itself.
@@ -43,7 +43,7 @@ define(["dojo/_base/declare", "../js", "dojo/_base/lang"],
         lang.mixin(this, kwargs);
       },
 
-      createMethodTests: function(methodName) {
+      createMethodTests: function(methodName, methodTestCreator) {
 
         var self = this;
         var remainingArgFactories = self["$" + methodName]();
@@ -52,11 +52,12 @@ define(["dojo/_base/declare", "../js", "dojo/_base/lang"],
 
         function fillTests() {
           if (remainingArgFactories.length <= 0) {
-            self.methodTestCreator(
+            methodTestCreator(
               self.contract.SubjectType,
               methodName,
               postconditions,
-              partialInstanceArgFactories);
+              partialInstanceArgFactories
+            );
           }
           else {
             var nextArg = remainingArgFactories.shift();
@@ -94,15 +95,16 @@ define(["dojo/_base/declare", "../js", "dojo/_base/lang"],
           this.typeCaseFactory.createTypeTests();
         }
         var self = this;
-        js.getAllPropertyNames(self.contract)
-          .filter(function(methodName) {
-            return methodName[0] === "$" &&
-                   (self.contract[methodName] instanceof Array ||
-                    (self.contract[methodName].nominal instanceof Array && self.contract[methodName].exceptional instanceof Array));
-          })
-          .forEach(function(methodName) {
-            self.createMethodTests(methodName.slice(1));
-          });
+        self.typeTestCreator(
+          self.contract.SubjectType,
+          js.getAllPropertyNames(self.contract)
+            .filter(function(methodName) {
+              return methodName[0] === "$" &&
+                     (self.contract[methodName] instanceof Array ||
+                      (self.contract[methodName].nominal instanceof Array && self.contract[methodName].exceptional instanceof Array));
+            }),
+          lang.hitch(self, self.createMethodTests)
+        );
       }
 
 

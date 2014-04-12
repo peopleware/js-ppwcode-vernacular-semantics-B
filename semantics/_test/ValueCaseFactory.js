@@ -103,7 +103,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value"
       createTypeCaseFactory: function(kwargs) {
         return new TransformerCaseFactory({
           SubjectType: this.contract.SubjectType,
-          methodTestCreator: kwargs.methodTestCreator,
+          typeTestCreator: kwargs.typeTestCreator,
           subjectFactories: lang.hitch(this, this.typeSubjectFactories),
           valueFactories: lang.hitch(this, this.subjectFactories),
           formatOptionsFactories: lang.hitch(this, this.formatOptionsFactories)

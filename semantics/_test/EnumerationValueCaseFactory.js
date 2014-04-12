@@ -44,7 +44,7 @@ define(["dojo/_base/declare", "../EnumerationValue", "../ComparableValue", "./Va
       createTypeCaseFactory: function(kwargs) {
         return new EnumerationValueTypeCaseFactory({
           SubjectType: this.contract.SubjectType,
-          methodTestCreator: kwargs.methodTestCreator,
+          typeTestCreator: kwargs.typeTestCreator,
           subjectFactories: lang.hitch(this, this.typeSubjectFactories),
           valueFactories: lang.hitch(this, this.subjectFactories),
           formatOptionsFactories: lang.hitch(this, this.formatOptionsFactories)

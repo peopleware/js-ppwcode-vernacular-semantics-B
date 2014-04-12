@@ -229,30 +229,39 @@ define(["intern!object", 'intern/chai!assert', "dojo/_base/lang",
 
     var testCounter = 0;
 
-    function createMethodTest(Type, methodName, postConditions, argFactories) {
-      if (argFactories.length > 0) {
-        var test = new Test({
-          methodName: methodName,
-          name: "(" + testCounter + ") " + methodName + " - " +
-                argFactories.map(function(af) {return af.argRepr;}).join("; "),
-          argFactories: argFactories.slice(), // lock a copy in scope of this test
-          nominalPostConditions: postConditions.nominal,
-          exceptionalPostConditions: postConditions.exceptional
-        });
-        var suite = {
-          name: groupId(Type)
-        };
-        suite["#" + test.name] = lang.hitch(test, test.runTest);
-        registerSuite(suite);
-        testCounter++;
-      }
+    function createTypeTest(/*Function*/ SubjectType, /*String[]*/ methodNames, /*Function*/ createMethodTests) {
+      var suite = {
+        name: groupId(SubjectType)
+      };
+      methodNames.forEach(function(methodName) {
+        createMethodTests(
+          methodName.slice(1),
+          function(Type, methodName, postConditions, argFactories) {
+            if (argFactories.length > 0) {
+              var test = new Test({
+                methodName: methodName,
+                name: "(" + testCounter + ") " + methodName + " - " +
+                      argFactories.map(function(af) {return af.argRepr;}).join("; "),
+                argFactories: argFactories.slice(), // lock a copy in scope of this test
+                nominalPostConditions: postConditions.nominal,
+                exceptionalPostConditions: postConditions.exceptional
+              });
+              suite[test.name] = lang.hitch(test, test.runTest);
+              testCounter++;
+            }
+          }
+        );
+      });
+      registerSuite(suite);
     }
 
-    var kwargs = {methodTestCreator: createMethodTest};
+    var kwargs = {
+      typeTestCreator: createTypeTest
+    };
     new PpwCodeObjectCaseFactory(kwargs).createTypeTests();
     new ValueCaseFactory(kwargs).createTypeTests();
     new ComparableValueCaseFactory(kwargs).createTypeTests();
-    new EnumerationValueConstructorCaseFactory(kwargs).createTypeTests();
+//    new EnumerationValueConstructorCaseFactory(kwargs).createTypeTests();
     new EnumerationValueCaseFactory(kwargs).createTypeTests();
   }
 );
