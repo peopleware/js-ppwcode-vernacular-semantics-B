@@ -235,6 +235,9 @@ define(["intern!object", 'intern/chai!assert', "dojo/_base/lang",
       };
       methodNames.forEach(function(methodName) {
         var methodSuite = {};
+        if (typeSuite[methodName]) {
+          throw "ERROR: already method suite for " + methodName + " in suite " + typeSuite.name;
+        }
         typeSuite[methodName] = methodSuite;
         createMethodTests(
           methodName.slice(1),
