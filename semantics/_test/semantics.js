@@ -16,10 +16,10 @@
 
 define(["intern!object", 'intern/chai!assert', "dojo/_base/lang",
         "./PpwCodeObjectCaseFactory", "./ValueCaseFactory", "./ComparableValueCaseFactory",
-        "./EnumerationValueConstructorCaseFactory", "./EnumerationValueCaseFactory"],
+        "./EnumerationValueConstructorCaseFactory", "./EnumerationValueCaseFactory", "dojo/has"],
   function(registerSuite, assert, lang,
            PpwCodeObjectCaseFactory, ValueCaseFactory, ComparableValueCaseFactory,
-           EnumerationValueConstructorCaseFactory, EnumerationValueCaseFactory) {
+           EnumerationValueConstructorCaseFactory, EnumerationValueCaseFactory, has) {
 
     function flattenConditions(context, args, /*Array*/ a, /*Array*/ acc) {
 
@@ -260,7 +260,14 @@ define(["intern!object", 'intern/chai!assert', "dojo/_base/lang",
       registerSuite(typeSuite);
     }
 
-    process.maxTickDepth = 10000; // fix problem with node 0.10
+    if (has("host-node")) {
+      console.warn("working around limitation in node 0.10");
+      //noinspection MagicNumberJS
+      process.maxTickDepth = 10000; // fix problem with node 0.10
+    }
+    else {
+      console.info("not working on node; no workaround needed");
+    }
 
     var kwargs = {
       typeTestCreator: createTypeTest
