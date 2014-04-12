@@ -191,11 +191,11 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value"
               },
               {
                 name: "not-a-value Function",
-                factory: function() {return window.open;}
+                factory: function() {return function() {return "function is not a value"};}
               },
               {
                 name: "not-a-value object",
-                factory: function() {return window;}
+                factory: function() {return {_data: "not a value"};}
               }
             ].concat(this.otherOfSameTypeFactories())
           }
