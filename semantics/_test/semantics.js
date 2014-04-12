@@ -230,29 +230,31 @@ define(["intern!object", 'intern/chai!assert', "dojo/_base/lang",
     var testCounter = 0;
 
     function createTypeTest(/*Function*/ SubjectType, /*String[]*/ methodNames, /*Function*/ createMethodTests) {
-      var suite = {
+      var typeSuite = {
         name: groupId(SubjectType)
       };
       methodNames.forEach(function(methodName) {
+        var methodSuite = {};
+        typeSuite[methodName] = methodSuite;
         createMethodTests(
           methodName.slice(1),
           function(Type, methodName, postConditions, argFactories) {
             if (argFactories.length > 0) {
               var test = new Test({
                 methodName: methodName,
-                name: "(" + testCounter + ") " + methodName + " - " +
+                name: "(" + testCounter + ") " +
                       argFactories.map(function(af) {return af.argRepr;}).join("; "),
                 argFactories: argFactories.slice(), // lock a copy in scope of this test
                 nominalPostConditions: postConditions.nominal,
                 exceptionalPostConditions: postConditions.exceptional
               });
-              suite[test.name] = lang.hitch(test, test.runTest);
+              methodSuite[test.name] = lang.hitch(test, test.runTest);
               testCounter++;
             }
           }
         );
       });
-      registerSuite(suite);
+      registerSuite(typeSuite);
     }
 
     var kwargs = {
