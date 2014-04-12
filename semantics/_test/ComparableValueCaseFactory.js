@@ -1,5 +1,5 @@
-define(["dojo/_base/declare", "./ValueCaseFactory", "../_contract/ComparableValue", "./TransformerCaseFactory", "dojo/_base/lang", "module"],
-  function(declare, ValueCaseFactory, Contract, TransformerCaseFactory, lang, module) {
+define(["dojo/_base/declare", "./ValueCaseFactory", "../_contract/ComparableValue", "module"],
+  function(declare, ValueCaseFactory, Contract, module) {
 
 
 

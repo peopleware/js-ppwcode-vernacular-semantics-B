@@ -51,8 +51,6 @@ define(["dojo/_base/declare", "./_exceptions/SemanticException"],
           this.options === other.options;
       }
 
-      // TODO need JSON and toString?
-
     });
 
     return ParseException;

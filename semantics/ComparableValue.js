@@ -45,7 +45,7 @@ define(["dojo/_base/declare", "./Value","module"],
           //   choose one option over the other. In practice, sometimes we need null-elements last, sometimes
           //   we need null-elements first. Furthermore, we cannot uphold the above requirement,
           //   since `null` nor `undefined` can be used as the left-side when calling `compare`.
-          //   "Wovon man nicht sprechen kann, darüber mu§ man schweigen."
+          //   "Wovon man nicht sprechen kann, darüber muß man schweigen."
           //   (http://en.wikisource.org/wiki/Tractatus_Logico-Philosophicus/7): the only sensible option
           //   is to let this to the user, when needed.
           //

@@ -72,7 +72,7 @@ define(["dojo/_base/declare", "./TransformerCaseFactory", "../_contract/Enumerat
            name: "lang",
            factories: [null, undefined, "", "nl", "ru"]
          }
-       ]
+       ];
      }
 
    });
