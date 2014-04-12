@@ -257,13 +257,15 @@ define(["intern!object", 'intern/chai!assert', "dojo/_base/lang",
       registerSuite(typeSuite);
     }
 
+    process.maxTickDepth = 10000; // fix problem with node 0.10
+
     var kwargs = {
       typeTestCreator: createTypeTest
     };
     new PpwCodeObjectCaseFactory(kwargs).createTypeTests();
     new ValueCaseFactory(kwargs).createTypeTests();
     new ComparableValueCaseFactory(kwargs).createTypeTests();
-//    new EnumerationValueConstructorCaseFactory(kwargs).createTypeTests();
+    new EnumerationValueConstructorCaseFactory(kwargs).createTypeTests();
     new EnumerationValueCaseFactory(kwargs).createTypeTests();
   }
 );
