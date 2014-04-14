@@ -14,9 +14,9 @@
  limitations under the License.
  */
 
-define(["../_util/contracts/doh",
-        "./PpwCodeObjectCaseFactory", "./ValueCaseFactory", "./ComparableValueCaseFactory",
-        "./EnumerationValueConstructorCaseFactory", "./EnumerationValueCaseFactory"],
+define(["../../_util/contracts/doh",
+        "../PpwCodeObjectCaseFactory", "../ValueCaseFactory", "../ComparableValueCaseFactory",
+        "../EnumerationValueConstructorCaseFactory", "../EnumerationValueCaseFactory"],
   function(doh,
            PpwCodeObjectCaseFactory, ValueCaseFactory, ComparableValueCaseFactory,
            EnumerationValueConstructorCaseFactory, EnumerationValueCaseFactory) {

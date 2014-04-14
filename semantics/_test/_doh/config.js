@@ -38,7 +38,7 @@
   ];
 
   window.require["ppwcode-contracts-doh-initialization-done"] = true;
-  console.log("loaded _dohConfig.js");
+  console.log("loaded config.js");
 
   console.log("starting load of dojo.js");
   var e = document.createElement("script");
