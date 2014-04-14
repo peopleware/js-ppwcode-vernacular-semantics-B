@@ -15,8 +15,8 @@
  */
 
 define(["intern!object", 'intern/chai!assert', "dojo/_base/lang",
-        "./PpwCodeObjectCaseFactory", "./ValueCaseFactory", "./ComparableValueCaseFactory",
-        "./EnumerationValueConstructorCaseFactory", "./EnumerationValueCaseFactory", "dojo/has"],
+        "../PpwCodeObjectCaseFactory", "../ValueCaseFactory", "../ComparableValueCaseFactory",
+        "../EnumerationValueConstructorCaseFactory", "../EnumerationValueCaseFactory", "dojo/has"],
   function(registerSuite, assert, lang,
            PpwCodeObjectCaseFactory, ValueCaseFactory, ComparableValueCaseFactory,
            EnumerationValueConstructorCaseFactory, EnumerationValueCaseFactory, has) {

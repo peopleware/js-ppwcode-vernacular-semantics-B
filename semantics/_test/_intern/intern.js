@@ -49,8 +49,8 @@ define({
 	// The desired AMD loader to use when running unit tests (client.html/client.js). Omit to use the default Dojo
 	// loader
 	useLoader: {
-		"host-node": "dojo/dojo",
-		"host-browser": "lib/dojo/dojo"
+//		"host-node": "dojo/dojo",
+//		"host-browser": "../../lib/dojo/dojo/dojo"
 	},
 
 	// Configuration options for the module loader; any AMD configuration options supported by the specified AMD loader
@@ -64,7 +64,7 @@ define({
 	},
 
 	// Non-functional test suite(s) to run in each browser
-	suites: ["ppwcode-vernacular-semantics/_test/semantics"],
+	suites: ["ppwcode-vernacular-semantics/_test/_intern/all"],
 
 	// Functional test suite(s) to run in each browser once non-functional tests are completed
 	functionalSuites: [ /* "myPackage/tests/functional" */ ],

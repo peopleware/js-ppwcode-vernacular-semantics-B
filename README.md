@@ -48,7 +48,7 @@ This will install the necessary node modules in ./node-modules.
 
 To run the tests:
 * execute in this directory
-> node node_modules/intern/client config=semantics/_test/intern
+> node node_modules/intern/client config=semantics/_test/_intern/all
 
 
 
