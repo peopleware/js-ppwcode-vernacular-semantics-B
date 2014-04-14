@@ -2,4 +2,4 @@
 lib/dojox/
 atlassian-ide-plugin.xml
 demo/img/
-semantics/node_modules/
+node_modules

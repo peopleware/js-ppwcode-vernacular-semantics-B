@@ -42,15 +42,15 @@ define({
 	// in the SAUCE_USERNAME and SAUCE_ACCESS_KEY environment variables unless you are sure you will NEVER be
 	// publishing this configuration file somewhere
 	webdriver: {
-		host: 'localhost',
+		host: "localhost",
 		port: 4444
 	},
 
 	// The desired AMD loader to use when running unit tests (client.html/client.js). Omit to use the default Dojo
 	// loader
 	useLoader: {
-		'host-node': 'dojo/dojo',
-		'host-browser': 'node_modules/dojo/dojo.js'
+		"host-node": "dojo/dojo",
+		"host-browser": "lib/dojo/dojo"
 	},
 
 	// Configuration options for the module loader; any AMD configuration options supported by the specified AMD loader
@@ -58,8 +58,8 @@ define({
 	loader: {
 		// Packages that should be registered with the loader in each testing environment
 		packages: [
-      {name: "dojo",   location: "../lib/dojo/dojo"},
-      {name: "ppwcode-vernacular-semantics",   location: "../semantics"}
+      {name: "dojo",   location: "lib/dojo/dojo"},
+      {name: "ppwcode-vernacular-semantics",   location: "semantics"}
     ]
 	},
 
@@ -67,8 +67,8 @@ define({
 	suites: ["ppwcode-vernacular-semantics/_test/semantics"],
 
 	// Functional test suite(s) to run in each browser once non-functional tests are completed
-	functionalSuites: [ /* 'myPackage/tests/functional' */ ],
+	functionalSuites: [ /* "myPackage/tests/functional" */ ],
 
 	// A regular expression matching URLs to files that should not be included in code coverage analysis
-	excludeInstrumentation: /^_test\//
+	excludeInstrumentation: /^node_modules\/|^lib\/|^semantics\/_util\/|^semantics\/_exceptions\//
 });
