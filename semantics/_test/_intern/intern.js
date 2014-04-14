@@ -7,7 +7,7 @@ define({
 	proxyPort: 9000,
 
 	// A fully qualified URL to the Intern proxy
-	proxyUrl: 'http://localhost:9000/',
+	proxyUrl: "http://localhost:9000/",
 
 	// Default desired capabilities for all environments. Individual capabilities can be overridden by any of the
 	// specified browser environments in the `environments` array below as well. See
@@ -16,24 +16,63 @@ define({
 	// Note that the `build` capability will be filled in with the current commit ID from the Travis CI environment
 	// automatically
 	capabilities: {
-		'selenium-version': '2.39.0'
+		"selenium-version": "2.39.0"
 	},
 
 	// Browsers to run integration testing against. Note that version numbers must be strings if used with Sauce
 	// OnDemand. Options that will be permutated are browserName, version, platform, and platformVersion; any other
 	// capabilities options specified for an environment will be copied as-is
 	environments: [
-		{ browserName: 'internet explorer', version: '11', platform: 'Windows 8.1' },
-		{ browserName: 'internet explorer', version: '10', platform: 'Windows 8' },
-		{ browserName: 'internet explorer', version: '9', platform: 'Windows 7' },
-		{ browserName: 'firefox', version: '27', platform: [ 'OS X 10.6', 'Windows 7', 'Linux' ] },
-		{ browserName: 'chrome', version: '32', platform: [ 'OS X 10.6', 'Windows 7', 'Linux' ] },
-		{ browserName: 'safari', version: '6', platform: 'OS X 10.8' },
-		{ browserName: 'safari', version: '7', platform: 'OS X 10.9' }
+		{
+      browserName: "chrome",
+      version: "33",
+      platform: ["Windows 8.1", "Windows 8", "Windows 7", "OS X 10.9", "OS X 10.8", "Linux"]
+    },
+    {
+      browserName: "internet explorer",
+      version: "11",
+      platform: ["Windows 8.1", "Windows 7"]
+    },
+    {
+      browserName: "internet explorer",
+      version: "10",
+      platform: ["Windows 8", "Windows 7"]
+    },
+    {
+      browserName: "internet explorer",
+      version: "9",
+      platform: ["Windows 7"]
+    },
+    {
+      browserName: "firefox",
+      version: "28",
+      platform: [/*"Windows 8.1", "Windows 8", "Windows 7",*/ "OS X 10.9", "OS X 10.6", "Linux"]
+    },
+    {
+      browserName: "iphone",
+      version: "7.1",
+      platform: ["OS X 10.9"]
+    },
+    {
+      browserName: "ipad",
+      version: "7.1",
+      platform: ["OS X 10.9"]
+    },
+    {
+      browserName: "android",
+      version: "4.3",
+      platform: ["Linux"],
+      "device-type": "tablet"
+    },
+    {
+      browserName: "android",
+      version: "4.3",
+      platform: ["Linux"]
+    }
 	],
 
 	// Maximum number of simultaneous integration tests that should be executed on the remote WebDriver service
-	maxConcurrency: 3,
+	maxConcurrency: 2,
 
 	// Whether or not to start Sauce Connect before running tests
 	useSauceConnect: true,
