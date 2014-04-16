@@ -59,7 +59,7 @@
   left: -1px;
   width: 100%;
   display: none;
-  background: rgba(255, 255, 255, 0.80);
+  background: #FFF;
 }
 
 .combo .dgrid.opened {
@@ -85,4 +85,8 @@
   left: 5px;
   top: 5px;
   height: 20px;
+}
+
+.combo .dgrid .entry.dgrid-row-even {
+  background-color: #F0F9FF;
 }
