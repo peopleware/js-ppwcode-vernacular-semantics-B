@@ -25,6 +25,7 @@
   min-width: 50px;
   display: inline-block;
   text-align: center;
+  cursor: pointer; cursor: hand;
   opacity: 0; /* initial opacity */
 }
 

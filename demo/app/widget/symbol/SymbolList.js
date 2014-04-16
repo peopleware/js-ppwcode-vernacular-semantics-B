@@ -14,11 +14,11 @@
  limitations under the License.
  */
 
-define(["dojo/_base/declare", "dijit/_WidgetBase",  "ppwcode-vernacular-semantics/_util/contracts/_Mixin",
+define(["dojo/_base/declare", "dojo/_base/lang", "dijit/_WidgetBase",  "ppwcode-vernacular-semantics/_util/contracts/_Mixin",
         "./Symbol", "dojo/dom-class", "dojo/dom-construct",
 
         "xstyle/css!./symbol.css"],
-  function (declare, _WidgetBase, _ContractsMixin,
+  function (declare, lang, _WidgetBase, _ContractsMixin,
             SymbolWidget, domClass, domConstruct) {
 
     return declare([_WidgetBase, _ContractsMixin], {
@@ -88,11 +88,24 @@ define(["dojo/_base/declare", "dijit/_WidgetBase",  "ppwcode-vernacular-semantic
           []
         );
         added.forEach(function(symbol) {
-          var li = domConstruct.create("li", null, self.domNode);
+          var li = domConstruct.create("li", {title: "Click to remove", onclick: lang.hitch(self, self._removeSymbol, symbol)}, self.domNode);
           var widget = new SymbolWidget({symbol: symbol}, li);
           self._widgets.push({symbol: symbol, widget: widget});
         });
         domClass.toggle(this.domNode, "empty", self._widgets.length <= 0);
+      },
+
+      _removeSymbol: function(symbol) {
+        this._c_pre(function() {return !symbol || SymbolWidget.isSymbol(symbol);});
+
+        var symbols = this.get("symbols") || [];
+        if (symbol) {
+          var index = symbols.indexOf(symbol);
+          if (index >= 0) {
+            symbols.splice(index, 1);
+            this.set("symbols", symbols);
+          }
+        }
       }
 
     });
