@@ -24,14 +24,13 @@
   min-height: 50px;
   min-width: 50px;
   display: inline-block;
+  text-align: center;
   opacity: 0; /* initial opacity */
 }
 
 .symbol img {
   width: 50px; /* no height: keep ratio */
   top: 0;
-  /* center horizontally */
-  left: 50%;
   margin: 0;
 }
 
