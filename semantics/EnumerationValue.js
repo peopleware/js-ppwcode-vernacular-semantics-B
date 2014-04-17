@@ -265,7 +265,7 @@ define(["dojo/_base/declare", "./Value", "./ParseException",
 
     function enumDeclare(/*Function?*/ SuperType,
                          /*Object?*/ prototypeDef,
-                         /*Array|Object*/ valueDefinitions,
+                         /*Array|Object*/ valueDefinitions, //MUDO Isn't this an optional parameter? In case we make an abstract enum (example: TrafficSign.js)
                          /*module|String?*/ mod,
                          /*String?*/ bundleName) {
       /*pre: no duplicate representations*/
