@@ -97,8 +97,8 @@ define({
 	loader: {
 		// Packages that should be registered with the loader in each testing environment
 		packages: [
-      {name: "dojo",   location: "lib/dojo/dojo"},
-      {name: "ppwcode-vernacular-semantics",   location: "semantics"}
+      {name: "dojo",   location: "../../../../lib/dojo/dojo"},
+      {name: "ppwcode-vernacular-semantics",   location: "../../../../"}
     ]
 	},
 
