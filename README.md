@@ -26,6 +26,16 @@ a while.
 
 
 
+Dependencies
+------------
+When using this library in your project, make sure to include these
+dependencies:
+
+* dojo/dojo
+* dojo/util
+
+dojo/util is only needed to run the unit tests.
+
 
 
 Tests
