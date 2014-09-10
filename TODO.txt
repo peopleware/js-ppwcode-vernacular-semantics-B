@@ -1,3 +1,5 @@
+* used in js-ppwcode-dev
+
 * add description, contract, test for keyExtension in format / parse
 
 * npm? cpm? keep git modules?
