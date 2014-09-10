@@ -1,4 +1,4 @@
-* used in js-ppwcode-dev
+* used in js-ppwcode-dev; this TODO was added as a test
 
 * add description, contract, test for keyExtension in format / parse
 
