@@ -42,7 +42,7 @@ The accompanying demo application can be found on
 Tests
 -----
 Tests are generated automatically for a given test framework.
-Test setup is done assuming the dependent libaries are next to this library:
+Test setup is done assuming the dependent libraries are next to this library:
 * `../dojo`
 
 Setup is provided for *intern* (http://theintern.io).
