@@ -207,7 +207,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value"
               },
               {
                 name: "not-a-value Function",
-                factory: function() {return function() {return "function is not a value"};}
+                factory: function() {return function() {return "function is not a value";};}
               },
               {
                 name: "not-a-value object",

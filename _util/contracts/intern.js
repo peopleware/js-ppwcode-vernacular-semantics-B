@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-define(["intern!object", 'intern/chai!assert', "dojo/_base/lang", "dojo/has"],
+define(["intern!object", "intern/chai!assert", "dojo/_base/lang", "dojo/has"],
   function(registerSuite, assert, lang, has) {
 
     function flattenConditions(context, args, /*Array*/ a, /*Array*/ acc) {

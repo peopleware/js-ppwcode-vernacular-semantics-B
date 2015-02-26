@@ -118,7 +118,7 @@ define(["doh/main", "dojo/_base/lang"],
       //    The test failed.
       var msg = "test failed";
       if (error) {
-        msg += ('" + error + "');
+        msg += ("\" + error + \"");
       }
       throw new doh._AssertFailure(msg, hint);
     };
