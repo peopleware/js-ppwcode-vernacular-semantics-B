@@ -18,7 +18,7 @@ define(["dojo/_base/declare", "../EnumerationValue",
         "../_util/contracts/CaseFactory", "../_contract/EnumerationValueConstructor",
         "module"],
   function(declare, EnumerationValue,
-           CaseFactory, Contract,
+           CaseFactory, EnumerationValueConstructorContract,
            module) {
 
     var EnumerationValueStub1 = EnumerationValue.declare(
@@ -30,7 +30,7 @@ define(["dojo/_base/declare", "../EnumerationValue",
 
     return declare([CaseFactory], {
 
-      contract: new Contract(),
+      contract: new EnumerationValueConstructorContract(),
 
       subjectFactories: function() {
         return [function() {return EnumerationValue;}];

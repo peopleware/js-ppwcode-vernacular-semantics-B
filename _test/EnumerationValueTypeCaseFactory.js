@@ -15,12 +15,12 @@
  */
 
 define(["dojo/_base/declare", "./TransformerCaseFactory", "../_contract/EnumerationValueType"],
- function(declare, TransformerCaseFactory, Contract) {
+ function(declare, TransformerCaseFactory, EnumerationValueTypeContract) {
 
    return declare([TransformerCaseFactory], {
 
      constructor: function(kwargs) {
-       this.contract = new Contract({SubjectType: kwargs.SubjectType});
+       this.contract = new EnumerationValueTypeContract({SubjectType: kwargs.SubjectType});
      },
 
      jsonFactories: function() {

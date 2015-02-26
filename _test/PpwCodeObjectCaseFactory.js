@@ -15,16 +15,16 @@
  */
 
 define(["dojo/_base/declare", "../_util/contracts/CaseFactory", "../_contract/PpwCodeObject", "module"],
- function(declare, CaseFactory, Contract, module) {
+ function(declare, CaseFactory, PpwCodeObjectContract, module) {
 
-   var PpwCodeObjectStub1 = declare([Contract.prototype.SubjectType], {});
+   var PpwCodeObjectStub1 = declare([PpwCodeObjectContract.prototype.SubjectType], {});
    PpwCodeObjectStub1.mid = module.id + "_PpwCodeObjectStub1";
 
-   var PpwCodeObjectStub2 = declare([Contract.prototype.SubjectType], {}); // no mid
+   var PpwCodeObjectStub2 = declare([PpwCodeObjectContract.prototype.SubjectType], {}); // no mid
 
    return declare([CaseFactory], {
 
-     contract: new Contract(),
+     contract: new PpwCodeObjectContract(),
 
      subjectFactories: function() {
        return [

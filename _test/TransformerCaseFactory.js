@@ -15,7 +15,7 @@
  */
 
 define(["dojo/_base/declare", "../_util/contracts/CaseFactory", "../_contract/Transformer"],
- function(declare, CaseFactory, Contract) {
+ function(declare, CaseFactory, TransformerContract) {
 
    return declare([CaseFactory], {
 
@@ -26,7 +26,7 @@ define(["dojo/_base/declare", "../_util/contracts/CaseFactory", "../_contract/Tr
      formatOptionsFactories: null,
 
      constructor: function(kwargs) {
-       this.contract = new Contract({SubjectType: kwargs.SubjectType});
+       this.contract = new TransformerContract({SubjectType: kwargs.SubjectType});
      },
 
      $format: function() {

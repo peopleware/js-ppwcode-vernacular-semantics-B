@@ -15,12 +15,12 @@
  */
 
 define(["dojo/_base/declare", "./ValueCaseFactory", "../_contract/ComparableValue", "module"],
-  function(declare, ValueCaseFactory, Contract, module) {
+  function(declare, ValueCaseFactory, ComparableValueContract, module) {
 
 
 
     // Abstract functions are not tested.
-    var ValueStub = declare([Contract.prototype.SubjectType], {
+    var ValueStub = declare([ComparableValueContract.prototype.SubjectType], {
 
       _data: null,
 
@@ -115,7 +115,7 @@ define(["dojo/_base/declare", "./ValueCaseFactory", "../_contract/ComparableValu
 
     return declare([ValueCaseFactory], {
 
-      contract: new Contract(),
+      contract: new ComparableValueContract(),
 
       typeSubjectFactories: function() {
         return [function() {return ValueStub1;}];

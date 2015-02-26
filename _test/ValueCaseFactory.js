@@ -15,12 +15,12 @@
  */
 
 define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value", "./TransformerCaseFactory", "dojo/_base/lang", "module"],
-  function(declare, PpwCodeObjectCaseFactory, Contract, TransformerCaseFactory, lang, module) {
+  function(declare, PpwCodeObjectCaseFactory, ValueContract, TransformerCaseFactory, lang, module) {
 
 
 
     // Abstract functions are not tested.
-    var ValueStub = declare([Contract.prototype.SubjectType], {
+    var ValueStub = declare([ValueContract.prototype.SubjectType], {
 
       _data: null,
 
@@ -111,7 +111,7 @@ define(["dojo/_base/declare", "./PpwCodeObjectCaseFactory", "../_contract/Value"
 
     return declare([PpwCodeObjectCaseFactory], {
 
-      contract: new Contract(),
+      contract: new ValueContract(),
 
       // typeCaseFactory: TransformerCaseFactories
       typeCaseFactory: null,

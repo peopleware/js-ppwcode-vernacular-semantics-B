@@ -17,7 +17,7 @@
 define(["dojo/_base/declare", "../EnumerationValue", "../ComparableValue", "./ValueCaseFactory", "./EnumerationValueTypeCaseFactory",
         "dojo/_base/lang", "../_contract/EnumerationValue", "module"],
   function(declare, EnumerationValue, ComparableValue, ValueCaseFactory, EnumerationValueTypeCaseFactory,
-           lang, Contract, module) {
+           lang, EnumerationValueContract, module) {
 
 
     // Abstract functions are not tested.
@@ -55,7 +55,7 @@ define(["dojo/_base/declare", "../EnumerationValue", "../ComparableValue", "./Va
 
     return declare([ValueCaseFactory], {
 
-      contract: new Contract(),
+      contract: new EnumerationValueContract(),
 
       createTypeCaseFactory: function(kwargs) {
         return new EnumerationValueTypeCaseFactory({
