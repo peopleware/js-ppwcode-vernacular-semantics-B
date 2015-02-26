@@ -38,6 +38,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "../js", "dojo/has"],
       }
     });
 
+    //noinspection LocalVariableNamingConventionJS
     var _ContractMixin = declare(null, {
       _c_invar: [],
 

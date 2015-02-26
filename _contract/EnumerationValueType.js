@@ -22,12 +22,15 @@ define(["dojo/_base/declare", "./Transformer", "../EnumerationValue", "../ParseE
     EnumerationValueType.values = function() {
       return []; // return EnumerationValue[]
     };
+    //noinspection JSUnusedLocalSymbols
     EnumerationValueType.isJson = function(/*String?*/ json) {
       return false; // return boolean
     };
+    //noinspection JSUnusedLocalSymbols
     EnumerationValueType.revive = function(/*String?*/ json) {
       return new EnumerationValueType(); // return EnumerationValueType
     };
+    //noinspection JSUnusedLocalSymbols
     EnumerationValueType.getBundle = function(/*String*/ lang) {
       return {}; // return Object
     };

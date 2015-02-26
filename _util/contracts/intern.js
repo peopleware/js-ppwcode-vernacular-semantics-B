@@ -258,7 +258,7 @@ define(["intern!object", 'intern/chai!assert', "dojo/_base/lang", "dojo/has"],
 
     if (has("host-node")) {
       console.warn("working around limitation in node 0.10");
-      //noinspection MagicNumberJS
+      //noinspection MagicNumberJS,JSHint
       process.maxTickDepth = 10000; // fix problem with node 0.10
     }
     else {

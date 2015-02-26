@@ -76,6 +76,7 @@ define(["dojo/_base/declare", "../_util/contracts/Contract", "../EnumerationValu
         }),
         normalizeArguments(function(/*Function?*/ SuperType, /*Object?*/ prototypeDef, /*Array|Object*/ valueDefinitions, /*module|String?*/ mod, /*String?*/ bundleName, Result) {
           return !valueDefinitions || !(valueDefinitions instanceof Array) || valueDefinitions.every(function(valueDefinition) {
+            //noinspection LocalVariableNamingConventionJS
             var expectedInstanceNameAndRepresentation = reprFromDef(valueDefinition);
             return instanceExistsAndOk(Result, expectedInstanceNameAndRepresentation, expectedInstanceNameAndRepresentation);
           });
